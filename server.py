@@ -36,6 +36,12 @@ def main():
         webbrowser.open(f'http://localhost{path}')
 
     env = os.environ.copy()
+
+    if 'AUTH_SECRET_KEY' not in env:
+        print('ERROR: AUTH_SECRET_KEY env var is required')
+        print('  Generate one: export AUTH_SECRET_KEY="$(openssl rand -hex 32)"')
+        sys.exit(1)
+
     env['DB_PATH'] = str(DB_PATH)
 
     # execve replaces this process with uvicorn directly
