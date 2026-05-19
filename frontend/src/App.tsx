@@ -4,6 +4,9 @@ import GaragePage from "./pages/GaragePage";
 import BikePage from "./pages/BikePage";
 import ShockSettingsPage from "./pages/ShockSettingsPage";
 import { useTheme } from "./hooks/useTheme";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import { getToken } from "./hooks/useAuth";
 
 const qc = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000 } } });
 
@@ -50,6 +53,13 @@ function Blobs() {
   );
 }
 
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  if (!getToken()) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
+}
+
 function NavBar({ theme, toggle }: { theme: "light" | "dark"; toggle: () => void }) {
   return (
     <nav className="app-nav">
@@ -79,6 +89,13 @@ function NavBar({ theme, toggle }: { theme: "light" | "dark"; toggle: () => void
       >
         {theme === "dark" ? "☀️" : "🌙"}
       </button>
+      <button
+        onClick={() => { localStorage.removeItem("moto_token"); window.location.href = "/login"; }}
+        className="app-nav-toggle"
+        title="ออกจากระบบ"
+      >
+        🚪
+      </button>
     </nav>
   );
 }
@@ -90,9 +107,11 @@ function AppShell() {
       <NavBar theme={theme} toggle={toggle} />
       <div style={{ flex: 1, overflowY: "auto" }}>
         <Routes>
-          <Route path="/" element={<GaragePage />} />
-          <Route path="/bikes/:bikeId" element={<BikePage />} />
-          <Route path="/shock-settings" element={<ShockSettingsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/" element={<ProtectedRoute><GaragePage /></ProtectedRoute>} />
+          <Route path="/bikes/:bikeId" element={<ProtectedRoute><BikePage /></ProtectedRoute>} />
+          <Route path="/shock-settings" element={<ProtectedRoute><ShockSettingsPage /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
