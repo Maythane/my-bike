@@ -1,0 +1,16 @@
+data/
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/static/
+frontend/node_modules/
+frontend/dist/
+*.pyc
+*.db
+
+# macOS
+.DS_Store
+._*
+
+# Uploads (รูปภาพผู้ใช้)
+backend/uploads/
