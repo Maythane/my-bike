@@ -6,7 +6,9 @@ from pydantic import BaseModel
 import os, uuid, shutil
 
 from app.database import get_session
-from app.models import Motorcycle, Profile, UnitEnum
+from app.models import Motorcycle, Profile, UnitEnum, User
+from app.auth import get_current_user
+from app.utils import get_motorcycle_for_user
 
 router = APIRouter(tags=["motorcycles"])
 
@@ -62,9 +64,14 @@ class MotorcycleRead(BaseModel):
 
 
 @router.get("/api/profiles/{profile_id}/motorcycles", response_model=List[MotorcycleRead])
-def list_motorcycles(profile_id: int, session: Session = Depends(get_session)):
-    if not session.get(Profile, profile_id):
-        raise HTTPException(status_code=404, detail="Profile not found")
+def list_motorcycles(
+    profile_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    profile = session.get(Profile, profile_id)
+    if not profile or profile.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Not found")
     return session.exec(
         select(Motorcycle)
         .where(Motorcycle.profile_id == profile_id)
@@ -73,9 +80,15 @@ def list_motorcycles(profile_id: int, session: Session = Depends(get_session)):
 
 
 @router.post("/api/profiles/{profile_id}/motorcycles", response_model=MotorcycleRead, status_code=201)
-def create_motorcycle(profile_id: int, data: MotorcycleCreate, session: Session = Depends(get_session)):
-    if not session.get(Profile, profile_id):
-        raise HTTPException(status_code=404, detail="Profile not found")
+def create_motorcycle(
+    profile_id: int,
+    data: MotorcycleCreate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    profile = session.get(Profile, profile_id)
+    if not profile or profile.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Not found")
     bike = Motorcycle(profile_id=profile_id, **data.model_dump())
     session.add(bike)
     session.commit()
@@ -84,15 +97,35 @@ def create_motorcycle(profile_id: int, data: MotorcycleCreate, session: Session 
 
 
 @router.get("/api/motorcycles", response_model=List[MotorcycleRead])
-def list_all_motorcycles(session: Session = Depends(get_session)):
-    return session.exec(select(Motorcycle).order_by(Motorcycle.created_at)).all()
+def list_all_motorcycles(
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    user_profile_ids = [
+        p.id for p in session.exec(
+            select(Profile).where(Profile.user_id == current_user.id)
+        ).all()
+    ]
+    return session.exec(
+        select(Motorcycle)
+        .where(Motorcycle.profile_id.in_(user_profile_ids))
+        .order_by(Motorcycle.created_at)
+    ).all()
 
 
 @router.post("/api/motorcycles", response_model=MotorcycleRead, status_code=201)
-def create_motorcycle_simple(data: MotorcycleCreate, session: Session = Depends(get_session)):
-    profile = session.exec(select(Profile).order_by(Profile.created_at)).first()
+def create_motorcycle_simple(
+    data: MotorcycleCreate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    profile = session.exec(
+        select(Profile)
+        .where(Profile.user_id == current_user.id)
+        .order_by(Profile.created_at)
+    ).first()
     if not profile:
-        profile = Profile(name="default", icon="🏍️", color_accent="#6e5dd4")
+        profile = Profile(name="default", icon="🏍️", color_accent="#6e5dd4", user_id=current_user.id)
         session.add(profile)
         session.commit()
         session.refresh(profile)
@@ -104,18 +137,22 @@ def create_motorcycle_simple(data: MotorcycleCreate, session: Session = Depends(
 
 
 @router.get("/api/motorcycles/{bike_id}", response_model=MotorcycleRead)
-def get_motorcycle(bike_id: int, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
-    return bike
+def get_motorcycle(
+    bike_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    return get_motorcycle_for_user(bike_id, current_user, session)
 
 
 @router.put("/api/motorcycles/{bike_id}", response_model=MotorcycleRead)
-def update_motorcycle(bike_id: int, data: MotorcycleUpdate, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+def update_motorcycle(
+    bike_id: int,
+    data: MotorcycleUpdate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    bike = get_motorcycle_for_user(bike_id, current_user, session)
     for field, value in data.model_dump(exclude_unset=True).items():
         setattr(bike, field, value)
     session.add(bike)
@@ -129,10 +166,9 @@ async def upload_bike_image(
     bike_id: int,
     file: UploadFile = File(...),
     session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+    bike = get_motorcycle_for_user(bike_id, current_user, session)
     ext = os.path.splitext(file.filename or "")[1].lower() or ".jpg"
     filename = f"{bike_id}_{uuid.uuid4().hex[:8]}{ext}"
     dest = os.path.join(UPLOAD_DIR, filename)
@@ -151,10 +187,12 @@ async def upload_bike_image(
 
 
 @router.delete("/api/motorcycles/{bike_id}/image", response_model=MotorcycleRead)
-def delete_bike_image(bike_id: int, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+def delete_bike_image(
+    bike_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    bike = get_motorcycle_for_user(bike_id, current_user, session)
     if bike.image_path:
         path = os.path.join(UPLOAD_DIR, os.path.basename(bike.image_path))
         if os.path.exists(path):
@@ -167,10 +205,12 @@ def delete_bike_image(bike_id: int, session: Session = Depends(get_session)):
 
 
 @router.delete("/api/motorcycles/{bike_id}", status_code=204)
-def delete_motorcycle(bike_id: int, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+def delete_motorcycle(
+    bike_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    bike = get_motorcycle_for_user(bike_id, current_user, session)
     if bike.image_path:
         path = os.path.join(UPLOAD_DIR, os.path.basename(bike.image_path))
         if os.path.exists(path):
