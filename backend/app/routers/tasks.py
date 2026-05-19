@@ -4,7 +4,9 @@ from typing import List, Optional, Any
 from pydantic import BaseModel
 
 from app.database import get_session
-from app.models import MaintenanceTask, MaintenanceLog, Motorcycle, TaskTemplate, PriorityEnum
+from app.models import MaintenanceTask, MaintenanceLog, Motorcycle, TaskTemplate, PriorityEnum, User
+from app.auth import get_current_user
+from app.utils import get_motorcycle_for_user
 from app.status import compute_status
 
 router = APIRouter(tags=["tasks"])
@@ -48,13 +50,6 @@ class TaskWithStatus(BaseModel):
     days_until_due: Optional[int]
 
 
-def _get_bike_or_404(bike_id: int, session: Session) -> Motorcycle:
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
-    return bike
-
-
 def _get_task_or_404(task_id: int, session: Session) -> MaintenanceTask:
     task = session.get(MaintenanceTask, task_id)
     if not task:
@@ -74,8 +69,12 @@ def _enrich_task(task: MaintenanceTask, bike: Motorcycle, session: Session) -> T
 
 
 @router.get("/api/motorcycles/{bike_id}/tasks", response_model=List[TaskWithStatus])
-def list_tasks(bike_id: int, session: Session = Depends(get_session)):
-    bike = _get_bike_or_404(bike_id, session)
+def list_tasks(
+    bike_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    bike = get_motorcycle_for_user(bike_id, current_user, session)
     _PRIORITY_ORDER = {"high": 0, "medium": 1, "low": 2}
     tasks = session.exec(
         select(MaintenanceTask)
@@ -87,8 +86,13 @@ def list_tasks(bike_id: int, session: Session = Depends(get_session)):
 
 
 @router.post("/api/motorcycles/{bike_id}/tasks", response_model=TaskWithStatus, status_code=201)
-def create_task(bike_id: int, data: TaskCreate, session: Session = Depends(get_session)):
-    bike = _get_bike_or_404(bike_id, session)
+def create_task(
+    bike_id: int,
+    data: TaskCreate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    bike = get_motorcycle_for_user(bike_id, current_user, session)
     if not data.interval_km and not data.interval_months:
         raise HTTPException(status_code=422, detail="At least one of interval_km or interval_months is required")
     task = MaintenanceTask(motorcycle_id=bike_id, **data.model_dump())
@@ -100,9 +104,12 @@ def create_task(bike_id: int, data: TaskCreate, session: Session = Depends(get_s
 
 @router.post("/api/motorcycles/{bike_id}/tasks/from-template", response_model=TaskWithStatus, status_code=201)
 def create_task_from_template(
-    bike_id: int, data: TaskFromTemplate, session: Session = Depends(get_session)
+    bike_id: int,
+    data: TaskFromTemplate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
-    bike = _get_bike_or_404(bike_id, session)
+    bike = get_motorcycle_for_user(bike_id, current_user, session)
     template = session.get(TaskTemplate, data.template_id)
     if not template:
         raise HTTPException(status_code=404, detail="Template not found")
@@ -119,9 +126,14 @@ def create_task_from_template(
 
 
 @router.put("/api/tasks/{task_id}", response_model=TaskWithStatus)
-def update_task(task_id: int, data: TaskUpdate, session: Session = Depends(get_session)):
+def update_task(
+    task_id: int,
+    data: TaskUpdate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
     task = _get_task_or_404(task_id, session)
-    bike = _get_bike_or_404(task.motorcycle_id, session)
+    bike = get_motorcycle_for_user(task.motorcycle_id, current_user, session)
     for field, value in data.model_dump(exclude_unset=True).items():
         setattr(task, field, value)
     session.add(task)
@@ -131,8 +143,13 @@ def update_task(task_id: int, data: TaskUpdate, session: Session = Depends(get_s
 
 
 @router.delete("/api/tasks/{task_id}", status_code=204)
-def delete_task(task_id: int, session: Session = Depends(get_session)):
+def delete_task(
+    task_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
     task = _get_task_or_404(task_id, session)
+    get_motorcycle_for_user(task.motorcycle_id, current_user, session)  # ownership check
     task.is_active = False
     session.add(task)
     session.commit()
