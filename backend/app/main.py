@@ -7,7 +7,7 @@ import os
 
 from app.database import create_db, engine
 from app.seed import seed_defaults
-from app.routers import profiles, motorcycles, tasks, logs, settings, templates, fuel, shock, shock_presets
+from app.routers import profiles, motorcycles, tasks, logs, settings, templates, fuel, shock, shock_presets, auth
 
 
 @asynccontextmanager
@@ -20,6 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Moto Tracker API", version="1.0.0", lifespan=lifespan)
 
+app.include_router(auth.router)
 app.include_router(profiles.router)
 app.include_router(motorcycles.router)
 app.include_router(tasks.router)

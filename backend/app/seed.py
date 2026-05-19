@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from app.models import AppSettings, TaskTemplate
+from app.models import TaskTemplate
 
 TEMPLATES = [
     {"name": "เปลี่ยนน้ำมันเครื่อง", "default_interval_km": 3000, "default_interval_months": 6, "category": "Engine"},
@@ -35,11 +35,7 @@ GRAND_FILANO_TEMPLATES = [
 
 
 def seed_defaults(session: Session):
-    existing = session.exec(select(AppSettings)).first()
-    if not existing:
-        session.add(AppSettings())
-        session.commit()
-
+    # AppSettings ไม่ seed global อีกต่อไป — สร้างต่อ user ใน auth router
     all_templates = TEMPLATES + GRAND_FILANO_TEMPLATES
     for t in all_templates:
         existing_t = session.exec(
@@ -50,5 +46,4 @@ def seed_defaults(session: Session):
         ).first()
         if not existing_t:
             session.add(TaskTemplate(**t))
-
     session.commit()
