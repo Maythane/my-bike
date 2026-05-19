@@ -6,8 +6,9 @@ from pydantic import BaseModel
 import os, uuid
 
 from app.database import get_session
-from app.models import FuelLog, FuelLogImage, Motorcycle
-from app.utils import recalc_odometer, save_compressed_image
+from app.models import FuelLog, FuelLogImage, Motorcycle, User
+from app.auth import get_current_user
+from app.utils import recalc_odometer, save_compressed_image, get_motorcycle_for_user
 
 router = APIRouter(tags=["fuel"])
 
@@ -114,11 +115,21 @@ def _to_read(log: FuelLog, kpl: Optional[float], distance_km: Optional[int], ses
     )
 
 
+def _get_fuel_for_user(fuel_id: int, user: User, session: Session) -> FuelLog:
+    log = session.get(FuelLog, fuel_id)
+    if not log:
+        raise HTTPException(status_code=404, detail="Not found")
+    get_motorcycle_for_user(log.motorcycle_id, user, session)  # raises 404 if not owner
+    return log
+
+
 @router.get("/api/motorcycles/{bike_id}/fuel-logs", response_model=List[FuelLogRead])
-def list_fuel_logs(bike_id: int, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+def list_fuel_logs(
+    bike_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    get_motorcycle_for_user(bike_id, current_user, session)
     logs = session.exec(
         select(FuelLog)
         .where(FuelLog.motorcycle_id == bike_id)
@@ -129,10 +140,12 @@ def list_fuel_logs(bike_id: int, session: Session = Depends(get_session)):
 
 
 @router.get("/api/motorcycles/{bike_id}/fuel-economy", response_model=FuelEconomy)
-def get_fuel_economy(bike_id: int, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+def get_fuel_economy(
+    bike_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    get_motorcycle_for_user(bike_id, current_user, session)
     logs = session.exec(
         select(FuelLog).where(FuelLog.motorcycle_id == bike_id).order_by(FuelLog.date.asc(), FuelLog.id.asc())
     ).all()
@@ -150,10 +163,13 @@ def get_fuel_economy(bike_id: int, session: Session = Depends(get_session)):
 
 
 @router.post("/api/motorcycles/{bike_id}/fuel-logs", response_model=FuelLogRead, status_code=201)
-def create_fuel_log(bike_id: int, data: FuelLogCreate, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+def create_fuel_log(
+    bike_id: int,
+    data: FuelLogCreate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    get_motorcycle_for_user(bike_id, current_user, session)
     log = FuelLog(motorcycle_id=bike_id, **data.model_dump())
     session.add(log)
     session.flush()
@@ -170,10 +186,13 @@ def create_fuel_log(bike_id: int, data: FuelLogCreate, session: Session = Depend
 
 
 @router.put("/api/fuel-logs/{log_id}", response_model=FuelLogRead)
-def update_fuel_log(log_id: int, data: FuelLogUpdate, session: Session = Depends(get_session)):
-    log = session.get(FuelLog, log_id)
-    if not log:
-        raise HTTPException(status_code=404, detail="Fuel log not found")
+def update_fuel_log(
+    log_id: int,
+    data: FuelLogUpdate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    log = _get_fuel_for_user(log_id, current_user, session)
     for field, value in data.model_dump(exclude_unset=True).items():
         setattr(log, field, value)
     session.add(log)
@@ -195,10 +214,9 @@ async def upload_fuel_log_image(
     log_id: int,
     file: UploadFile = File(...),
     session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
-    log = session.get(FuelLog, log_id)
-    if not log:
-        raise HTTPException(status_code=404, detail="Fuel log not found")
+    log = _get_fuel_for_user(log_id, current_user, session)
     count = len(session.exec(
         select(FuelLogImage).where(FuelLogImage.log_id == log_id)
     ).all())
@@ -220,10 +238,15 @@ async def upload_fuel_log_image(
 
 
 @router.delete("/api/fuel-log-images/{img_id}", status_code=204)
-def delete_fuel_log_image_by_id(img_id: int, session: Session = Depends(get_session)):
+def delete_fuel_log_image_by_id(
+    img_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
     img = session.get(FuelLogImage, img_id)
     if not img:
         raise HTTPException(status_code=404, detail="Image not found")
+    _get_fuel_for_user(img.log_id, current_user, session)  # ownership check
     path = os.path.join(UPLOAD_DIR, os.path.basename(img.image_path))
     if os.path.exists(path):
         os.remove(path)
@@ -232,10 +255,12 @@ def delete_fuel_log_image_by_id(img_id: int, session: Session = Depends(get_sess
 
 
 @router.delete("/api/fuel-logs/{log_id}", status_code=204)
-def delete_fuel_log(log_id: int, session: Session = Depends(get_session)):
-    log = session.get(FuelLog, log_id)
-    if not log:
-        raise HTTPException(status_code=404, detail="Fuel log not found")
+def delete_fuel_log(
+    log_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    log = _get_fuel_for_user(log_id, current_user, session)
     bike_id = log.motorcycle_id
     imgs = session.exec(select(FuelLogImage).where(FuelLogImage.log_id == log_id)).all()
     for img in imgs:

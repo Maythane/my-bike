@@ -6,8 +6,9 @@ from pydantic import BaseModel
 import os, uuid
 
 from app.database import get_session
-from app.models import MaintenanceLog, MaintenanceLogImage, MaintenanceTask, Motorcycle
-from app.utils import recalc_odometer, save_compressed_image
+from app.models import MaintenanceLog, MaintenanceLogImage, MaintenanceTask, Motorcycle, User
+from app.auth import get_current_user
+from app.utils import recalc_odometer, save_compressed_image, get_motorcycle_for_user
 
 router = APIRouter(tags=["logs"])
 
@@ -71,11 +72,22 @@ def _build_read(log: MaintenanceLog, task_name: str, session: Session) -> Servic
     )
 
 
+def _get_log_for_user(log_id: int, user: User, session: Session) -> MaintenanceLog:
+    log = session.get(MaintenanceLog, log_id)
+    if not log:
+        raise HTTPException(status_code=404, detail="Not found")
+    task = session.get(MaintenanceTask, log.task_id)
+    get_motorcycle_for_user(task.motorcycle_id, user, session)  # raises 404 if not owner
+    return log
+
+
 @router.get("/api/motorcycles/{bike_id}/service-logs", response_model=List[ServiceLogRead])
-def list_service_logs(bike_id: int, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+def list_service_logs(
+    bike_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    get_motorcycle_for_user(bike_id, current_user, session)
     tasks = session.exec(
         select(MaintenanceTask).where(MaintenanceTask.motorcycle_id == bike_id)
     ).all()
@@ -92,10 +104,13 @@ def list_service_logs(bike_id: int, session: Session = Depends(get_session)):
 
 
 @router.post("/api/motorcycles/{bike_id}/service-logs", response_model=ServiceLogRead, status_code=201)
-def create_service_log(bike_id: int, data: ServiceLogCreate, session: Session = Depends(get_session)):
-    bike = session.get(Motorcycle, bike_id)
-    if not bike:
-        raise HTTPException(status_code=404, detail="Motorcycle not found")
+def create_service_log(
+    bike_id: int,
+    data: ServiceLogCreate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    get_motorcycle_for_user(bike_id, current_user, session)
     task = session.exec(
         select(MaintenanceTask)
         .where(MaintenanceTask.motorcycle_id == bike_id)
@@ -122,10 +137,13 @@ def create_service_log(bike_id: int, data: ServiceLogCreate, session: Session = 
 
 
 @router.put("/api/service-logs/{log_id}", response_model=ServiceLogRead)
-def update_service_log(log_id: int, data: ServiceLogUpdate, session: Session = Depends(get_session)):
-    log = session.get(MaintenanceLog, log_id)
-    if not log:
-        raise HTTPException(status_code=404, detail="Log not found")
+def update_service_log(
+    log_id: int,
+    data: ServiceLogUpdate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    log = _get_log_for_user(log_id, current_user, session)
     task = session.get(MaintenanceTask, log.task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -164,10 +182,9 @@ async def upload_service_log_image(
     log_id: int,
     file: UploadFile = File(...),
     session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
-    log = session.get(MaintenanceLog, log_id)
-    if not log:
-        raise HTTPException(status_code=404, detail="Log not found")
+    log = _get_log_for_user(log_id, current_user, session)
     task = session.get(MaintenanceTask, log.task_id)
     count = len(session.exec(
         select(MaintenanceLogImage).where(MaintenanceLogImage.log_id == log_id)
@@ -184,10 +201,15 @@ async def upload_service_log_image(
 
 
 @router.delete("/api/service-log-images/{img_id}", status_code=204)
-def delete_service_log_image_by_id(img_id: int, session: Session = Depends(get_session)):
+def delete_service_log_image_by_id(
+    img_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
     img = session.get(MaintenanceLogImage, img_id)
     if not img:
         raise HTTPException(status_code=404, detail="Image not found")
+    _get_log_for_user(img.log_id, current_user, session)  # ownership check
     path = os.path.join(UPLOAD_DIR, os.path.basename(img.image_path))
     if os.path.exists(path):
         os.remove(path)
@@ -196,10 +218,12 @@ def delete_service_log_image_by_id(img_id: int, session: Session = Depends(get_s
 
 
 @router.delete("/api/service-logs/{log_id}", status_code=204)
-def delete_service_log(log_id: int, session: Session = Depends(get_session)):
-    log = session.get(MaintenanceLog, log_id)
-    if not log:
-        raise HTTPException(status_code=404, detail="Log not found")
+def delete_service_log(
+    log_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    log = _get_log_for_user(log_id, current_user, session)
     task = session.get(MaintenanceTask, log.task_id)
     bike_id = task.motorcycle_id if task else None
     imgs = session.exec(select(MaintenanceLogImage).where(MaintenanceLogImage.log_id == log_id)).all()
