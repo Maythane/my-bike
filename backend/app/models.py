@@ -21,6 +21,21 @@ class AppSettings(SQLModel, table=True):
     default_unit: UnitEnum = Field(default=UnitEnum.km)
     timezone: str = Field(default="Asia/Bangkok")
     app_version: str = Field(default="1.0.0")
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id", index=True)
+
+
+class User(SQLModel, table=True):
+    __tablename__ = "users"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    email: str = Field(unique=True, index=True)
+    hashed_password: str
+    is_active: bool = Field(default=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    profiles: List["Profile"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={"cascade": "all, delete-orphan"},
+    )
 
 
 class Profile(SQLModel, table=True):
@@ -31,7 +46,9 @@ class Profile(SQLModel, table=True):
     color_accent: str = Field(default="#39FF14")
     unit: Optional[UnitEnum] = Field(default=None)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id", index=True)
 
+    user: Optional["User"] = Relationship(back_populates="profiles")
     motorcycles: List["Motorcycle"] = Relationship(
         back_populates="profile",
         sa_relationship_kwargs={"cascade": "all, delete-orphan"},
@@ -151,6 +168,7 @@ class ShockPreset(SQLModel, table=True):
     reb: int
     note: Optional[str] = Field(default=None)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id", index=True)
 
 
 class ShockSetting(SQLModel, table=True):
@@ -159,3 +177,4 @@ class ShockSetting(SQLModel, table=True):
     rider_weight: float = Field(default=75.0)
     passenger_weight: float = Field(default=0.0)
     mode: str = Field(default="street")
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id", index=True)
