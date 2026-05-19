@@ -43,3 +43,16 @@ def recalc_odometer(bike_id: int, session: Session) -> None:
         if bike:
             bike.current_mileage = new_km
             session.add(bike)
+
+
+def get_motorcycle_for_user(bike_id: int, user, session: Session) -> Motorcycle:
+    """Return Motorcycle ถ้า user เป็นเจ้าของ — raise 404 ไม่ใช่ 403 เพื่อป้องกัน ID enumeration"""
+    from fastapi import HTTPException
+    from app.models import Profile
+    bike = session.get(Motorcycle, bike_id)
+    if not bike:
+        raise HTTPException(status_code=404, detail="Not found")
+    profile = session.get(Profile, bike.profile_id)
+    if not profile or profile.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Not found")
+    return bike
