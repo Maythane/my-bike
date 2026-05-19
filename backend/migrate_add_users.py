@@ -32,7 +32,7 @@ def migrate(db_path: str) -> None:
         from passlib.context import CryptContext
         hashed = CryptContext(schemes=["bcrypt"], deprecated="auto").hash("changeme")
         cur.execute(
-            "INSERT INTO users (email, hashed_password) VALUES (?, ?)",
+            "INSERT INTO users (email, hashed_password, is_active, created_at) VALUES (?, ?, 1, datetime('now'))",
             ("owner@local", hashed),
         )
     cur.execute("SELECT id FROM users WHERE email = 'owner@local'")
