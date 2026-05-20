@@ -31,6 +31,9 @@ class User(SQLModel, table=True):
     hashed_password: str
     is_active: bool = Field(default=True)
     is_admin: bool = Field(default=False)
+    username: Optional[str] = Field(default=None, unique=True, index=True)
+    phone: Optional[str] = Field(default=None, unique=True, index=True)
+    phone_verified: bool = Field(default=False)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     profiles: List["Profile"] = Relationship(

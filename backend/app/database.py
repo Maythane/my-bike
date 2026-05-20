@@ -59,6 +59,9 @@ def _migrate_shock_per_bike():
         ("shock_presets",  "shock_brand",   "TEXT"),
         ("shock_presets",  "shock_model",   "TEXT"),
         ("users",          "is_admin",      "INTEGER NOT NULL DEFAULT 0"),
+        ("users",          "username",      "TEXT UNIQUE DEFAULT NULL"),
+        ("users",          "phone",         "TEXT UNIQUE DEFAULT NULL"),
+        ("users",          "phone_verified", "INTEGER NOT NULL DEFAULT 0"),
     ]
     with engine.connect() as conn:
         for table, col, col_type in new_columns:
