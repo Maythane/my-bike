@@ -29,6 +29,9 @@ export default function AccountModal({ onClose }: { onClose: () => void }) {
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew]         = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
@@ -162,19 +165,31 @@ export default function AccountModal({ onClose }: { onClose: () => void }) {
           <form onSubmit={handlePasswordSubmit} className="auth-form">
             <label>
               Current Password
-              <input type="password" value={currentPw}
-                onChange={(e) => setCurrentPw(e.target.value)} required />
+              <div className="pw-wrap">
+                <input type={showCurrent ? "text" : "password"} value={currentPw}
+                  onChange={(e) => setCurrentPw(e.target.value)} required />
+                <button type="button" className="pw-toggle" tabIndex={-1}
+                  onClick={() => setShowCurrent((v) => !v)}>{showCurrent ? "🙈" : "👁"}</button>
+              </div>
             </label>
             <label>
               New Password
-              <input type="password" value={newPw}
-                onChange={(e) => setNewPw(e.target.value)}
-                minLength={8} placeholder="อย่างน้อย 8 ตัวอักษร" required />
+              <div className="pw-wrap">
+                <input type={showNew ? "text" : "password"} value={newPw}
+                  onChange={(e) => setNewPw(e.target.value)}
+                  minLength={8} placeholder="อย่างน้อย 8 ตัวอักษร" required />
+                <button type="button" className="pw-toggle" tabIndex={-1}
+                  onClick={() => setShowNew((v) => !v)}>{showNew ? "🙈" : "👁"}</button>
+              </div>
             </label>
             <label>
               Confirm New Password
-              <input type="password" value={confirmPw}
-                onChange={(e) => setConfirmPw(e.target.value)} required />
+              <div className="pw-wrap">
+                <input type={showConfirm ? "text" : "password"} value={confirmPw}
+                  onChange={(e) => setConfirmPw(e.target.value)} required />
+                <button type="button" className="pw-toggle" tabIndex={-1}
+                  onClick={() => setShowConfirm((v) => !v)}>{showConfirm ? "🙈" : "👁"}</button>
+              </div>
             </label>
             {error && <p className="auth-error">{error}</p>}
             {success && <p className="auth-success">✓ {success}</p>}

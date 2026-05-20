@@ -1985,6 +1985,14 @@ html.light .shock-preset-card {
   font-size: 1rem;
 }
 .auth-form input:focus { outline: none; border-color: var(--purple-border); }
+.pw-wrap { position: relative; }
+.pw-wrap input { width: 100%; padding-right: 2.5rem; box-sizing: border-box; }
+.pw-toggle {
+  position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; padding: 0; line-height: 1;
+  color: var(--slate); font-size: 1.1rem; opacity: 0.7;
+}
+.pw-toggle:hover { opacity: 1; }
 .auth-error { color: var(--red); font-size: 0.875rem; margin: 0; }
 .auth-success { color: var(--green); font-size: 0.875rem; margin: 0; }
 

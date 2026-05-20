@@ -18,6 +18,8 @@ export default function AuthPage() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -181,28 +183,40 @@ export default function AuthPage() {
           {!isPhone && (
             <label>
               Password
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                autoComplete={tab === "login" ? "current-password" : "new-password"}
-              />
+              <div className="pw-wrap">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete={tab === "login" ? "current-password" : "new-password"}
+                />
+                <button type="button" className="pw-toggle" onClick={() => setShowPassword((v) => !v)}
+                  tabIndex={-1} aria-label={showPassword ? "ซ่อน password" : "แสดง password"}>
+                  {showPassword ? "🙈" : "👁"}
+                </button>
+              </div>
             </label>
           )}
 
           {tab === "register" && (
             <label>
               Confirm Password
-              <input
-                type="password"
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                placeholder="••••••••"
-                required
-                autoComplete="new-password"
-              />
+              <div className="pw-wrap">
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="new-password"
+                />
+                <button type="button" className="pw-toggle" onClick={() => setShowConfirm((v) => !v)}
+                  tabIndex={-1} aria-label={showConfirm ? "ซ่อน password" : "แสดง password"}>
+                  {showConfirm ? "🙈" : "👁"}
+                </button>
+              </div>
             </label>
           )}
 
