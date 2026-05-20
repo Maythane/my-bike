@@ -7,7 +7,7 @@ import os
 
 from app.database import create_db, engine
 from app.seed import seed_defaults
-from app.routers import profiles, motorcycles, tasks, logs, settings, templates, fuel, shock, shock_presets, auth
+from app.routers import profiles, motorcycles, tasks, logs, settings, templates, fuel, shock, shock_presets, auth, shock_brands
 
 
 @asynccontextmanager
@@ -30,10 +30,15 @@ app.include_router(templates.router)
 app.include_router(fuel.router)
 app.include_router(shock.router)
 app.include_router(shock_presets.router)
+app.include_router(shock_brands.router)
 
 UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads")
 if os.path.isdir(UPLOADS_DIR):
     app.mount("/uploads", StaticFiles(directory=UPLOADS_DIR), name="uploads")
+
+BRANDS_DIR = os.path.join(os.path.dirname(__file__), "..", "static", "brands")
+os.makedirs(BRANDS_DIR, exist_ok=True)
+app.mount("/static/brands", StaticFiles(directory=BRANDS_DIR), name="brands")
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "..", "static")
 if os.path.isdir(STATIC_DIR):
