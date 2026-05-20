@@ -30,6 +30,7 @@ class User(SQLModel, table=True):
     email: str = Field(unique=True, index=True)
     hashed_password: str
     is_active: bool = Field(default=True)
+    is_admin: bool = Field(default=False)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     profiles: List["Profile"] = Relationship(
@@ -169,12 +170,28 @@ class ShockPreset(SQLModel, table=True):
     note: Optional[str] = Field(default=None)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     user_id: Optional[int] = Field(default=None, foreign_key="users.id", index=True)
+    motorcycle_id: Optional[int] = Field(default=None, foreign_key="motorcycles.id", index=True)
+    shock_brand: Optional[str] = Field(default=None)
+    shock_model: Optional[str] = Field(default=None)
 
 
 class ShockSetting(SQLModel, table=True):
     __tablename__ = "shock_settings"
     id: Optional[int] = Field(default=None, primary_key=True)
+    motorcycle_id: Optional[int] = Field(default=None, foreign_key="motorcycles.id", index=True)
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id", index=True)
     rider_weight: float = Field(default=75.0)
     passenger_weight: float = Field(default=0.0)
     mode: str = Field(default="street")
-    user_id: Optional[int] = Field(default=None, foreign_key="users.id", index=True)
+    shock_brand: Optional[str] = Field(default=None)
+    shock_model: Optional[str] = Field(default=None)
+
+
+class ShockBrand(SQLModel, table=True):
+    __tablename__ = "shock_brands"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(unique=True)
+    accent_color: str = Field(default="#a78bfa")
+    banner_bg_color: str = Field(default="#09091a")
+    header_image_path: Optional[str] = Field(default=None)
+    shock_models: Optional[str] = Field(default=None)  # JSON array string e.g. '["P-Series","G30"]'
