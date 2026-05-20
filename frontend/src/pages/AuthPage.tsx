@@ -49,6 +49,7 @@ export default function AuthPage() {
   }
 
   async function handleSendOtp() {
+    if (loading) return;
     setError(null);
     setLoading(true);
     try {
@@ -64,6 +65,7 @@ export default function AuthPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (loading) return;
     setError(null);
     if (tab === "register" && password !== confirm) {
       setError("Password ไม่ตรงกัน");
@@ -210,7 +212,7 @@ export default function AuthPage() {
           {!(isPhone && !otpSent) && (
             <button
               type="submit"
-              disabled={loading || (isPhone && otpSent && otp.length < 6)}
+              disabled={loading || (isPhone && otpSent && (otp.length < 6 || countdown === 0))}
               className="btn btn-primary"
               style={{ marginTop: "0.5rem" }}
             >
