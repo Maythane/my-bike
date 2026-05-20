@@ -1,6 +1,6 @@
 import { fetchLogin, fetchRegister, otpLogin } from "../api/auth";
 
-const TOKEN_KEY = "moto_token";
+export const TOKEN_KEY = "moto_token";
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);

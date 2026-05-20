@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from "../hooks/useAuth";
+import { getToken, TOKEN_KEY } from "../hooks/useAuth";
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? "",
@@ -20,7 +20,7 @@ client.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("moto_token");
+      localStorage.removeItem(TOKEN_KEY);
       window.location.href = "/login";
     }
     return Promise.reject(error);
