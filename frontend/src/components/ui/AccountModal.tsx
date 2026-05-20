@@ -1,4 +1,4 @@
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, useRef, type FormEvent } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   fetchUpdateEmail,
@@ -30,14 +30,21 @@ export default function AccountModal({ onClose }: { onClose: () => void }) {
   const [error, setError]     = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
+
   useEffect(() => {
     if (countdown <= 0) return;
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(t);
   }, [countdown]);
 
+  function scheduleClose(delay: number) {
+    closeTimer.current = setTimeout(onClose, delay);
+  }
+
   function reset() {
-    setError(null); setSuccess(null);
+    setError(null); setSuccess(null); setLoading(false);
     setNewEmail(""); setCurrentPw(""); setNewPw(""); setConfirmPw("");
     setNewUsername(""); setPhone(""); setOtpCode("");
     setOtpSent(false); setCountdown(0);
@@ -51,7 +58,7 @@ export default function AccountModal({ onClose }: { onClose: () => void }) {
       await fetchUpdateEmail(newEmail);
       setSuccess("อัปเดต email แล้ว");
       qc.invalidateQueries({ queryKey: ["me"] });
-      setTimeout(onClose, 1200);
+      scheduleClose(1200);
     } catch (err: any) {
       setError(err.response?.data?.detail ?? "เกิดข้อผิดพลาด");
     } finally { setLoading(false); }
@@ -66,7 +73,7 @@ export default function AccountModal({ onClose }: { onClose: () => void }) {
     try {
       await fetchUpdatePassword(currentPw, newPw);
       setSuccess("เปลี่ยน password แล้ว");
-      setTimeout(onClose, 1200);
+      scheduleClose(1200);
     } catch (err: any) {
       setError(err.response?.data?.detail ?? "เกิดข้อผิดพลาด");
     } finally { setLoading(false); }
@@ -80,7 +87,7 @@ export default function AccountModal({ onClose }: { onClose: () => void }) {
       await fetchUpdateUsername(newUsername);
       setSuccess("ตั้ง username แล้ว");
       qc.invalidateQueries({ queryKey: ["me"] });
-      setTimeout(onClose, 1200);
+      scheduleClose(1200);
     } catch (err: any) {
       setError(err.response?.data?.detail ?? "เกิดข้อผิดพลาด");
     } finally { setLoading(false); }
@@ -105,7 +112,7 @@ export default function AccountModal({ onClose }: { onClose: () => void }) {
       await fetchConfirmPhone(phone, otpCode);
       setSuccess("ยืนยันเบอร์โทรแล้ว ✓");
       qc.invalidateQueries({ queryKey: ["me"] });
-      setTimeout(onClose, 1500);
+      scheduleClose(1500);
     } catch (err: any) {
       setError(err.response?.data?.detail ?? "เกิดข้อผิดพลาด");
     } finally { setLoading(false); }
@@ -238,7 +245,7 @@ export default function AccountModal({ onClose }: { onClose: () => void }) {
                 </button>
               </>
             ) : (
-              <form onSubmit={handlePhoneConfirm}>
+              <form onSubmit={handlePhoneConfirm} className="auth-form">
                 <p style={{ fontSize: 13, color: "var(--slate)", margin: "0 0 8px" }}>
                   ส่ง OTP ไปที่ <strong style={{ color: "var(--ink)" }}>{phone}</strong>
                 </p>
