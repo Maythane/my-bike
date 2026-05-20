@@ -106,6 +106,47 @@ def login(data: LoginRequest, session: Session = Depends(get_session)):
     return TokenResponse(access_token=create_access_token(user.id))
 
 
+class OtpSendRequest(BaseModel):
+    phone: str
+
+
+@router.post("/otp/send")
+def otp_send(data: OtpSendRequest, session: Session = Depends(get_session)):
+    phone = data.phone.strip()
+    user = session.exec(select(User).where(User.phone == phone)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="ไม่พบเบอร์โทรนี้ในระบบ")
+    key = f"login:{phone}"
+    if key in _otp_store:
+        _, exp = _otp_store[key]
+        if exp > datetime.now(timezone.utc) + timedelta(seconds=OTP_TTL_SECONDS - 60):
+            raise HTTPException(status_code=429, detail="รอ 60 วินาทีก่อนขอ OTP ใหม่")
+    code = _generate_otp()
+    _store_otp(key, code)
+    _send_otp(phone, code)
+    return {"ok": True, "expires_in": OTP_TTL_SECONDS}
+
+
+class OtpLoginRequest(BaseModel):
+    phone: str
+    otp_code: str
+
+
+@router.post("/otp/login", response_model=TokenResponse)
+def otp_login(data: OtpLoginRequest, session: Session = Depends(get_session)):
+    phone = data.phone.strip()
+    key = f"login:{phone}"
+    if not _verify_otp(key, data.otp_code):
+        raise HTTPException(status_code=401, detail="OTP ไม่ถูกต้องหรือหมดอายุ")
+    _otp_store.pop(key, None)
+    user = session.exec(select(User).where(User.phone == phone)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="ไม่พบบัญชี")
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Account disabled")
+    return TokenResponse(access_token=create_access_token(user.id))
+
+
 @router.get("/me", response_model=UserRead)
 def me(current_user: User = Depends(get_current_user)):
     return current_user
