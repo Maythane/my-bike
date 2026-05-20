@@ -28,7 +28,8 @@ export default function AvatarMenu() {
     return () => document.removeEventListener("mousedown", onMouseDown);
   }, []);
 
-  const initial = user?.email?.[0]?.toUpperCase() ?? "?";
+  const displayName = user?.username ? `@${user.username}` : (user?.email ?? "…");
+  const initial = (user?.username?.[0] ?? user?.email?.[0] ?? "?").toUpperCase();
 
   return (
     <>
@@ -41,7 +42,7 @@ export default function AvatarMenu() {
           <div className="avatar-dropdown">
             <div className="avatar-dropdown-header">
               <div className="avatar-dropdown-email">Signed in as</div>
-              <div className="avatar-dropdown-user">{user?.email ?? "…"}</div>
+              <div className="avatar-dropdown-user">{displayName}</div>
             </div>
 
             <div
