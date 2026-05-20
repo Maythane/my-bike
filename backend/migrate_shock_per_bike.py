@@ -4,6 +4,7 @@ import argparse
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BRANDS_DIR = os.path.join(SCRIPT_DIR, "static", "brands")
+DB_PATH = os.getenv("DB_PATH", "/app/data/moto.db")
 
 SEED_BRANDS = [
     ("Profender", "#e8251a", "#000000", '["P-Series","G30","G2R"]'),
@@ -50,6 +51,18 @@ def migrate(db_path: str) -> None:
             if not col_exists(conn, "shock_presets", col):
                 conn.execute(f"ALTER TABLE shock_presets ADD COLUMN {col} {definition}")
 
+        # Assign motorcycle_id to existing shock_presets rows (first bike of that user)
+        conn.execute("""
+            UPDATE shock_presets
+            SET motorcycle_id = (
+                SELECT motorcycles.id FROM motorcycles
+                JOIN profiles ON profiles.id = motorcycles.profile_id
+                WHERE profiles.user_id = shock_presets.user_id
+                ORDER BY motorcycles.id ASC LIMIT 1
+            )
+            WHERE motorcycle_id IS NULL AND user_id IS NOT NULL
+        """)
+
         # ── users ────────────────────────────────────────────────────
         if not col_exists(conn, "users", "is_admin"):
             conn.execute("ALTER TABLE users ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0")
@@ -83,6 +96,6 @@ def migrate(db_path: str) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--db", default="moto_tracker.db")
+    parser.add_argument("--db", default=DB_PATH)
     args = parser.parse_args()
     migrate(args.db)
