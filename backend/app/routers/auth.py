@@ -71,3 +71,45 @@ def login(data: LoginRequest, session: Session = Depends(get_session)):
 @router.get("/me", response_model=UserRead)
 def me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+class UpdateEmailRequest(BaseModel):
+    new_email: str
+
+
+class UpdatePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+
+@router.put("/email", status_code=200)
+def update_email(
+    data: UpdateEmailRequest,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    email = data.new_email.lower().strip()
+    if not email or "@" not in email:
+        raise HTTPException(status_code=422, detail="Invalid email")
+    if session.exec(select(User).where(User.email == email)).first():
+        raise HTTPException(status_code=409, detail="Email already in use")
+    current_user.email = email
+    session.add(current_user)
+    session.commit()
+    return {"ok": True}
+
+
+@router.put("/password", status_code=200)
+def update_password(
+    data: UpdatePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    if not verify_password(data.current_password, current_user.hashed_password):
+        raise HTTPException(status_code=401, detail="Current password incorrect")
+    if len(data.new_password) < 8:
+        raise HTTPException(status_code=422, detail="Password must be at least 8 characters")
+    current_user.hashed_password = hash_password(data.new_password)
+    session.add(current_user)
+    session.commit()
+    return {"ok": True}
