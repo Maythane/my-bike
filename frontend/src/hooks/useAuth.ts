@@ -1,4 +1,4 @@
-import { fetchLogin, fetchRegister } from "../api/auth";
+import { fetchLogin, fetchRegister, otpLogin } from "../api/auth";
 
 const TOKEN_KEY = "moto_token";
 
@@ -17,8 +17,13 @@ function clearToken(): void {
 export function useAuth() {
   const isAuthenticated = !!getToken();
 
-  async function login(email: string, password: string): Promise<void> {
-    const { access_token } = await fetchLogin(email, password);
+  async function login(identifier: string, password: string): Promise<void> {
+    const { access_token } = await fetchLogin(identifier, password);
+    setToken(access_token);
+  }
+
+  async function loginWithOtp(phone: string, otp_code: string): Promise<void> {
+    const { access_token } = await otpLogin(phone, otp_code);
     setToken(access_token);
   }
 
@@ -32,5 +37,5 @@ export function useAuth() {
     window.location.href = "/login";
   }
 
-  return { isAuthenticated, login, register, logout };
+  return { isAuthenticated, login, loginWithOtp, register, logout };
 }

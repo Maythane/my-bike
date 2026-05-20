@@ -8,6 +8,9 @@ export interface TokenResponse {
 export interface UserInfo {
   id: number;
   email: string;
+  username: string | null;
+  phone: string | null;
+  phone_verified: boolean;
   created_at: string;
 }
 
@@ -16,8 +19,8 @@ export async function fetchRegister(email: string, password: string): Promise<To
   return data;
 }
 
-export async function fetchLogin(email: string, password: string): Promise<TokenResponse> {
-  const { data } = await client.post<TokenResponse>("/api/auth/login", { email, password });
+export async function fetchLogin(identifier: string, password: string): Promise<TokenResponse> {
+  const { data } = await client.post<TokenResponse>("/api/auth/login", { identifier, password });
   return data;
 }
 
@@ -35,4 +38,25 @@ export async function fetchUpdatePassword(
   new_password: string,
 ): Promise<void> {
   await client.put("/api/auth/password", { current_password, new_password });
+}
+
+export async function sendOtp(phone: string): Promise<void> {
+  await client.post("/api/auth/otp/send", { phone });
+}
+
+export async function otpLogin(phone: string, otp_code: string): Promise<TokenResponse> {
+  const { data } = await client.post<TokenResponse>("/api/auth/otp/login", { phone, otp_code });
+  return data;
+}
+
+export async function fetchUpdateUsername(username: string): Promise<void> {
+  await client.put("/api/auth/username", { username });
+}
+
+export async function fetchRequestPhone(phone: string): Promise<void> {
+  await client.post("/api/auth/phone/request", { phone });
+}
+
+export async function fetchConfirmPhone(phone: string, otp_code: string): Promise<void> {
+  await client.post("/api/auth/phone/confirm", { phone, otp_code });
 }
