@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
-import random
+import logging
 import re
+import secrets
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -10,14 +11,16 @@ from app.database import get_session
 from app.models import User, AppSettings, ShockSetting
 from app.auth import hash_password, verify_password, create_access_token, get_current_user
 
+logger = logging.getLogger(__name__)
+
 _otp_store: dict[str, tuple[str, datetime]] = {}
 OTP_TTL_SECONDS = 300  # 5 minutes
 
 def _send_otp(phone: str, code: str) -> None:
-    print(f"[OTP MOCK] {phone} → {code}", flush=True)
+    logger.info("[OTP MOCK] %s → %s", phone, code)
 
 def _generate_otp() -> str:
-    return f"{random.randint(0, 999999):06d}"
+    return f"{secrets.randbelow(1_000_000):06d}"
 
 def _store_otp(key: str, code: str) -> None:
     _otp_store[key] = (code, datetime.now(timezone.utc) + timedelta(seconds=OTP_TTL_SECONDS))
@@ -89,6 +92,7 @@ def register(data: RegisterRequest, session: Session = Depends(get_session)):
 @router.post("/login", response_model=TokenResponse)
 def login(data: LoginRequest, session: Session = Depends(get_session)):
     identifier = data.identifier.strip()
+    user = None
     if "@" in identifier:
         user = session.exec(select(User).where(User.email == identifier.lower())).first()
     elif re.match(r"^\+?[0-9]{8,15}$", identifier):
