@@ -192,3 +192,72 @@ def update_password(
     session.add(current_user)
     session.commit()
     return {"ok": True}
+
+
+class UpdateUsernameRequest(BaseModel):
+    username: str
+
+
+@router.put("/username", status_code=200)
+def update_username(
+    data: UpdateUsernameRequest,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    username = data.username.strip()
+    if not re.match(r"^[a-zA-Z0-9_]{3,30}$", username):
+        raise HTTPException(status_code=422, detail="ใช้ได้เฉพาะ a-z 0-9 _ (3–30 ตัว)")
+    if session.exec(select(User).where(User.username == username)).first():
+        raise HTTPException(status_code=409, detail="Username นี้ถูกใช้แล้ว")
+    current_user.username = username
+    session.add(current_user)
+    session.commit()
+    return {"ok": True}
+
+
+class PhoneRequestBody(BaseModel):
+    phone: str
+
+
+@router.post("/phone/request", status_code=200)
+def phone_request(
+    data: PhoneRequestBody,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    phone = data.phone.strip()
+    existing = session.exec(select(User).where(User.phone == phone)).first()
+    if existing and existing.id != current_user.id:
+        raise HTTPException(status_code=409, detail="เบอร์นี้ถูกใช้แล้ว")
+    key = f"verify:{phone}"
+    if key in _otp_store:
+        _, exp = _otp_store[key]
+        if exp > datetime.now(timezone.utc) + timedelta(seconds=OTP_TTL_SECONDS - 60):
+            raise HTTPException(status_code=429, detail="รอ 60 วินาทีก่อนขอ OTP ใหม่")
+    code = _generate_otp()
+    _store_otp(key, code)
+    _send_otp(phone, code)
+    return {"ok": True, "expires_in": OTP_TTL_SECONDS}
+
+
+class PhoneConfirmBody(BaseModel):
+    phone: str
+    otp_code: str
+
+
+@router.post("/phone/confirm", status_code=200)
+def phone_confirm(
+    data: PhoneConfirmBody,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    phone = data.phone.strip()
+    key = f"verify:{phone}"
+    if not _verify_otp(key, data.otp_code):
+        raise HTTPException(status_code=401, detail="OTP ไม่ถูกต้องหรือหมดอายุ")
+    _otp_store.pop(key, None)
+    current_user.phone = phone
+    current_user.phone_verified = True
+    session.add(current_user)
+    session.commit()
+    return {"ok": True}
