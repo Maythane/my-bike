@@ -135,6 +135,9 @@ type SaveForm = {
   note: string;
 };
 
+// TODO(Task 11): replace with real bikeId from bike selector context
+const TEMP_BIKE_ID = 0;
+
 export default function ShockSettingsPage() {
   const [riderInput, setRiderInput] = useState("75");
   const [passengerInput, setPassengerInput] = useState("0");
@@ -152,7 +155,7 @@ export default function ShockSettingsPage() {
   });
 
   useEffect(() => {
-    getShockSetting().then((s) => {
+    getShockSetting(TEMP_BIKE_ID).then((s) => {
       setRiderInput(String(s.rider_weight));
       setPassengerInput(String(s.passenger_weight));
       setModeInput(s.mode as RideMode);
@@ -212,6 +215,10 @@ export default function ShockSettingsPage() {
         comp: Number(saveForm.comp) || 0,
         reb: Number(saveForm.reb) || 0,
         note: saveForm.note.trim() || null,
+        user_id: null,
+        motorcycle_id: TEMP_BIKE_ID || null,
+        shock_brand: null,
+        shock_model: null,
       });
       setPresets((prev) => [created, ...prev]);
       setShowSaveSheet(false);
@@ -266,7 +273,7 @@ export default function ShockSettingsPage() {
     setPassengerInput(String(p.passenger_weight));
     setModeInput(p.mode as RideMode);
     setApplied({ rider: p.rider_weight, passenger: p.passenger_weight, mode: p.mode as RideMode });
-    updateShockSetting({ rider_weight: p.rider_weight, passenger_weight: p.passenger_weight, mode: p.mode }).catch(() => {});
+    updateShockSetting(TEMP_BIKE_ID, { rider_weight: p.rider_weight, passenger_weight: p.passenger_weight, mode: p.mode }).catch(() => {});
   }
 
   return (
@@ -392,7 +399,7 @@ export default function ShockSettingsPage() {
               mode: modeInput,
             };
             setApplied(next);
-            updateShockSetting({ rider_weight: next.rider, passenger_weight: next.passenger, mode: next.mode }).catch(() => {});
+            updateShockSetting(TEMP_BIKE_ID, { rider_weight: next.rider, passenger_weight: next.passenger, mode: next.mode }).catch(() => {});
           }}
         >
           <IconCalculator size={20} />

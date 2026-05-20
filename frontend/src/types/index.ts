@@ -105,3 +105,23 @@ export interface TaskTemplate {
   default_interval_months: number | null;
   category: string;
 }
+
+export interface ShockBrand {
+  id: number;
+  name: string;
+  accent_color: string;
+  banner_bg_color: string;
+  header_image_url: string | null;
+  shock_models: string[];
+}
+
+export interface ShockSetting {
+  id: number;
+  motorcycle_id: number | null;
+  user_id: number | null;
+  rider_weight: number;
+  passenger_weight: number;
+  mode: string;
+  shock_brand: string | null;
+  shock_model: string | null;
+}

@@ -25,3 +25,14 @@ export async function fetchMe(): Promise<UserInfo> {
   const { data } = await client.get<UserInfo>("/api/auth/me");
   return data;
 }
+
+export async function fetchUpdateEmail(new_email: string): Promise<void> {
+  await client.put("/api/auth/email", { new_email });
+}
+
+export async function fetchUpdatePassword(
+  current_password: string,
+  new_password: string,
+): Promise<void> {
+  await client.put("/api/auth/password", { current_password, new_password });
+}
