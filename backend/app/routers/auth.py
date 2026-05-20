@@ -207,7 +207,8 @@ def update_username(
     username = data.username.strip()
     if not re.match(r"^[a-zA-Z0-9_]{3,30}$", username):
         raise HTTPException(status_code=422, detail="ใช้ได้เฉพาะ a-z 0-9 _ (3–30 ตัว)")
-    if session.exec(select(User).where(User.username == username)).first():
+    existing = session.exec(select(User).where(User.username == username)).first()
+    if existing and existing.id != current_user.id:
         raise HTTPException(status_code=409, detail="Username นี้ถูกใช้แล้ว")
     current_user.username = username
     session.add(current_user)
@@ -226,6 +227,8 @@ def phone_request(
     session: Session = Depends(get_session),
 ):
     phone = data.phone.strip()
+    if not re.match(r"^\+?[0-9]{8,15}$", phone):
+        raise HTTPException(status_code=422, detail="เบอร์โทรไม่ถูกต้อง")
     existing = session.exec(select(User).where(User.phone == phone)).first()
     if existing and existing.id != current_user.id:
         raise HTTPException(status_code=409, detail="เบอร์นี้ถูกใช้แล้ว")
@@ -252,10 +255,15 @@ def phone_confirm(
     session: Session = Depends(get_session),
 ):
     phone = data.phone.strip()
+    if not re.match(r"^\+?[0-9]{8,15}$", phone):
+        raise HTTPException(status_code=422, detail="เบอร์โทรไม่ถูกต้อง")
     key = f"verify:{phone}"
     if not _verify_otp(key, data.otp_code):
         raise HTTPException(status_code=401, detail="OTP ไม่ถูกต้องหรือหมดอายุ")
     _otp_store.pop(key, None)
+    existing = session.exec(select(User).where(User.phone == phone)).first()
+    if existing and existing.id != current_user.id:
+        raise HTTPException(status_code=409, detail="เบอร์นี้ถูกใช้แล้ว")
     current_user.phone = phone
     current_user.phone_verified = True
     session.add(current_user)
