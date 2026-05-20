@@ -1,6 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getShockSetting, updateShockSetting } from "../api/shock";
 import { listPresets, createPreset, updatePreset, deletePreset, type ShockPreset } from "../api/shock_presets";
+import { getAllMotorcycles } from "../api/motorcycles";
+import { fetchShockBrands } from "../api/shockBrands";
+import type { ShockBrand } from "../types";
 
 type RideMode = "street" | "heavy";
 
@@ -135,8 +139,12 @@ type SaveForm = {
   note: string;
 };
 
-// TODO(Task 11): replace with real bikeId from bike selector context
-const TEMP_BIKE_ID = 0;
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
 
 export default function ShockSettingsPage() {
   const [riderInput, setRiderInput] = useState("75");
@@ -154,15 +162,45 @@ export default function ShockSettingsPage() {
     preload: "", comp: "", reb: "", note: "",
   });
 
+  const BIKE_KEY = "lastSelectedBikeId";
+  const [selectedBikeId, setSelectedBikeId] = useState<number | null>(() => {
+    const saved = localStorage.getItem(BIKE_KEY);
+    return saved ? Number(saved) : null;
+  });
+  const { data: bikes } = useQuery({ queryKey: ["motorcycles"], queryFn: getAllMotorcycles });
+  const { data: brands } = useQuery({ queryKey: ["shock-brands"], queryFn: fetchShockBrands });
+  const activeBikeId = selectedBikeId ?? bikes?.[0]?.id ?? null;
+  function selectBike(id: number) {
+    setSelectedBikeId(id);
+    localStorage.setItem(BIKE_KEY, String(id));
+  }
+  const [activeBrand, setActiveBrand] = useState<ShockBrand | null>(null);
+
   useEffect(() => {
-    getShockSetting(TEMP_BIKE_ID).then((s) => {
+    if (!activeBikeId) return;
+    getShockSetting(activeBikeId).then((s) => {
       setRiderInput(String(s.rider_weight));
       setPassengerInput(String(s.passenger_weight));
       setModeInput(s.mode as RideMode);
       setApplied({ rider: s.rider_weight, passenger: s.passenger_weight, mode: s.mode as RideMode });
+      if (s.shock_brand && brands) {
+        setActiveBrand(brands.find((b) => b.name === s.shock_brand) ?? null);
+      } else {
+        setActiveBrand(null);
+      }
     }).catch(() => {});
     listPresets().then(setPresets).catch(() => {});
-  }, []);
+  }, [activeBikeId, brands]);
+
+  const brandStyle: React.CSSProperties = activeBrand
+    ? ({
+        "--brand-accent": activeBrand.accent_color,
+        "--brand-accent-bg": hexToRgba(activeBrand.accent_color, 0.14),
+        "--brand-accent-border": hexToRgba(activeBrand.accent_color, 0.40),
+        "--brand-accent-glow": hexToRgba(activeBrand.accent_color, 0.28),
+        "--brand-banner-bg": activeBrand.banner_bg_color,
+      } as React.CSSProperties)
+    : {};
 
   const totalWeight = applied.rider + applied.passenger;
   const activeBand = useMemo(
@@ -216,8 +254,8 @@ export default function ShockSettingsPage() {
         reb: Number(saveForm.reb) || 0,
         note: saveForm.note.trim() || null,
         user_id: null,
-        motorcycle_id: TEMP_BIKE_ID || null,
-        shock_brand: null,
+        motorcycle_id: activeBikeId ?? null,
+        shock_brand: activeBrand?.name ?? null,
         shock_model: null,
       });
       setPresets((prev) => [created, ...prev]);
@@ -273,11 +311,31 @@ export default function ShockSettingsPage() {
     setPassengerInput(String(p.passenger_weight));
     setModeInput(p.mode as RideMode);
     setApplied({ rider: p.rider_weight, passenger: p.passenger_weight, mode: p.mode as RideMode });
-    updateShockSetting(TEMP_BIKE_ID, { rider_weight: p.rider_weight, passenger_weight: p.passenger_weight, mode: p.mode }).catch(() => {});
+    updateShockSetting(activeBikeId!, { rider_weight: p.rider_weight, passenger_weight: p.passenger_weight, mode: p.mode }).catch(() => {});
   }
 
   return (
-    <div className="page shock-page">
+    <div style={brandStyle}>
+      {activeBrand?.header_image_url && (
+        <div className="shock-brand-banner" style={{ background: "var(--brand-banner-bg, var(--canvas))" }}>
+          <img src={activeBrand.header_image_url} alt={activeBrand.name} />
+          <div className="shock-brand-banner-fade" />
+        </div>
+      )}
+      <div className="page shock-page">
+        {bikes && bikes.length > 1 && (
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
+            {bikes.map((bike) => (
+              <button
+                key={bike.id}
+                className={activeBikeId === bike.id ? "chip-brand-active" : "chip-brand-idle"}
+                onClick={() => selectBike(bike.id)}
+              >
+                {bike.nickname ?? `${bike.make} ${bike.model}`}
+              </button>
+            ))}
+          </div>
+        )}
       <div className="shock-page-header">
         <div>
           <p className="shock-page-kicker">Profender Setup</p>
@@ -399,7 +457,7 @@ export default function ShockSettingsPage() {
               mode: modeInput,
             };
             setApplied(next);
-            updateShockSetting(TEMP_BIKE_ID, { rider_weight: next.rider, passenger_weight: next.passenger, mode: next.mode }).catch(() => {});
+            updateShockSetting(activeBikeId!, { rider_weight: next.rider, passenger_weight: next.passenger, mode: next.mode }).catch(() => {});
           }}
         >
           <IconCalculator size={20} />
@@ -755,6 +813,7 @@ export default function ShockSettingsPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
