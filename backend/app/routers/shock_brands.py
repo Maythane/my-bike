@@ -54,7 +54,10 @@ async def upload_brand_image(
     brand = session.get(ShockBrand, brand_id)
     if not brand:
         raise HTTPException(status_code=404, detail="Brand not found")
-    ext = os.path.splitext(file.filename or "")[1].lower() or ".png"
+    ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+    ext = os.path.splitext(file.filename or "")[1].lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(status_code=422, detail=f"File type not allowed. Use: {', '.join(sorted(ALLOWED_EXTENSIONS))}")
     filename = f"{brand.name.lower().replace(' ', '_').replace('ö', 'o')}{ext}"
     os.makedirs(BRANDS_DIR, exist_ok=True)
     dest = os.path.join(BRANDS_DIR, filename)
