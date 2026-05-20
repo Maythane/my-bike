@@ -1,4 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+import random
+import re
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlmodel import Session, select
@@ -6,6 +9,29 @@ from sqlmodel import Session, select
 from app.database import get_session
 from app.models import User, AppSettings, ShockSetting
 from app.auth import hash_password, verify_password, create_access_token, get_current_user
+
+_otp_store: dict[str, tuple[str, datetime]] = {}
+OTP_TTL_SECONDS = 300  # 5 minutes
+
+def _send_otp(phone: str, code: str) -> None:
+    print(f"[OTP MOCK] {phone} → {code}", flush=True)
+
+def _generate_otp() -> str:
+    return f"{random.randint(0, 999999):06d}"
+
+def _store_otp(key: str, code: str) -> None:
+    _otp_store[key] = (code, datetime.now(timezone.utc) + timedelta(seconds=OTP_TTL_SECONDS))
+
+def _verify_otp(key: str, code: str) -> bool:
+    entry = _otp_store.get(key)
+    if not entry:
+        return False
+    stored_code, exp = entry
+    if datetime.now(timezone.utc) > exp:
+        _otp_store.pop(key, None)
+        return False
+    return stored_code == code
+
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -16,7 +42,7 @@ class RegisterRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    email: str
+    identifier: str
     password: str
 
 
@@ -28,6 +54,9 @@ class TokenResponse(BaseModel):
 class UserRead(BaseModel):
     id: int
     email: str
+    username: Optional[str] = None
+    phone: Optional[str] = None
+    phone_verified: bool = False
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -59,10 +88,15 @@ def register(data: RegisterRequest, session: Session = Depends(get_session)):
 
 @router.post("/login", response_model=TokenResponse)
 def login(data: LoginRequest, session: Session = Depends(get_session)):
-    email = data.email.lower().strip()
-    user = session.exec(select(User).where(User.email == email)).first()
+    identifier = data.identifier.strip()
+    if "@" in identifier:
+        user = session.exec(select(User).where(User.email == identifier.lower())).first()
+    elif re.match(r"^\+?[0-9]{8,15}$", identifier):
+        raise HTTPException(status_code=400, detail="เบอร์โทรต้องใช้ OTP — ใช้ /api/auth/otp/send")
+    else:
+        user = session.exec(select(User).where(User.username == identifier)).first()
     if not user or not verify_password(data.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(status_code=401, detail="ไม่พบบัญชีหรือรหัสผ่านไม่ถูกต้อง")
     if not user.is_active:
         raise HTTPException(status_code=403, detail="Account disabled")
     return TokenResponse(access_token=create_access_token(user.id))
