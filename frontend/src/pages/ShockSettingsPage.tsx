@@ -1,30 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getShockSetting, updateShockSetting } from "../api/shock";
+import { getShockSetting, updateShockSetting, getShockChart } from "../api/shock";
 import { listPresets, createPreset, updatePreset, deletePreset, type ShockPreset } from "../api/shock_presets";
 import { getAllMotorcycles } from "../api/motorcycles";
 import { fetchShockBrands } from "../api/shockBrands";
-import type { ShockBrand } from "../types";
+import type { ShockBrand, ShockBand } from "../types";
 
 type RideMode = "street" | "heavy";
 
-type ShockBand = {
-  label: string;
-  min: number;
-  max: number; // exclusive upper bound (use < for comparison), except last band
-  preloadMin: number;
-  preloadMax: number;
-  streetCompMin: number;
-  streetCompMax: number;
-  streetRebMin: number;
-  streetRebMax: number;
-  heavyCompMin: number;
-  heavyCompMax: number;
-  heavyRebMin: number;
-  heavyRebMax: number;
-};
-
-const SHOCK_BANDS: ShockBand[] = [
+// Fallback chart — used when the active shock has no chart data in the DB
+const FALLBACK_BANDS: ShockBand[] = [
   { label: "< 50",     min: 0,   max: 50,  preloadMin: 1,  preloadMax: 3,  streetCompMin: 3,  streetCompMax: 9,  streetRebMin: 3,  streetRebMax: 9,  heavyCompMin: 5,  heavyCompMax: 11, heavyRebMin: 5,  heavyRebMax: 11 },
   { label: "50 - 70",  min: 50,  max: 70,  preloadMin: 3,  preloadMax: 3,  streetCompMin: 4,  streetCompMax: 10, streetRebMin: 4,  streetRebMax: 10, heavyCompMin: 6,  heavyCompMax: 12, heavyRebMin: 6,  heavyRebMax: 12 },
   { label: "70 - 90",  min: 70,  max: 90,  preloadMin: 3,  preloadMax: 5,  streetCompMin: 5,  streetCompMax: 11, streetRebMin: 5,  streetRebMax: 11, heavyCompMin: 7,  heavyCompMax: 13, heavyRebMin: 7,  heavyRebMax: 13 },
@@ -147,6 +133,7 @@ function hexToRgba(hex: string, alpha: number): string {
 }
 
 export default function ShockSettingsPage() {
+  const navigate = useNavigate();
   const [riderInput, setRiderInput] = useState("75");
   const [passengerInput, setPassengerInput] = useState("0");
   const [modeInput, setModeInput] = useState<RideMode>("street");
@@ -170,11 +157,19 @@ export default function ShockSettingsPage() {
   const { data: bikes } = useQuery({ queryKey: ["motorcycles"], queryFn: getAllMotorcycles });
   const { data: brands } = useQuery({ queryKey: ["shock-brands"], queryFn: fetchShockBrands });
   const activeBikeId = selectedBikeId ?? bikes?.[0]?.id ?? null;
+  const { data: chartData } = useQuery({
+    queryKey: ["shock-chart", activeBikeId],
+    queryFn: () => getShockChart(activeBikeId!),
+    enabled: !!activeBikeId,
+  });
   function selectBike(id: number) {
     setSelectedBikeId(id);
     localStorage.setItem(BIKE_KEY, String(id));
   }
+  const activeBands: ShockBand[] = chartData?.bands ?? FALLBACK_BANDS;
+
   const [activeBrand, setActiveBrand] = useState<ShockBrand | null>(null);
+  const [shockModel, setShockModel] = useState<string | null>(null);
 
   useEffect(() => {
     if (!activeBikeId) return;
@@ -183,6 +178,7 @@ export default function ShockSettingsPage() {
       setPassengerInput(String(s.passenger_weight));
       setModeInput(s.mode as RideMode);
       setApplied({ rider: s.rider_weight, passenger: s.passenger_weight, mode: s.mode as RideMode });
+      setShockModel(s.shock_model ?? null);
       if (s.shock_brand && brands) {
         setActiveBrand(brands.find((b) => b.name === s.shock_brand) ?? null);
       } else {
@@ -204,8 +200,8 @@ export default function ShockSettingsPage() {
 
   const totalWeight = applied.rider + applied.passenger;
   const activeBand = useMemo(
-    () => SHOCK_BANDS.find((band) => totalWeight >= band.min && totalWeight < band.max) ?? null,
-    [totalWeight],
+    () => activeBands.find((band) => totalWeight >= band.min && totalWeight < band.max) ?? null,
+    [totalWeight, activeBands],
   );
 
   const recommended = useMemo(() => {
@@ -323,6 +319,19 @@ export default function ShockSettingsPage() {
         </div>
       )}
       <div className="page shock-page">
+        <button
+          onClick={() => {
+            document.documentElement.dataset.navDir = "back";
+            setTimeout(() => { delete document.documentElement.dataset.navDir; }, 500);
+            navigate(activeBikeId ? `/bikes/${activeBikeId}` : "/", { viewTransition: true });
+          }}
+          style={{ display: "inline-flex", alignItems: "center", gap: 5, color: "var(--slate)", fontSize: 13, marginBottom: 16 }}
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M9 11L5 7l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          กลับ
+        </button>
         {bikes && bikes.length > 1 && (
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
             {bikes.map((bike) => (
@@ -338,9 +347,46 @@ export default function ShockSettingsPage() {
         )}
       <div className="shock-page-header">
         <div>
-          <p className="shock-page-kicker">Profender Setup</p>
-          <h1>ตั้งค่าโช้ค</h1>
-          <p className="shock-page-subtitle">Grand Filano 2018 - 2022 ตาม chart น้ำหนักรวมของผู้ขับขี่และคนซ้อน</p>
+          <p className="shock-page-kicker">
+            {activeBrand ? `${activeBrand.name} Setup` : "Shock Setup"}
+          </p>
+          <h1>
+            {(() => {
+              const b = bikes?.find((b) => b.id === activeBikeId);
+              return b ? (b.nickname ?? `${b.make} ${b.model}`) : "ตั้งค่าโช้ค";
+            })()}
+          </h1>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
+            {activeBrand && (
+              <span style={{
+                fontSize: 11, fontWeight: 600, padding: "2px 8px",
+                borderRadius: 99, border: "1px solid var(--brand-accent-border, var(--purple-border))",
+                color: "var(--brand-accent, var(--purple))",
+                background: "var(--brand-accent-bg, var(--purple-bg))",
+                letterSpacing: "0.04em",
+              }}>
+                {activeBrand.name}
+              </span>
+            )}
+            {shockModel && (
+              <span style={{
+                fontSize: 11, fontWeight: 600, padding: "2px 8px",
+                borderRadius: 99, border: "1px solid var(--glass-border)",
+                color: "var(--slate)", background: "var(--surface-soft)",
+                letterSpacing: "0.04em",
+              }}>
+                {shockModel}
+              </span>
+            )}
+            <button
+              className="btn btn-ghost btn-sm"
+              style={{ fontSize: 11, padding: "2px 10px", marginLeft: 2 }}
+              onClick={() => activeBikeId && navigate(`/settings/bikes/${activeBikeId}/shock`, { viewTransition: true, state: { from: "shock-settings" } })}
+            >
+              เปลี่ยนโช้ค
+            </button>
+          </div>
+          <p className="shock-page-subtitle" style={{ marginTop: 6 }}>ตาม chart น้ำหนักรวมของผู้ขับขี่และคนซ้อน</p>
         </div>
       </div>
 
@@ -579,7 +625,7 @@ export default function ShockSettingsPage() {
               </tr>
             </thead>
             <tbody>
-              {SHOCK_BANDS.map((band) => (
+              {activeBands.map((band) => (
                 <tr key={band.label} className={activeBand?.label === band.label ? "is-active" : ""}>
                   <td>{band.label}</td>
                   <td>{formatNumber(band.preloadMin)}{band.preloadMin !== band.preloadMax ? ` - ${formatNumber(band.preloadMax)}` : ""}</td>

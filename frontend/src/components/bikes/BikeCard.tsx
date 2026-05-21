@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Motorcycle } from "../../types";
 import ServiceLogForm from "../logs/ServiceLogForm";
+import FuelLogForm from "../logs/FuelLogForm";
 
 interface Props {
   bike: Motorcycle;
@@ -10,6 +11,8 @@ interface Props {
 export default function BikeCard({ bike }: Props) {
   const navigate = useNavigate();
   const [showLog, setShowLog] = useState(false);
+  const [showFuelLog, setShowFuelLog] = useState(false);
+  const [showQuickMenu, setShowQuickMenu] = useState(false);
   const unit = bike.mileage_unit ?? "km";
   const hasPhoto = !!bike.image_path;
 
@@ -18,11 +21,12 @@ export default function BikeCard({ bike }: Props) {
       <div className="card" style={{ padding: 0, overflow: "hidden" }}>
         {/* Hero */}
         <div
-          onClick={() => navigate(`/bikes/${bike.id}`)}
+          onClick={() => navigate(`/bikes/${bike.id}`, { viewTransition: true })}
           style={{
             cursor: "pointer", overflow: "hidden", position: "relative",
             background: hasPhoto ? "var(--surface)" : "linear-gradient(135deg, var(--purple) 0%, #9d8df7 100%)",
             display: "flex", alignItems: "center", justifyContent: "center",
+            viewTransitionName: `bike-hero-${bike.id}`,
           }}
           className="garage-card-image"
         >
@@ -55,7 +59,7 @@ export default function BikeCard({ bike }: Props) {
         {/* Stats row */}
         <div
           className="garage-card-stats"
-          onClick={() => navigate(`/bikes/${bike.id}`)}
+          onClick={() => navigate(`/bikes/${bike.id}`, { viewTransition: true })}
           style={{ background: "transparent" }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.background = "var(--surface-soft)")}
           onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.background = "transparent")}
@@ -82,13 +86,46 @@ export default function BikeCard({ bike }: Props) {
         </div>
 
         <div style={{ padding: "10px 16px 14px", borderTop: "1px solid var(--hairline)" }}>
-          <button
-            className="btn btn-primary"
-            style={{ width: "100%", fontSize: 13 }}
-            onClick={() => setShowLog(true)}
-          >
-            + บันทึกการบำรุงรักษา
-          </button>
+          <div className="bike-overflow-wrap" style={{ width: "100%" }}>
+            <button
+              className="btn btn-primary"
+              style={{ width: "100%", fontSize: 13, justifyContent: "space-between", position: "relative", zIndex: 50 }}
+              onClick={() => setShowQuickMenu((v) => !v)}
+            >
+              <span>+ บันทึกรายการ</span>
+              <svg
+                width="14" height="14" viewBox="0 0 14 14" fill="none"
+                style={{
+                  transform: showQuickMenu ? "rotate(-90deg)" : "rotate(90deg)",
+                  transition: "transform 0.22s var(--jelly-ease)",
+                  flexShrink: 0,
+                }}
+              >
+                <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            {showQuickMenu && (
+              <>
+                <div className="bike-overflow-backdrop" onClick={() => setShowQuickMenu(false)} />
+                <div className="quick-log-menu">
+                  <button
+                    className="quick-log-item"
+                    onClick={() => { setShowQuickMenu(false); setShowLog(true); }}
+                  >
+                    <span className="quick-log-icon" style={{ background: "var(--purple-bg)", border: "1px solid var(--purple-border)" }}>🔧</span>
+                    <span>บันทึกการบำรุงรักษา</span>
+                  </button>
+                  <button
+                    className="quick-log-item"
+                    onClick={() => { setShowQuickMenu(false); setShowFuelLog(true); }}
+                  >
+                    <span className="quick-log-icon" style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.28)" }}>⛽</span>
+                    <span>บันทึกการเติมน้ำมัน</span>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -97,6 +134,14 @@ export default function BikeCard({ bike }: Props) {
           bikeId={bike.id}
           currentMileage={bike.current_mileage}
           onClose={() => setShowLog(false)}
+        />
+      )}
+      {showFuelLog && (
+        <FuelLogForm
+          bikeId={bike.id}
+          currentMileage={bike.current_mileage}
+          tankCapacity={bike.tank_capacity}
+          onClose={() => setShowFuelLog(false)}
         />
       )}
     </>

@@ -115,6 +115,22 @@ export interface ShockBrand {
   shock_models: string[];
 }
 
+export interface ShockBand {
+  label: string;
+  min: number;
+  max: number;
+  preloadMin: number;
+  preloadMax: number;
+  streetCompMin: number;
+  streetCompMax: number;
+  streetRebMin: number;
+  streetRebMax: number;
+  heavyCompMin: number;
+  heavyCompMax: number;
+  heavyRebMin: number;
+  heavyRebMax: number;
+}
+
 export interface ShockSetting {
   id: number;
   motorcycle_id: number | null;

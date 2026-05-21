@@ -124,6 +124,25 @@ button {
 button:focus { outline: none; }
 button:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
 
+/* ─── View Transitions ───────────────────────────────────────────────────── */
+@keyframes vt-out       { to   { opacity: 0; transform: scale(0.96) translateY(10px); } }
+@keyframes vt-in        { from { opacity: 0; transform: scale(0.98) translateY(14px); } }
+@keyframes vt-back-out  { to   { opacity: 0; transform: scale(0.98) translateY(-10px); } }
+@keyframes vt-back-in   { from { opacity: 0; transform: scale(0.96) translateY(-14px); } }
+
+/* Forward (default) */
+::view-transition-old(root) { animation: 180ms ease both vt-out; }
+::view-transition-new(root) { animation: 360ms var(--jelly-ease) both vt-in; }
+
+/* Back — toggled by html[data-nav-dir="back"] */
+html[data-nav-dir="back"]::view-transition-old(root) { animation: 180ms ease both vt-back-out; }
+html[data-nav-dir="back"]::view-transition-new(root) { animation: 360ms var(--jelly-ease) both vt-back-in; }
+
+::view-transition-group(*) {
+  animation-duration: 380ms;
+  animation-timing-function: var(--jelly-ease);
+}
+
 /* ─── Inputs ─────────────────────────────────────────────────────────────── */
 input, textarea, select {
   font: inherit;
@@ -175,54 +194,107 @@ label {
 }
 .btn:not(:disabled):active { transform: scale(0.94) translateY(2px); }
 .btn:hover:not(:disabled) { transform: scale(1.03); }
+@media (hover: none) { .btn:hover:not(:disabled) { transform: none; } }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
 .btn-primary {
-  background: var(--purple);
+  background: rgba(109, 40, 217, 0.82);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   color: #fff;
-  border-color: var(--purple);
-  box-shadow: 0 4px 16px rgba(167, 139, 250, 0.30);
+  border-color: rgba(167, 139, 250, 0.50);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.40),
+              0 0 0 0.5px rgba(255,255,255,0.18) inset;
 }
 .btn-primary:hover:not(:disabled) {
-  background: var(--purple-hover);
-  border-color: var(--purple-hover);
-  box-shadow: 0 6px 22px rgba(167, 139, 250, 0.45);
+  background: rgba(124, 58, 237, 0.92);
+  border-color: rgba(167, 139, 250, 0.68);
+  box-shadow: 0 6px 28px rgba(139, 92, 246, 0.56),
+              0 0 0 0.5px rgba(255,255,255,0.22) inset;
 }
 
 .btn-jelly {
-  background: var(--green);
-  color: #052e16;
-  border-color: var(--green);
-  box-shadow: 0 4px 18px var(--green-border);
+  background: rgba(5, 150, 105, 0.78);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  color: #ecfdf5;
+  border-color: rgba(52, 211, 153, 0.42);
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.34),
+              0 0 0 0.5px rgba(255,255,255,0.16) inset;
   font-weight: 700;
 }
 .btn-jelly:hover:not(:disabled) {
-  filter: brightness(1.12);
-  box-shadow: 0 6px 26px var(--green-border);
+  background: rgba(5, 150, 105, 0.92);
+  box-shadow: 0 6px 26px rgba(16, 185, 129, 0.48),
+              0 0 0 0.5px rgba(255,255,255,0.20) inset;
 }
 
 .btn-secondary {
-  background: var(--glass-bg);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   color: var(--ink);
-  border-color: var(--glass-border);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border-color: rgba(255, 255, 255, 0.13);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.22),
+              0 0 0 0.5px rgba(255,255,255,0.08) inset;
 }
-.btn-secondary:hover:not(:disabled) { background: var(--elevated); }
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.20);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.28),
+              0 0 0 0.5px rgba(255,255,255,0.12) inset;
+}
 
 .btn-ghost {
   background: transparent;
   color: var(--slate);
   border-color: transparent;
 }
-.btn-ghost:hover:not(:disabled) { background: var(--surface); color: var(--ink); }
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(255,255,255,0.08);
+  color: var(--ink);
+}
 
 .btn-danger {
-  background: transparent;
-  color: var(--red);
-  border-color: transparent;
+  background: rgba(220, 38, 38, 0.72);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  color: #fff;
+  border-color: rgba(252, 165, 165, 0.30);
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.30),
+              0 0 0 0.5px rgba(255,255,255,0.12) inset;
 }
-.btn-danger:hover:not(:disabled) { background: var(--red-bg); border-color: var(--red); }
+.btn-danger:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.88);
+  box-shadow: 0 6px 22px rgba(220, 38, 38, 0.44),
+              0 0 0 0.5px rgba(255,255,255,0.16) inset;
+}
+
+/* ─── Light mode button overrides ──────────────────────────────────── */
+html.light .btn-primary {
+  background: rgba(109, 40, 217, 0.88);
+  border-color: rgba(109, 40, 217, 0.55);
+  box-shadow: 0 4px 18px rgba(109, 40, 217, 0.28),
+              0 0 0 0.5px rgba(255,255,255,0.35) inset;
+}
+html.light .btn-primary:hover:not(:disabled) {
+  background: rgba(109, 40, 217, 0.96);
+  box-shadow: 0 6px 24px rgba(109, 40, 217, 0.40),
+              0 0 0 0.5px rgba(255,255,255,0.40) inset;
+}
+html.light .btn-secondary {
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(0, 0, 0, 0.11);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08),
+              0 0 0 0.5px rgba(255,255,255,0.85) inset;
+}
+html.light .btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.80);
+  border-color: rgba(0, 0, 0, 0.16);
+}
+html.light .btn-ghost:hover:not(:disabled) { background: rgba(0,0,0,0.06); }
+html.light .btn-danger { background: rgba(220, 38, 38, 0.82); }
+html.light .btn-jelly { background: rgba(5, 150, 105, 0.84); }
 
 .btn-sm { padding: 6px 14px; font-size: 13px; }
 
@@ -237,7 +309,7 @@ label {
   box-shadow: var(--shadow-card);
   transition: transform var(--spring), box-shadow var(--spring);
 }
-.card:active { transform: scale(0.97) translateY(2px); }
+.card:active:not(:has(button:active, a:active, .bike-overflow-backdrop:active)) { transform: scale(0.97) translateY(2px); }
 
 .card-surface {
   background: var(--surface);
@@ -840,6 +912,59 @@ html.light .bike-overflow-menu {
 @keyframes overflow-pop {
   from { opacity: 0; transform: scale(0.92) translateY(-4px); }
   to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* ─── Jelly click animation (class-toggled via JS) ───────────────────── */
+@keyframes btn-jelly-click {
+  0%   { transform: scale(1); }
+  22%  { transform: scale(0.88); }
+  55%  { transform: scale(1.07); }
+  78%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+.btn-clicking {
+  animation: btn-jelly-click 0.38s var(--jelly-ease) both !important;
+  transform: scale(1) !important;
+}
+
+/* ─── Quick log dropdown ──────────────────────────────────────────────── */
+.quick-log-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0; right: 0;
+  z-index: 50;
+  background: var(--canvas);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  box-shadow: 0 -6px 24px rgba(0,0,0,0.36), 0 2px 6px rgba(0,0,0,0.18);
+  overflow: hidden;
+  animation: quick-log-pop 0.22s var(--jelly-ease);
+}
+html.light .quick-log-menu {
+  background: #fff;
+  box-shadow: 0 -6px 20px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+@keyframes quick-log-pop {
+  from { opacity: 0; transform: scale(0.95) translateY(6px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+.quick-log-item {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 14px 16px;
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  background: none; border: none; cursor: pointer;
+  transition: background 0.12s;
+  text-align: left;
+}
+.quick-log-item:hover { background: var(--surface-soft); }
+.quick-log-item + .quick-log-item { border-top: 1px solid var(--hairline); }
+
+.quick-log-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
 }
 
 .bike-overflow-item {
@@ -1989,8 +2114,9 @@ html.light .shock-preset-card {
 .pw-wrap input { width: 100%; padding-right: 2.5rem; box-sizing: border-box; }
 .pw-toggle {
   position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
-  background: none; border: none; cursor: pointer; padding: 0; line-height: 1;
-  color: var(--slate); font-size: 1.1rem; opacity: 0.7;
+  background: none; border: none; cursor: pointer; padding: 0;
+  display: inline-flex; align-items: center;
+  color: var(--slate); opacity: 0.7;
 }
 .pw-toggle:hover { opacity: 1; }
 .auth-error { color: var(--red); font-size: 0.875rem; margin: 0; }
@@ -2037,6 +2163,10 @@ html.light .shock-preset-card {
 .avatar-dropdown-item:hover { background: var(--surface); }
 .avatar-dropdown-item.danger { color: var(--red); }
 .avatar-dropdown-divider { height: 1px; background: var(--hairline); margin: 4px 0; }
+html.light .avatar-dropdown {
+  background: rgba(245, 245, 255, 0.95);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
 
 /* ─── Account Modal ─────────────────────────────────────────────── */
 .modal-overlay {
@@ -2057,6 +2187,10 @@ html.light .shock-preset-card {
 @keyframes modal-in {
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
+}
+html.light .modal-box {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.15);
 }
 .modal-header {
   display: flex; justify-content: space-between; align-items: center;

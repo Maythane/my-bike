@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getMotorcycle, deleteMotorcycle, uploadBikeImage, deleteBikeImage } from "../api/motorcycles";
+import { getShockSetting } from "../api/shock";
 import { getServiceLogs, deleteServiceLog } from "../api/logs";
 import { getFuelLogs, getFuelEconomy, deleteFuelLog } from "../api/fuel";
 import BikeForm from "../components/bikes/BikeForm";
@@ -10,6 +11,7 @@ import FuelLogForm from "../components/logs/FuelLogForm";
 import SkeletonCard from "../components/ui/SkeletonCard";
 import Lightbox from "../components/ui/Lightbox";
 import BikeSpecs from "../components/profiles/BikeSpecs";
+import ImageCropper from "../components/ui/ImageCropper";
 import { useConfirm } from "../hooks/useConfirm";
 import type { ServiceLog, FuelLog, FuelEconomy } from "../types";
 
@@ -27,6 +29,8 @@ export default function BikePage() {
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
   const [showOverflow, setShowOverflow] = useState(false);
   const [showManual, setShowManual] = useState(false);
+  const [shockLoading, setShockLoading] = useState(false);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
   const photoRef = useRef<HTMLInputElement>(null);
   const { dialog: confirmDialog, confirm } = useConfirm();
 
@@ -71,8 +75,19 @@ export default function BikePage() {
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) uploadImageMut.mutate(file);
+    if (file) setCropSrc(URL.createObjectURL(file));
     e.target.value = "";
+  };
+
+  const handleCropConfirm = (blob: Blob) => {
+    uploadImageMut.mutate(new File([blob], "bike-photo.jpg", { type: "image/jpeg" }));
+    URL.revokeObjectURL(cropSrc!);
+    setCropSrc(null);
+  };
+
+  const handleCropCancel = () => {
+    if (cropSrc) URL.revokeObjectURL(cropSrc);
+    setCropSrc(null);
   };
 
   const deleteLogMut = useMutation({
@@ -90,10 +105,29 @@ export default function BikePage() {
 
   const unit = bike?.mileage_unit ?? "km";
 
+  async function handleShockClick() {
+    if (shockLoading) return;
+    setShockLoading(true);
+    try {
+      const setting = await getShockSetting(bid);
+      localStorage.setItem("lastSelectedBikeId", String(bid));
+      navigate(
+        setting.shock_brand ? "/shock-settings" : `/settings/bikes/${bid}/shock`,
+        { viewTransition: true, state: { from: "bike", bikeId: bid } },
+      );
+    } finally {
+      setShockLoading(false);
+    }
+  }
+
   return (
     <div className="page">
       <button
-        onClick={() => navigate("/")}
+        onClick={() => {
+          document.documentElement.dataset.navDir = "back";
+          setTimeout(() => { delete document.documentElement.dataset.navDir; }, 500);
+          navigate("/", { viewTransition: true });
+        }}
         style={{ display: "inline-flex", alignItems: "center", gap: 5, color: "var(--slate)", fontSize: 13, marginBottom: 24 }}
       >
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -110,7 +144,7 @@ export default function BikePage() {
             {/* Bike photo */}
             <div style={{ position: "relative" }}>
               {bike.image_path ? (
-                <div className="bike-hero-image" style={{ overflow: "hidden", background: "var(--surface)", position: "relative" }}>
+                <div className="bike-hero-image" style={{ overflow: "hidden", background: "var(--surface)", position: "relative", viewTransitionName: `bike-hero-${bid}` }}>
                   <img
                     src={bike.image_path}
                     alt={bike.nickname ?? bike.model}
@@ -248,6 +282,9 @@ export default function BikePage() {
               <button className="btn btn-secondary" style={{ fontSize: 14 }} onClick={() => setShowLogForm(true)}>
                 🔧 บันทึกการบำรุงรักษา
               </button>
+              <button className="btn btn-secondary" style={{ fontSize: 14 }} onClick={handleShockClick} disabled={shockLoading}>
+                {shockLoading ? "…" : "⚙️ ตั้งค่าโช้ค"}
+              </button>
             </div>
             </div>{/* end padding div */}
           </div>
@@ -344,10 +381,12 @@ export default function BikePage() {
       )}
 
       {showLogForm && bike && (
-        <ServiceLogForm bikeId={bid} currentMileage={bike.current_mileage} onClose={() => setShowLogForm(false)} />
+        <ServiceLogForm bikeId={bid} currentMileage={bike.current_mileage} onClose={() => setShowLogForm(false)}
+          pastLocations={logs.map(l => l.location).filter((l): l is string => !!l?.trim())} />
       )}
       {editLog && bike && (
-        <ServiceLogForm bikeId={bid} currentMileage={bike.current_mileage} log={editLog} onClose={() => setEditLog(null)} />
+        <ServiceLogForm bikeId={bid} currentMileage={bike.current_mileage} log={editLog} onClose={() => setEditLog(null)}
+          pastLocations={logs.map(l => l.location).filter((l): l is string => !!l?.trim())} />
       )}
       {showFuelForm && bike && (
         <FuelLogForm bikeId={bid} currentMileage={bike.current_mileage} tankCapacity={bike.tank_capacity} onClose={() => setShowFuelForm(false)}
@@ -361,6 +400,7 @@ export default function BikePage() {
         <BikeForm bike={bike} onClose={() => setShowEditBike(false)} />
       )}
       {confirmDialog}
+      {cropSrc && <ImageCropper src={cropSrc} aspectRatio={2} onConfirm={handleCropConfirm} onCancel={handleCropCancel} />}
       {lightbox && <Lightbox images={lightbox.images} initialIndex={lightbox.index} onClose={() => setLightbox(null)} />}
 
       {showManual && (

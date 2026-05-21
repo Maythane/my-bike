@@ -3,12 +3,12 @@ from sqlmodel import Session, select
 from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
-import os, uuid, shutil
+import os, uuid
 
 from app.database import get_session
 from app.models import Motorcycle, Profile, UnitEnum, User
 from app.auth import get_current_user
-from app.utils import get_motorcycle_for_user
+from app.utils import get_motorcycle_for_user, save_compressed_image
 
 router = APIRouter(tags=["motorcycles"])
 
@@ -169,16 +169,13 @@ async def upload_bike_image(
     current_user: User = Depends(get_current_user),
 ):
     bike = get_motorcycle_for_user(bike_id, current_user, session)
-    ext = os.path.splitext(file.filename or "")[1].lower() or ".jpg"
-    filename = f"{bike_id}_{uuid.uuid4().hex[:8]}{ext}"
+    filename = f"{bike_id}_{uuid.uuid4().hex[:8]}.jpg"
     dest = os.path.join(UPLOAD_DIR, filename)
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
     if bike.image_path:
         old = os.path.join(UPLOAD_DIR, os.path.basename(bike.image_path))
         if os.path.exists(old):
             os.remove(old)
-    with open(dest, "wb") as f:
-        shutil.copyfileobj(file.file, f)
+    save_compressed_image(await file.read(), dest)
     bike.image_path = f"/uploads/bikes/{filename}"
     session.add(bike)
     session.commit()

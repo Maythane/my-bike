@@ -1,15 +1,22 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getShockSetting, updateShockSetting } from "../api/shock";
 import { fetchShockBrands } from "../api/shockBrands";
+import { getMotorcycle } from "../api/motorcycles";
 
 export default function ShockSetupPage() {
   const { bikeId } = useParams<{ bikeId: string }>();
   const id = Number(bikeId);
   const navigate = useNavigate();
+  const location = useLocation();
   const qc = useQueryClient();
+  const from = location.state?.from as string | undefined;
+  const backTo = from === "shock-settings" ? "/shock-settings"
+    : from === "settings" ? "/settings"
+    : `/bikes/${id}`;
 
+  const { data: bike } = useQuery({ queryKey: ["motorcycle", id], queryFn: () => getMotorcycle(id) });
   const { data: setting } = useQuery({
     queryKey: ["shock-setting", id],
     queryFn: () => getShockSetting(id),
@@ -34,25 +41,35 @@ export default function ShockSetupPage() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["shock-setting", id] });
       setSaved(true);
-      setTimeout(() => navigate("/settings"), 1000);
+      setTimeout(() => navigate("/shock-settings", { viewTransition: true }), 1000);
     },
   });
 
   return (
     <div className="page">
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
         <button
           className="btn btn-ghost btn-sm"
-          onClick={() => navigate("/settings")}
+          onClick={() => {
+            document.documentElement.dataset.navDir = "back";
+            setTimeout(() => { delete document.documentElement.dataset.navDir; }, 500);
+            navigate(backTo, { viewTransition: true });
+          }}
           style={{ fontSize: 13 }}
         >
-          ← Settings
+          ← กลับ
         </button>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--ink)", margin: 0 }}>
-          Shock Setup
-        </h1>
+        <div>
+          <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--ink)", margin: 0 }}>
+            เลือกยี่ห้อโช้ค
+          </h1>
+          {bike && (
+            <p style={{ fontSize: 13, color: "var(--slate)", margin: "2px 0 0" }}>
+              {bike.nickname ?? `${bike.make} ${bike.model}`} · {bike.year}
+            </p>
+          )}
+        </div>
       </div>
-      <p style={{ color: "var(--slate)", fontSize: 13, marginBottom: 20 }}>Bike ID: {id}</p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 

@@ -53,7 +53,7 @@ export default function AvatarMenu() {
             </div>
             <div
               className="avatar-dropdown-item"
-              onClick={() => { setOpen(false); navigate("/settings"); }}
+              onClick={() => { setOpen(false); navigate("/settings", { viewTransition: true }); }}
             >
               <span>⚙️</span> Settings
             </div>

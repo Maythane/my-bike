@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel, create_engine, Session
 from sqlalchemy import text
+import json
 import os
 
 DB_PATH = os.getenv("DB_PATH", "/app/data/moto.db")
@@ -17,6 +18,7 @@ def create_db():
     SQLModel.metadata.create_all(engine)
     _migrate()
     _migrate_shock_per_bike()
+    _migrate_shock_charts()
     _migrate_images()
 
 
@@ -46,7 +48,7 @@ def _migrate():
 def _migrate_shock_per_bike():
     """Add shock-per-bike columns and shock_brands table at startup (idempotent)."""
     SEED_BRANDS = [
-        ("Profender", "#e8251a", "#000000", '["P-Series","G30","G2R"]'),
+        ("Profender", "#e8251a", "#000000", '["X-Series+","X-Series","Flash"]'),
         ("Öhlins",   "#f4a620", "#1a5fb4", '["STX 36","EC 460","TTX GP"]'),
         ("YSS",      "#e01010", "#000000", '["G-Series","Z-Series","ME302"]'),
         ("Stock",    "#a78bfa", "#09091a", "[]"),
@@ -113,6 +115,51 @@ def _migrate_shock_per_bike():
             WHERE motorcycle_id IS NULL AND user_id IS NOT NULL
         """))
 
+        # Ensure Profender model list is up to date
+        row = conn.execute(text("SELECT shock_models FROM shock_brands WHERE name = 'Profender'")).fetchone()
+        if row:
+            models = json.loads(row[0] or "[]")
+            changed = False
+            models = [m for m in models if m not in ("P-Series", "G30", "G2R")]
+            for m in ["X-Series+", "X-Series", "Flash"]:
+                if m not in models:
+                    models.append(m)
+                    changed = True
+            if changed:
+                conn.execute(
+                    text("UPDATE shock_brands SET shock_models = :m WHERE name = 'Profender'"),
+                    {"m": json.dumps(models)},
+                )
+
+        conn.commit()
+
+
+PROFENDER_X_SERIES_PLUS = json.dumps([
+    {"label": "< 50",      "min": 0,   "max": 50,  "preloadMin": 1,  "preloadMax": 3,  "streetCompMin": 3,  "streetCompMax": 9,  "streetRebMin": 3,  "streetRebMax": 9,  "heavyCompMin": 5,  "heavyCompMax": 11, "heavyRebMin": 5,  "heavyRebMax": 11},
+    {"label": "50 - 70",   "min": 50,  "max": 70,  "preloadMin": 3,  "preloadMax": 3,  "streetCompMin": 4,  "streetCompMax": 10, "streetRebMin": 4,  "streetRebMax": 10, "heavyCompMin": 6,  "heavyCompMax": 12, "heavyRebMin": 6,  "heavyRebMax": 12},
+    {"label": "70 - 90",   "min": 70,  "max": 90,  "preloadMin": 3,  "preloadMax": 5,  "streetCompMin": 5,  "streetCompMax": 11, "streetRebMin": 5,  "streetRebMax": 11, "heavyCompMin": 7,  "heavyCompMax": 13, "heavyRebMin": 7,  "heavyRebMax": 13},
+    {"label": "90 - 110",  "min": 90,  "max": 110, "preloadMin": 8,  "preloadMax": 10, "streetCompMin": 6,  "streetCompMax": 12, "streetRebMin": 6,  "streetRebMax": 12, "heavyCompMin": 8,  "heavyCompMax": 14, "heavyRebMin": 8,  "heavyRebMax": 14},
+    {"label": "110 - 130", "min": 110, "max": 130, "preloadMin": 10, "preloadMax": 13, "streetCompMin": 7,  "streetCompMax": 13, "streetRebMin": 7,  "streetRebMax": 13, "heavyCompMin": 9,  "heavyCompMax": 15, "heavyRebMin": 9,  "heavyRebMax": 15},
+    {"label": "130 - 150", "min": 130, "max": 151, "preloadMin": 20, "preloadMax": 22, "streetCompMin": 8,  "streetCompMax": 14, "streetRebMin": 8,  "streetRebMax": 14, "heavyCompMin": 10, "heavyCompMax": 16, "heavyRebMin": 10, "heavyRebMax": 16},
+])
+
+
+def _migrate_shock_charts():
+    """Create shock_charts table and seed known charts (idempotent)."""
+    with engine.connect() as conn:
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS shock_charts (
+                id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                shock_brand TEXT NOT NULL,
+                shock_model TEXT,
+                chart_data  TEXT NOT NULL,
+                UNIQUE(shock_brand, shock_model)
+            )
+        """))
+        conn.execute(
+            text("INSERT OR IGNORE INTO shock_charts (shock_brand, shock_model, chart_data) VALUES (:b, :m, :d)"),
+            {"b": "Profender", "m": "X-Series+", "d": PROFENDER_X_SERIES_PLUS},
+        )
         conn.commit()
 
 

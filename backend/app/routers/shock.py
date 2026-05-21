@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
+from sqlalchemy import text
 from typing import Optional
+import json
 from pydantic import BaseModel
 
 from app.database import get_session
@@ -39,6 +41,32 @@ def get_shock_setting(
     current_user: User = Depends(get_current_user),
 ):
     return _get_or_create(bike_id, current_user, session)
+
+
+@router.get("/api/motorcycles/{bike_id}/shock-chart")
+def get_shock_chart(
+    bike_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    setting = _get_or_create(bike_id, current_user, session)
+    if not setting.shock_brand:
+        return {"bands": None}
+    # Try brand+model first, then brand-only (shock_model IS NULL)
+    row = session.exec(
+        select(text("chart_data")).select_from(text("shock_charts"))
+        .where(text("shock_brand = :b AND shock_model = :m"))
+        .params(b=setting.shock_brand, m=setting.shock_model)
+    ).first()
+    if not row and setting.shock_model:
+        row = session.exec(
+            select(text("chart_data")).select_from(text("shock_charts"))
+            .where(text("shock_brand = :b AND shock_model IS NULL"))
+            .params(b=setting.shock_brand)
+        ).first()
+    if not row:
+        return {"bands": None}
+    return {"bands": json.loads(row[0])}
 
 
 @router.put("/api/motorcycles/{bike_id}/shock-setting", response_model=ShockSetting)

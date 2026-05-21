@@ -33,7 +33,11 @@ export default function SettingsPage() {
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
         <button
           className="btn btn-ghost btn-sm"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            document.documentElement.dataset.navDir = "back";
+            setTimeout(() => { delete document.documentElement.dataset.navDir; }, 500);
+            navigate("/", { viewTransition: true });
+          }}
           style={{ fontSize: 13 }}
         >
           ← กลับ
@@ -84,7 +88,7 @@ export default function SettingsPage() {
               key={bike.id}
               bikeId={bike.id}
               bikeName={bike.nickname ?? `${bike.make} ${bike.model}`}
-              onEdit={() => navigate(`/settings/bikes/${bike.id}/shock`)}
+              onEdit={() => navigate(`/settings/bikes/${bike.id}/shock`, { viewTransition: true, state: { from: "settings" } })}
             />
           ))}
           {!bikes?.length && (
