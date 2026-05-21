@@ -91,7 +91,10 @@ html.light {
 }
 
 /* ─── Reset ──────────────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box; margin: 0; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
 html, body, #root { height: 100%; }
 
 body {
@@ -308,8 +311,13 @@ html.light .btn-jelly { background: rgba(5, 150, 105, 0.84); }
   padding: 20px;
   box-shadow: var(--shadow-card);
   transition: transform var(--spring), box-shadow var(--spring);
+  user-select: none;
+  -webkit-user-select: none;
 }
-.card:active:not(:has(button:active, a:active, .bike-overflow-backdrop:active)) { transform: scale(0.97) translateY(2px); }
+.card:active:not(:has(button:active, a:active, .bike-overflow-backdrop:active)) {
+  transform: scale(0.97) translateY(2px);
+  transition: transform 0.08s ease;
+}
 
 .card-surface {
   background: var(--surface);
@@ -455,6 +463,9 @@ html.light .modal { background: rgba(245, 245, 255, 0.88); }
     padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     background: linear-gradient(to top, rgba(12, 12, 28, 0.96), rgba(12, 12, 28, 0.88));
     justify-content: stretch;
+  }
+  html.light .modal-actions {
+    background: linear-gradient(to top, rgba(242, 242, 255, 0.98), rgba(242, 242, 255, 0.88));
   }
   .modal-actions .btn {
     flex: 1 1 0;
@@ -931,7 +942,9 @@ html.light .bike-overflow-menu {
 .quick-log-menu {
   position: absolute;
   bottom: calc(100% + 8px);
-  left: 0; right: 0;
+  left: 0;
+  width: max-content;
+  min-width: 220px;
   z-index: 50;
   background: var(--canvas);
   border: 1px solid var(--glass-border);
@@ -948,6 +961,14 @@ html.light .quick-log-menu {
 @keyframes quick-log-pop {
   from { opacity: 0; transform: scale(0.95) translateY(6px); }
   to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+@keyframes quick-log-pop-out {
+  from { opacity: 1; transform: scale(1)    translateY(0); }
+  to   { opacity: 0; transform: scale(0.95) translateY(6px); }
+}
+.quick-log-menu.closing {
+  animation: quick-log-pop-out 0.18s ease both;
+  pointer-events: none;
 }
 
 .quick-log-item {
@@ -1085,6 +1106,8 @@ html.light .quick-log-menu {
   flex-wrap: wrap;
   background: transparent;
   transition: background 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
 }
 @media (max-width: 639px) {
   .garage-card-stats {
@@ -1804,60 +1827,6 @@ html.light .shock-result-range {
 }
 
 /* ─── Manual PDF viewer ──────────────────────────────────────────────────── */
-.bike-manual-btn {
-  gap: 8px;
-}
-
-.bike-manual-overlay {
-  align-items: stretch !important;
-  padding: 0 !important;
-}
-@media (min-width: 640px) {
-  .bike-manual-overlay {
-    align-items: center !important;
-    padding: 20px !important;
-  }
-}
-
-.bike-manual-modal {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  max-width: 860px;
-  margin: 0 auto;
-  background: rgba(12, 12, 28, 0.96);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  overflow: hidden;
-}
-@media (min-width: 640px) {
-  .bike-manual-modal {
-    border-radius: var(--r-lg);
-    height: 90vh;
-  }
-}
-
-.bike-manual-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--hairline);
-  flex-shrink: 0;
-}
-
-.bike-manual-iframe {
-  flex: 1;
-  width: 100%;
-  border: none;
-  background: #fff;
-}
-
-html.light .bike-manual-modal {
-  background: rgba(245, 245, 255, 0.98);
-}
 
 /* ─── Shock Presets ──────────────────────────────────────────────────────── */
 .shock-preset-strip {
@@ -2276,3 +2245,91 @@ html.light .modal-box {
 }
 .btn-brand:hover:not(:disabled) { filter: brightness(1.1); transform: scale(1.03); }
 .btn-brand:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ─── Bottom Nav (mobile only) ────────────────────────────────────────────── */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: var(--canvas);
+  border-top: 1px solid var(--hairline);
+  z-index: 200;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-nav-tab {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2px;
+  font-size: 9px; font-weight: 500;
+  color: var(--slate);
+  background: transparent;
+  border: none; border-top: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.bottom-nav-tab.is-active {
+  color: var(--purple);
+  font-weight: 700;
+  border-top-color: var(--purple);
+  background: var(--purple-bg);
+}
+
+.bottom-nav-fab-wrap {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding-bottom: 6px;
+  position: relative;
+}
+.bottom-nav-fab {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--purple);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  position: absolute; top: -18px;
+  box-shadow: 0 3px 10px rgba(108, 92, 231, 0.45);
+  color: #fff;
+  font-size: 24px; line-height: 1; font-weight: 300;
+  transition: transform 0.2s var(--jelly-ease), background 0.15s;
+}
+.bottom-nav-fab:active { background: #5a4cd6; }
+.bottom-nav-fab.is-open { transform: rotate(45deg); }
+.bottom-nav-fab-label {
+  font-size: 9px;
+  color: var(--slate);
+}
+
+.bottom-nav-popup {
+  position: fixed;
+  bottom: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 220px;
+  background: var(--canvas);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  box-shadow: 0 -6px 24px rgba(0,0,0,0.36), 0 2px 6px rgba(0,0,0,0.18);
+  overflow: hidden;
+  z-index: 202;
+  animation: quick-log-pop 0.22s var(--jelly-ease);
+}
+html.light .bottom-nav-popup {
+  box-shadow: 0 -6px 20px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+}
+.bottom-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 201;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 639px) {
+  .bottom-nav { display: flex; }
+  .app-nav-links, .app-nav-toggle { display: none; }
+  .page { padding-bottom: calc(60px + max(16px, env(safe-area-inset-bottom))); }
+}
