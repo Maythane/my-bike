@@ -198,7 +198,7 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
 
   const isPending = createMut.isPending || updateMut.isPending;
   const submit = () => (isEdit ? updateMut.mutate() : createMut.mutate());
-  const valid = !!effectiveBikeId && form.mileage_at_fillup && form.fuel_amount && Number(form.fuel_amount) > 0;
+  const valid = !!effectiveBikeId && form.mileage_at_fillup !== "" && form.fuel_amount && Number(form.fuel_amount) > 0;
 
   return (
     <>

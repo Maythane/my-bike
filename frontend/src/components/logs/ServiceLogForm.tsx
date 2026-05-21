@@ -283,7 +283,7 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
           <button className="btn btn-ghost" onClick={handleClose}>ยกเลิก</button>
           <button
             className="btn btn-primary"
-            disabled={!effectiveBikeId || !form.name.trim() || !form.mileage_at_service || isPending}
+            disabled={!effectiveBikeId || !form.name.trim() || form.mileage_at_service === "" || isPending}
             onClick={submit}
           >
             {isPending ? "กำลังบันทึก…" : isEdit ? "บันทึกการแก้ไข" : "บันทึก"}
