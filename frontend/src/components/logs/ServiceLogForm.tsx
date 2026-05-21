@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { createServiceLog, updateServiceLog, uploadServiceLogImage, deleteServiceLogImageById } from "../../api/logs";
 import { getAllMotorcycles } from "../../api/motorcycles";
@@ -25,7 +25,7 @@ interface Props {
 
 export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, pastLocations = [] }: Props) {
   const isEdit = !!log;
-  const [pickedBikeId, setPickedBikeId] = useState<number | undefined>(bikeId);
+  const [pickedBikeId, setPickedBikeId] = useState<number | undefined>(undefined);
 
   const { data: allBikes = [] } = useQuery({
     queryKey: ["motorcycles"],
@@ -79,6 +79,12 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
 
   const set = (k: string, v: string | number) => setForm((f) => ({ ...f, [k]: v }));
 
+  useEffect(() => {
+    if (bikeId === undefined && pickedBike) {
+      set("mileage_at_service", pickedBike.current_mileage);
+    }
+  }, [pickedBike?.id]);
+
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const canAdd = Math.min(files.length, MAX_IMAGES - totalImages);
@@ -99,7 +105,8 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
 
   const createMut = useMutation({
     mutationFn: async () => {
-      const created = await createServiceLog(effectiveBikeId!, {
+      if (!effectiveBikeId) throw new Error("No bike selected");
+      const created = await createServiceLog(effectiveBikeId, {
         name: form.name.trim(),
         date_performed: form.date_performed,
         mileage_at_service: Number(form.mileage_at_service),
