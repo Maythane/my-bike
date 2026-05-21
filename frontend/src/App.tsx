@@ -4,6 +4,7 @@ import { useTheme } from "./hooks/useTheme";
 import { getToken } from "./hooks/useAuth";
 import Blobs from "./components/ui/Blobs";
 import AvatarMenu from "./components/ui/AvatarMenu";
+import BottomNav from "./components/ui/BottomNav";
 import AuthPage from "./pages/AuthPage";
 import GaragePage from "./pages/GaragePage";
 import BikePage from "./pages/BikePage";
@@ -30,12 +31,6 @@ function NavBar({ theme, toggle }: { theme: "light" | "dark"; toggle: () => void
         >
           My Garage
         </NavLink>
-        <NavLink
-          to="/shock-settings"
-          className={({ isActive }) => `app-nav-link app-nav-link-accent${isActive ? " is-active" : ""}`}
-        >
-          ตั้งค่าโช้ค
-        </NavLink>
       </div>
       <div style={{ flex: 1 }} />
       <button
@@ -46,6 +41,29 @@ function NavBar({ theme, toggle }: { theme: "light" | "dark"; toggle: () => void
         onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1) rotate(0deg)")}
       >
         {theme === "dark" ? "☀️" : "🌙"}
+      </button>
+      <button
+        className="app-nav-toggle"
+        title="ปั๊มน้ำมันใกล้เคียง"
+        onClick={() => {
+          if (!navigator.geolocation) {
+            window.open("https://maps.google.com/?q=ปั๊มน้ำมัน", "_blank");
+            return;
+          }
+          navigator.geolocation.getCurrentPosition(
+            ({ coords }) => {
+              window.open(
+                `https://www.google.com/maps/search/ปั๊มน้ำมัน/@${coords.latitude},${coords.longitude},15z`,
+                "_blank"
+              );
+            },
+            () => {
+              window.open("https://maps.google.com/?q=ปั๊มน้ำมัน", "_blank");
+            }
+          );
+        }}
+      >
+        ⛽
       </button>
       <AvatarMenu />
     </nav>
@@ -77,6 +95,7 @@ function AppShell() {
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </div>
+              <BottomNav />
             </div>
           </ProtectedRoute>
         }
