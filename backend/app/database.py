@@ -20,6 +20,18 @@ def create_db():
     _migrate_shock_per_bike()
     _migrate_shock_charts()
     _migrate_images()
+    _migrate_reminders()
+    _migrate_expenses()
+    _migrate_user_profile()
+
+
+def _migrate_user_profile():
+    with engine.connect() as conn:
+        for col, col_type in [("display_name", "TEXT"), ("avatar_url", "TEXT")]:
+            existing = [r[1] for r in conn.execute(text("PRAGMA table_info(users)")).fetchall()]
+            if col not in existing:
+                conn.execute(text(f"ALTER TABLE users ADD COLUMN {col} {col_type}"))
+        conn.commit()
 
 
 def _migrate():
@@ -156,10 +168,65 @@ def _migrate_shock_charts():
                 UNIQUE(shock_brand, shock_model)
             )
         """))
+        # Add moto metadata columns if missing
+        existing = [r[1] for r in conn.execute(text("PRAGMA table_info(shock_charts)")).fetchall()]
+        for col, col_type in [("moto_make", "TEXT"), ("moto_model", "TEXT"), ("model_year_range", "TEXT")]:
+            if col not in existing:
+                conn.execute(text(f"ALTER TABLE shock_charts ADD COLUMN {col} {col_type}"))
+        # Seed Profender X-Series+ with moto metadata
         conn.execute(
             text("INSERT OR IGNORE INTO shock_charts (shock_brand, shock_model, chart_data) VALUES (:b, :m, :d)"),
             {"b": "Profender", "m": "X-Series+", "d": PROFENDER_X_SERIES_PLUS},
         )
+        conn.execute(text("""
+            UPDATE shock_charts
+            SET moto_make = 'Yamaha', moto_model = 'Grand Filano Hybrid (2018-2022)', model_year_range = '2018-2022'
+            WHERE shock_brand = 'Profender' AND shock_model = 'X-Series+' AND moto_make IS NULL
+        """))
+        conn.commit()
+
+
+DEFAULT_REMINDER_ITEMS = [
+    ("engine_oil",  "น้ำมันเครื่อง",         3000),
+    ("gear_oil",    "น้ำมันเฟืองท้าย",       6000),
+    ("spark_plug",  "หัวเทียน",               8000),
+    ("air_filter",  "ไส้กรองอากาศ",          8000),
+    ("oil_filter",  "ไส้กรองน้ำมันเครื่อง", 6000),
+]
+
+
+def _migrate_reminders():
+    """Create service_reminders table (idempotent)."""
+    with engine.connect() as conn:
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS service_reminders (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                motorcycle_id INTEGER NOT NULL REFERENCES motorcycles(id) ON DELETE CASCADE,
+                item_key      TEXT NOT NULL,
+                item_name     TEXT NOT NULL,
+                interval_km   INTEGER NOT NULL DEFAULT 3000,
+                last_done_mileage INTEGER,
+                enabled       INTEGER NOT NULL DEFAULT 1,
+                UNIQUE(motorcycle_id, item_key)
+            )
+        """))
+        conn.commit()
+
+
+def _migrate_expenses():
+    """Create expenses table (idempotent)."""
+    with engine.connect() as conn:
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS expenses (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                motorcycle_id INTEGER NOT NULL REFERENCES motorcycles(id) ON DELETE CASCADE,
+                category      TEXT NOT NULL,
+                amount        REAL NOT NULL,
+                date          DATE NOT NULL,
+                notes         TEXT,
+                created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """))
         conn.commit()
 
 

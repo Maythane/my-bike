@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMe } from "../../api/auth";
 import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
 import AccountModal from "./AccountModal";
 
 export default function AvatarMenu() {
@@ -11,6 +13,7 @@ export default function AvatarMenu() {
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { theme, toggle } = useTheme();
 
   const { data: user } = useQuery({
     queryKey: ["me"],
@@ -60,6 +63,27 @@ export default function AvatarMenu() {
 
             <div className="avatar-dropdown-divider" />
 
+            <div className="avatar-dropdown-item" onClick={toggle} style={{ justifyContent: "space-between" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span>{theme === "dark" ? "🌙" : "☀️"}</span> Dark Mode
+              </span>
+              <span style={{
+                display: "inline-flex", width: 36, height: 20, borderRadius: 99,
+                background: theme === "dark" ? "var(--purple)" : "var(--hairline)",
+                alignItems: "center", padding: "0 2px", transition: "background 0.2s",
+                flexShrink: 0,
+              }}>
+                <span style={{
+                  width: 16, height: 16, borderRadius: "50%", background: "#fff",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
+                  marginLeft: theme === "dark" ? "auto" : 0,
+                  transition: "margin 0.2s",
+                }} />
+              </span>
+            </div>
+
+            <div className="avatar-dropdown-divider" />
+
             <div
               className="avatar-dropdown-item danger"
               onClick={() => { setOpen(false); logout(); }}
@@ -70,7 +94,10 @@ export default function AvatarMenu() {
         )}
       </div>
 
-      {showAccount && <AccountModal onClose={() => setShowAccount(false)} />}
+      {showAccount && createPortal(
+        <AccountModal onClose={() => setShowAccount(false)} />,
+        document.body
+      )}
     </>
   );
 }

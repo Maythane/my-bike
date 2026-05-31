@@ -1,3 +1,11 @@
+const WarningIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+    <path d="M12 9v4" />
+    <path d="M12 17h.01" />
+  </svg>
+);
+
 interface Props {
   title?: string;
   message: string;
@@ -7,31 +15,32 @@ interface Props {
   danger?: boolean;
 }
 
-export default function ConfirmDialog({ title, message, confirmLabel = "ยืนยัน", onConfirm, onCancel, danger = true }: Props) {
+export default function ConfirmDialog({
+  title,
+  message,
+  confirmLabel = "ยืนยัน",
+  onConfirm,
+  onCancel,
+  danger = true,
+}: Props) {
   return (
-    <div
-      className="modal-overlay"
-      onClick={onCancel}
-      style={{ alignItems: "center" }}
-    >
-      <div
-        className="modal modal-plain"
-        onClick={(e) => e.stopPropagation()}
-        style={{ padding: "24px 24px 20px" }}
-      >
-        {title && (
-          <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink)", marginBottom: 8 }}>
-            {title}
+    <div className="modal-overlay" onClick={onCancel} style={{ alignItems: "center" }}>
+      <div className="modal modal-plain confirm-dialog" onClick={(e) => e.stopPropagation()}>
+        <div className="confirm-dialog-body">
+          {danger && (
+            <div className="confirm-dialog-icon">
+              <WarningIcon />
+            </div>
+          )}
+          <div className="confirm-dialog-text">
+            {title && <div className="confirm-dialog-title">{title}</div>}
+            <p className="confirm-dialog-message">{message}</p>
           </div>
-        )}
-        <p style={{ fontSize: 14, color: "var(--slate)", lineHeight: 1.6, whiteSpace: "pre-line", marginBottom: 20 }}>
-          {message}
-        </p>
-        <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+        </div>
+        <div className="confirm-dialog-footer">
           <button className="btn btn-ghost" onClick={onCancel}>ยกเลิก</button>
           <button
             className={danger ? "btn btn-danger" : "btn btn-primary"}
-            style={danger ? { background: "var(--red)", color: "#fff", borderColor: "var(--red)" } : {}}
             onClick={onConfirm}
             autoFocus
           >

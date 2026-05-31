@@ -11,6 +11,8 @@ export interface UserInfo {
   username: string | null;
   phone: string | null;
   phone_verified: boolean;
+  display_name: string | null;
+  avatar_url: string | null;
   created_at: string;
 }
 
@@ -51,6 +53,21 @@ export async function otpLogin(phone: string, otp_code: string): Promise<TokenRe
 
 export async function fetchUpdateUsername(username: string): Promise<void> {
   await client.put("/api/auth/username", { username });
+}
+
+export async function fetchUpdateDisplayName(display_name: string): Promise<void> {
+  await client.put("/api/auth/display-name", { display_name });
+}
+
+export async function fetchUploadAvatar(file: File): Promise<{ avatar_url: string }> {
+  const form = new FormData();
+  form.append("file", file);
+  const { data } = await client.post<{ avatar_url: string }>("/api/auth/avatar", form);
+  return data;
+}
+
+export async function fetchDeleteAvatar(): Promise<void> {
+  await client.delete("/api/auth/avatar");
 }
 
 export async function fetchRequestPhone(phone: string): Promise<void> {

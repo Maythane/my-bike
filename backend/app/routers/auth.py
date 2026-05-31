@@ -1,15 +1,20 @@
 from datetime import datetime, timedelta, timezone
 import logging
+import os
 import re
 import secrets
+import uuid
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from sqlmodel import Session, select
 
 from app.database import get_session
 from app.models import User, AppSettings, ShockSetting
 from app.auth import hash_password, verify_password, create_access_token, get_current_user
+from app.utils import save_compressed_image
+
+AVATAR_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "uploads", "avatars")
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +65,8 @@ class UserRead(BaseModel):
     username: Optional[str] = None
     phone: Optional[str] = None
     phone_verified: bool = False
+    display_name: Optional[str] = None
+    avatar_url: Optional[str] = None
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -266,6 +273,62 @@ def phone_confirm(
         raise HTTPException(status_code=409, detail="เบอร์นี้ถูกใช้แล้ว")
     current_user.phone = phone
     current_user.phone_verified = True
+    session.add(current_user)
+    session.commit()
+    return {"ok": True}
+
+
+class UpdateDisplayNameRequest(BaseModel):
+    display_name: str
+
+
+@router.put("/display-name", status_code=200)
+def update_display_name(
+    data: UpdateDisplayNameRequest,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    name = data.display_name.strip()
+    if not name or len(name) > 50:
+        raise HTTPException(status_code=422, detail="ชื่อต้องมี 1–50 ตัวอักษร")
+    current_user.display_name = name
+    session.add(current_user)
+    session.commit()
+    return {"ok": True}
+
+
+@router.post("/avatar", status_code=200)
+async def upload_avatar(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    data = await file.read()
+    if len(data) > 2 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="ไฟล์ใหญ่เกิน 2MB")
+    if current_user.avatar_url:
+        old = os.path.join(AVATAR_DIR, os.path.basename(current_user.avatar_url))
+        if os.path.exists(old):
+            os.remove(old)
+    filename = f"{uuid.uuid4().hex}.jpg"
+    dest = os.path.join(AVATAR_DIR, filename)
+    save_compressed_image(data, dest)
+    current_user.avatar_url = f"/uploads/avatars/{filename}"
+    session.add(current_user)
+    session.commit()
+    return {"avatar_url": current_user.avatar_url}
+
+
+@router.delete("/avatar", status_code=200)
+def delete_avatar(
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    if current_user.avatar_url:
+        old = os.path.join(AVATAR_DIR, os.path.basename(current_user.avatar_url))
+        if os.path.exists(old):
+            os.remove(old)
+    current_user.avatar_url = None
     session.add(current_user)
     session.commit()
     return {"ok": True}

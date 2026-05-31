@@ -34,6 +34,8 @@ class User(SQLModel, table=True):
     username: Optional[str] = Field(default=None, unique=True, index=True)
     phone: Optional[str] = Field(default=None, unique=True, index=True)
     phone_verified: bool = Field(default=False)
+    display_name: Optional[str] = Field(default=None)
+    avatar_url: Optional[str] = Field(default=None)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     profiles: List["Profile"] = Relationship(
@@ -109,7 +111,6 @@ class MaintenanceLog(SQLModel, table=True):
     date_performed: date
     mileage_at_service: int
     cost: Optional[float] = Field(default=None)
-    performed_by: Optional[str] = Field(default=None)
     location: Optional[str] = Field(default=None)
     notes: Optional[str] = Field(default=None)
     image_path: Optional[str] = Field(default=None)
@@ -198,3 +199,25 @@ class ShockBrand(SQLModel, table=True):
     banner_bg_color: str = Field(default="#09091a")
     header_image_path: Optional[str] = Field(default=None)
     shock_models: Optional[str] = Field(default=None)  # JSON array string e.g. '["P-Series","G30"]'
+
+
+class ServiceReminder(SQLModel, table=True):
+    __tablename__ = "service_reminders"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    motorcycle_id: int = Field(foreign_key="motorcycles.id", index=True)
+    item_key: str        # "engine_oil" | "gear_oil" | "spark_plug" | "air_filter" | "oil_filter"
+    item_name: str
+    interval_km: int = Field(default=3000)
+    last_done_mileage: Optional[int] = Field(default=None)
+    enabled: bool = Field(default=True)
+
+
+class Expense(SQLModel, table=True):
+    __tablename__ = "expenses"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    motorcycle_id: int = Field(foreign_key="motorcycles.id", index=True)
+    category: str
+    amount: float
+    date: date
+    notes: Optional[str] = Field(default=None)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
