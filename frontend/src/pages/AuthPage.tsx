@@ -92,6 +92,8 @@ export default function AuthPage() {
     setTab(t);
     setError(null);
     resetOtp();
+    setUsername("");
+    setRegEmail("");
   }
 
   async function handleSendOtp() {
@@ -291,7 +293,7 @@ export default function AuthPage() {
                 className="auth-input"
                 type="text"
                 value={username}
-                onChange={(e) => { setUsername(e.target.value); setError(null); }}
+                onChange={(e) => { setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "")); setError(null); }}
                 placeholder="rider_mark"
                 pattern="[a-zA-Z0-9_]+"
                 minLength={3}
