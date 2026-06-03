@@ -13,3 +13,18 @@ export const updateShockSetting = (
 
 export const getShockChart = (bikeId: number) =>
   client.get<{ bands: ShockBand[] | null }>(`/api/motorcycles/${bikeId}/shock-chart`).then((r) => r.data);
+
+export const lookupShockChart = (
+  brand: string,
+  model: string | null,
+  motoMake: string | null,
+  motoModel: string | null,
+) =>
+  client.get<{ found: boolean; bands: ShockBand[] | null }>("/api/shock-charts/lookup", {
+    params: {
+      brand,
+      ...(model ? { model } : {}),
+      ...(motoMake ? { moto_make: motoMake } : {}),
+      ...(motoModel ? { moto_model: motoModel } : {}),
+    },
+  }).then((r) => r.data);

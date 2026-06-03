@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllMotorcycles } from "../api/motorcycles";
 import { fetchSettings, updateSettings } from "../api/settings";
 import { getShockSetting } from "../api/shock";
-import { useTheme } from "../hooks/useTheme";
 import { useAuth } from "../hooks/useAuth";
 import { fetchMe } from "../api/auth";
 
@@ -31,11 +30,10 @@ export default function SettingsPage() {
     },
   });
 
-  const { theme, toggle } = useTheme();
   const { logout } = useAuth();
   const { data: user } = useQuery({ queryKey: ["me"], queryFn: fetchMe, staleTime: 60_000 });
-  const displayName = user?.username ? `@${user.username}` : (user?.email ?? "…");
-  const initial = (user?.username?.[0] ?? user?.email?.[0] ?? "?").toUpperCase();
+  const displayName = user?.display_name || (user?.username ? `@${user.username}` : (user?.email ?? "…"));
+  const initial = (user?.display_name?.[0] ?? user?.username?.[0] ?? user?.email?.[0] ?? "?").toUpperCase();
 
   function openGasStation() {
     if (!navigator.geolocation) {
@@ -81,8 +79,12 @@ export default function SettingsPage() {
               width: 36, height: 36, borderRadius: "50%", background: "var(--purple-bg)",
               border: "1px solid var(--purple-border)", display: "flex", alignItems: "center",
               justifyContent: "center", fontWeight: 700, fontSize: 15, color: "var(--purple)", flexShrink: 0,
+              overflow: "hidden",
             }}>
-              {initial}
+              {user?.avatar_url
+                ? <img src={user.avatar_url} alt={displayName} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                : initial
+              }
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{displayName}</div>
@@ -93,39 +95,10 @@ export default function SettingsPage() {
             <button
               className="settings-row"
               style={{ width: "100%", background: "none", border: "none", cursor: "pointer",
-                color: "#e55", fontSize: 14, fontWeight: 500, justifyContent: "flex-start", gap: 8 }}
+                color: "var(--red)", fontSize: 14, fontWeight: 500, justifyContent: "flex-start", gap: 8 }}
               onClick={logout}
             >
               🚪 ออกจากระบบ
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Appearance ── */}
-      <div style={{ marginBottom: 24 }}>
-        <div className="settings-section-label">Appearance</div>
-        <div className="settings-card">
-          <div className="settings-row" style={{ justifyContent: "space-between" }}>
-            <span style={{ fontSize: 14, color: "var(--ink)" }}>
-              {theme === "dark" ? "🌙" : "☀️"} Dark Mode
-            </span>
-            <button
-              onClick={toggle}
-              style={{
-                width: 44, height: 24, borderRadius: 99, border: "none", cursor: "pointer",
-                background: theme === "dark" ? "var(--purple)" : "var(--hairline)",
-                position: "relative", transition: "background 0.2s",
-              }}
-              aria-label="Toggle dark mode"
-            >
-              <span style={{
-                position: "absolute", top: 2,
-                left: theme === "dark" ? "calc(100% - 22px)" : 2,
-                width: 20, height: 20, borderRadius: "50%", background: "#fff",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-                transition: "left 0.2s",
-              }} />
             </button>
           </div>
         </div>
@@ -136,7 +109,7 @@ export default function SettingsPage() {
         <div className="settings-section-label">ทั่วไป</div>
         <div className="settings-card">
           <div className="settings-row">
-            <span className="settings-row-label">Distance Unit</span>
+            <span className="settings-row-label">ระยะทางที่ต้องการให้แสดง</span>
             <div className="toggle-group">
               <button
                 className={`toggle-btn${effectiveUnit === "km" ? " active" : ""}`}

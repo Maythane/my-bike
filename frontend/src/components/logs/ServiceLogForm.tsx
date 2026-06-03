@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { createServiceLog, updateServiceLog, uploadServiceLogImage, deleteServiceLogImageById } from "../../api/logs";
+import { markReminderDone } from "../../api/reminders";
 import { getAllMotorcycles } from "../../api/motorcycles";
 import { useGeoLocation } from "../../hooks/useGeoLocation";
 import { useAnimatedClose } from "../../hooks/useAnimatedClose";
@@ -12,6 +13,13 @@ const QUICK_ITEMS = [
   "ล่อโซ่ / ปรับโซ่", "ตรวจยาง", "เปลี่ยนยาง",
   "เปลี่ยนหัวเทียน", "ตรวจเบรก", "เปลี่ยนผ้าเบรก", "ตรวจสอบทั่วไป",
 ];
+
+const REMINDER_KEY_MAP: Record<string, { key: string; defaultKm: number }> = {
+  "เปลี่ยนน้ำมันเครื่อง": { key: "engine_oil",  defaultKm: 3000 },
+  "เปลี่ยนไส้กรองน้ำมัน": { key: "oil_filter",  defaultKm: 6000 },
+  "เปลี่ยนไส้กรองอากาศ":  { key: "air_filter",  defaultKm: 8000 },
+  "เปลี่ยนหัวเทียน":      { key: "spark_plug",  defaultKm: 8000 },
+};
 
 const MAX_IMAGES = 5;
 
@@ -68,6 +76,8 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
 
   const { getLocation, loading: geoLoading, geoError } = useGeoLocation((loc) => set("location", loc));
 
+  const [reminderKm, setReminderKm] = useState<string>("");
+
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [pendingPreviews, setPendingPreviews] = useState<string[]>([]);
   const [removedIds, setRemovedIds] = useState<number[]>([]);
@@ -115,11 +125,19 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
         notes: form.notes.trim() || null,
       });
       for (const file of pendingFiles) await uploadServiceLogImage(created.id, file);
+      const reminderInfo = REMINDER_KEY_MAP[form.name.trim()];
+      if (reminderInfo && reminderKm) {
+        await markReminderDone(effectiveBikeId, reminderInfo.key, {
+          mileage: Number(form.mileage_at_service),
+          interval_km: Number(reminderKm),
+        });
+      }
       return created;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["service-logs", effectiveBikeId] });
       qc.invalidateQueries({ queryKey: ["motorcycle", effectiveBikeId] });
+      qc.invalidateQueries({ queryKey: ["service-reminders", effectiveBikeId] });
       onClose();
     },
   });
@@ -164,7 +182,12 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
                 key={item}
                 type="button"
                 className={"chip" + (form.name === item ? " chip-active" : "")}
-                onClick={() => set("name", form.name === item ? "" : item)}
+                onClick={() => {
+                  const next = form.name === item ? "" : item;
+                  set("name", next);
+                  const info = REMINDER_KEY_MAP[next];
+                  setReminderKm(info ? String(info.defaultKm) : "");
+                }}
               >
                 {item}
               </button>
@@ -211,6 +234,18 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
             <input type="number" value={form.mileage_at_service} onChange={(e) => set("mileage_at_service", e.target.value)} />
           </div>
         </div>
+
+        {!isEdit && REMINDER_KEY_MAP[form.name.trim()] && (
+          <div className="form-group">
+            <label>แจ้งเตือนครั้งถัดไปทุก (km)</label>
+            <input
+              type="number"
+              value={reminderKm}
+              onChange={(e) => setReminderKm(e.target.value)}
+              placeholder={String(REMINDER_KEY_MAP[form.name.trim()]?.defaultKm ?? "")}
+            />
+          </div>
+        )}
 
         <div className="form-group">
           <label>ค่าใช้จ่าย (฿) — ไม่บังคับ</label>

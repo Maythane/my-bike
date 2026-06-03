@@ -62,7 +62,9 @@ export async function fetchUpdateDisplayName(display_name: string): Promise<void
 export async function fetchUploadAvatar(file: File): Promise<{ avatar_url: string }> {
   const form = new FormData();
   form.append("file", file);
-  const { data } = await client.post<{ avatar_url: string }>("/api/auth/avatar", form);
+  const { data } = await client.post<{ avatar_url: string }>("/api/auth/avatar", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return data;
 }
 

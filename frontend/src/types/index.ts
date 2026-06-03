@@ -141,3 +141,47 @@ export interface ShockSetting {
   shock_brand: string | null;
   shock_model: string | null;
 }
+
+export type ReminderStatus = "ok" | "due_soon" | "overdue" | "never";
+
+export interface ServiceReminder {
+  id: number;
+  item_key: string;
+  item_name: string;
+  interval_km: number;
+  last_done_mileage: number | null;
+  enabled: boolean;
+  status: ReminderStatus;
+  km_remaining: number | null;
+  is_custom: boolean;
+}
+
+export interface ExpenseRead {
+  id: number;
+  category: string;
+  amount: number;
+  date: string;
+  notes: string | null;
+}
+
+export interface CategoryTotal {
+  category: string;
+  label: string;
+  icon: string;
+  amount: number;
+  percent: number;
+}
+
+export interface MonthBucket {
+  month: string;      // "YYYY-MM"
+  fuel: number;
+  maintenance: number;
+  other: number;
+}
+
+export interface ExpenseSummary {
+  total: number;
+  cost_per_km: number | null;
+  by_category: CategoryTotal[];
+  monthly_trend: MonthBucket[];
+}

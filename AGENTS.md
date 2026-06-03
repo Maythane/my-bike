@@ -35,11 +35,6 @@ cd frontend && npm run deploy
 # = npm run build && rm -rf ../backend/static/assets && cp -r dist/. ../backend/static/
 ```
 
-### Frontend dev server (แยก)
-```bash
-cd frontend && npm run dev   # port 5173
-```
-
 ---
 
 ## Project Structure

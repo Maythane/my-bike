@@ -7,7 +7,7 @@ import os
 
 from app.database import create_db, engine
 from app.seed import seed_defaults
-from app.routers import profiles, motorcycles, tasks, logs, settings, templates, fuel, shock, shock_presets, auth, shock_brands
+from app.routers import profiles, motorcycles, tasks, logs, settings, templates, fuel, shock, shock_presets, auth, shock_brands, reminders, expenses
 
 
 @asynccontextmanager
@@ -31,6 +31,8 @@ app.include_router(fuel.router)
 app.include_router(shock.router)
 app.include_router(shock_presets.router)
 app.include_router(shock_brands.router)
+app.include_router(reminders.router)
+app.include_router(expenses.router)
 
 UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads")
 if os.path.isdir(UPLOADS_DIR):

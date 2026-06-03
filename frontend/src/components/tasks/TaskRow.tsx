@@ -61,11 +61,16 @@ export default function TaskRow({ task, currentMileage }: Props) {
 
   const statusColor = STATUS_COLOR[task.status_label];
 
+  const statusBg: Record<string, string> = {
+    overdue:  "rgba(255,112,112,0.07)",
+    due_soon: "rgba(245,158,11,0.07)",
+  };
+
   return (
     <>
       <div
         className="card"
-        style={{ cursor: "pointer", borderLeft: `3px solid ${statusColor}` }}
+        style={{ cursor: "pointer", background: statusBg[task.status_label] }}
         onClick={() => setExpanded((v) => !v)}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

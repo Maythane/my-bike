@@ -76,6 +76,15 @@ def _calc_kpl(logs: list[FuelLog]) -> tuple[list[Optional[float]], list[Optional
     kpls: list[Optional[float]] = [None] * len(logs)
     distances: list[Optional[int]] = [None] * len(logs)
     id_to_idx = {log.id: i for i, log in enumerate(logs)}
+
+    # distance_km for every log = gap from the previous fill (full or partial)
+    for i, log in enumerate(sorted_logs):
+        if i > 0:
+            dist = log.mileage_at_fillup - sorted_logs[i - 1].mileage_at_fillup
+            if dist > 0:
+                distances[id_to_idx[log.id]] = dist
+
+    # km/L only between consecutive full-tank fills (partial fills' fuel is accumulated)
     last_full_idx: Optional[int] = None
     for i, log in enumerate(sorted_logs):
         if log.is_full_tank:
@@ -84,10 +93,9 @@ def _calc_kpl(logs: list[FuelLog]) -> tuple[list[Optional[float]], list[Optional
                 dist = log.mileage_at_fillup - prev_full.mileage_at_fillup
                 fuel_sum = sum(sorted_logs[j].fuel_amount for j in range(last_full_idx + 1, i + 1))
                 if dist > 0 and fuel_sum > 0:
-                    orig_idx = id_to_idx[log.id]
-                    kpls[orig_idx] = round(dist / fuel_sum, 2)
-                    distances[orig_idx] = dist
+                    kpls[id_to_idx[log.id]] = round(dist / fuel_sum, 2)
             last_full_idx = i
+
     return kpls, distances
 
 
@@ -149,16 +157,35 @@ def get_fuel_economy(
     logs = session.exec(
         select(FuelLog).where(FuelLog.motorcycle_id == bike_id).order_by(FuelLog.date.asc(), FuelLog.id.asc())
     ).all()
-    kpls_raw = [kpl for kpl in _calc_kpl(list(logs))[0] if kpl is not None]
-    total_fuel = sum(log.fuel_amount for log in logs)
-    total_cost = sum(log.cost for log in logs if log.cost is not None) or None
+    sorted_logs = list(logs)
+
+    # Collect per-interval (full-fill to full-fill) distance and fuel,
+    # including partial fills' fuel in each interval.
+    # avg is total_distance / total_fuel (weighted), not mean of km/L values.
+    intervals: list[tuple[float, float]] = []  # (distance_km, fuel_liters)
+    last_full_idx: Optional[int] = None
+    for i, log in enumerate(sorted_logs):
+        if log.is_full_tank:
+            if last_full_idx is not None:
+                dist = log.mileage_at_fillup - sorted_logs[last_full_idx].mileage_at_fillup
+                fuel_sum = sum(sorted_logs[j].fuel_amount for j in range(last_full_idx + 1, i + 1))
+                if dist > 0 and fuel_sum > 0:
+                    intervals.append((dist, fuel_sum))
+            last_full_idx = i
+
+    kpls = [round(d / f, 2) for d, f in intervals]
+    total_dist = sum(d for d, _ in intervals)
+    total_fuel_tracked = sum(f for _, f in intervals)
+
+    total_fuel = sum(log.fuel_amount for log in sorted_logs)
+    total_cost = sum(log.cost for log in sorted_logs if log.cost is not None) or None
     return FuelEconomy(
-        avg_km_per_liter=round(sum(kpls_raw) / len(kpls_raw), 2) if kpls_raw else None,
-        last_km_per_liter=kpls_raw[-1] if kpls_raw else None,
-        best_km_per_liter=max(kpls_raw) if kpls_raw else None,
+        avg_km_per_liter=round(total_dist / total_fuel_tracked, 2) if total_fuel_tracked > 0 else None,
+        last_km_per_liter=kpls[-1] if kpls else None,
+        best_km_per_liter=max(kpls) if kpls else None,
         total_fuel=round(total_fuel, 2),
         total_cost=round(total_cost, 2) if total_cost else None,
-        total_logs=len(logs),
+        total_logs=len(sorted_logs),
     )
 
 

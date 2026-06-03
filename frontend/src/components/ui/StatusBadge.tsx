@@ -29,11 +29,13 @@ export default function StatusBadge({ label, score }: Props) {
         <div
           style={{
             height: "100%",
-            width: `${pct}%`,
+            width: "100%",
             background: color,
             borderRadius: 4,
             boxShadow: `0 0 6px ${color}`,
-            transition: "width 0.4s ease",
+            transform: `scaleX(${pct / 100})`,
+            transformOrigin: "left",
+            transition: "transform 0.4s ease",
           }}
         />
       </div>

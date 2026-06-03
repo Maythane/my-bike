@@ -69,6 +69,62 @@ def get_shock_chart(
     return {"bands": json.loads(row[0])}
 
 
+@router.get("/api/shock-charts/lookup")
+def lookup_shock_chart(
+    brand: str,
+    model: Optional[str] = None,
+    moto_make: Optional[str] = None,
+    moto_model: Optional[str] = None,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    def _q(where: str, params: dict):
+        row = session.execute(
+            text(f"SELECT chart_data FROM shock_charts WHERE {where}"),
+            params,
+        ).fetchone()
+        return row
+
+    has_moto = bool(moto_make and moto_model)
+
+    # 1. exact shock + exact moto
+    if model and has_moto:
+        row = _q(
+            "shock_brand = :b AND shock_model = :m AND moto_make = :mm AND moto_model = :mo",
+            {"b": brand, "m": model, "mm": moto_make, "mo": moto_model},
+        )
+        if row:
+            return {"found": True, "bands": json.loads(row[0])}
+
+    # 2. brand-only shock + exact moto
+    if has_moto:
+        row = _q(
+            "shock_brand = :b AND shock_model IS NULL AND moto_make = :mm AND moto_model = :mo",
+            {"b": brand, "mm": moto_make, "mo": moto_model},
+        )
+        if row:
+            return {"found": True, "bands": json.loads(row[0])}
+
+    # 3. exact shock, universal (moto_make not set)
+    if model:
+        row = _q(
+            "shock_brand = :b AND shock_model = :m AND moto_make IS NULL",
+            {"b": brand, "m": model},
+        )
+        if row:
+            return {"found": True, "bands": json.loads(row[0])}
+
+    # 4. brand-only, universal
+    row = _q(
+        "shock_brand = :b AND shock_model IS NULL AND moto_make IS NULL",
+        {"b": brand},
+    )
+    if row:
+        return {"found": True, "bands": json.loads(row[0])}
+
+    return {"found": False, "bands": None}
+
+
 @router.put("/api/motorcycles/{bike_id}/shock-setting", response_model=ShockSetting)
 def update_shock_setting(
     bike_id: int,

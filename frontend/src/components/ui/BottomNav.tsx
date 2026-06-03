@@ -22,6 +22,7 @@ export default function BottomNav() {
     location.pathname === "/" ||
     location.pathname.startsWith("/bikes/") ||
     location.pathname === "/shock-settings";
+  const expensesActive = location.pathname.startsWith("/expenses");
   const settingsActive = location.pathname.startsWith("/settings");
 
   const singleBike = bikes.length === 1 ? bikes[0] : undefined;
@@ -54,8 +55,8 @@ export default function BottomNav() {
               <span
                 className="quick-log-icon"
                 style={{
-                  background: "rgba(245,158,11,0.12)",
-                  border: "1px solid rgba(245,158,11,0.28)",
+                  background: "var(--amber-bg)",
+                  border: "1px solid var(--amber-border)",
                 }}
               >
                 ⛽
@@ -71,7 +72,7 @@ export default function BottomNav() {
           className={`bottom-nav-tab${garageActive ? " is-active" : ""}`}
           onClick={() => navigate("/", { viewTransition: true })}
         >
-          <span style={{ fontSize: 20 }}>🏍️</span>
+          <span className="tab-icon">🏍️</span>
           Garage
         </button>
 
@@ -81,6 +82,7 @@ export default function BottomNav() {
               className={`bottom-nav-fab${fabOpen ? " is-open" : ""}`}
               onClick={() => setFabOpen((v) => !v)}
               aria-label="บันทึกรายการ"
+              aria-expanded={fabOpen}
             >
               +
             </button>
@@ -89,10 +91,18 @@ export default function BottomNav() {
         </div>
 
         <button
+          className={`bottom-nav-tab${expensesActive ? " is-active" : ""}`}
+          onClick={() => navigate("/expenses", { viewTransition: true })}
+        >
+          <span className="tab-icon">💰</span>
+          ค่าใช้จ่าย
+        </button>
+
+        <button
           className={`bottom-nav-tab${settingsActive ? " is-active" : ""}`}
           onClick={() => navigate("/settings", { viewTransition: true })}
         >
-          <span style={{ fontSize: 20 }}>⚙️</span>
+          <span className="tab-icon">⚙️</span>
           Settings
         </button>
       </nav>

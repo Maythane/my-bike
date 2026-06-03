@@ -10,27 +10,22 @@ docker compose up --build
 
 Open `http://<server-ip>:8080` from any device on your LAN.
 
-## Local Development
+## Local Build
 
-**Backend:**
+**Install dependencies:**
 ```bash
 cd backend
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-DB_PATH=./data/moto.db .venv/bin/uvicorn app.main:app --reload
-```
-
-**Frontend:**
-```bash
 cd frontend
 npm install
-npm run dev       # proxy to localhost:8000
 ```
 
-**Build & serve together:**
+**Build frontend and serve through FastAPI:**
 ```bash
-cd frontend && npm run build && cp -r dist ../backend/static
-cd ../backend && DB_PATH=./data/moto.db .venv/bin/uvicorn app.main:app
+cd frontend && npm run deploy
+cd ..
+AUTH_SECRET_KEY=<your-secret> DB_PATH=./data/moto.db backend/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8764 --app-dir backend
 ```
 
 ## Stack

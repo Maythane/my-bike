@@ -3,11 +3,20 @@ import { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react
 interface Props {
   src: string;
   aspectRatio?: number;
+  exportSize?: number;
+  quality?: number;
   onConfirm: (blob: Blob) => void;
   onCancel: () => void;
 }
 
-export default function ImageCropper({ src, aspectRatio = 2, onConfirm, onCancel }: Props) {
+export default function ImageCropper({
+  src,
+  aspectRatio = 2,
+  exportSize = 1200,
+  quality = 0.88,
+  onConfirm,
+  onCancel,
+}: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -77,14 +86,14 @@ export default function ImageCropper({ src, aspectRatio = 2, onConfirm, onCancel
   const handleConfirm = () => {
     const img = imgRef.current;
     if (!img || !ready) return;
-    const exportW = Math.min(cropW * 2, 1200);
+    const exportW = Math.min(Math.round(cropW * 2), exportSize);
     const exportH = Math.round(exportW / aspectRatio);
     const ec = document.createElement("canvas");
     ec.width = exportW;
     ec.height = exportH;
     const ctx = ec.getContext("2d")!;
     ctx.drawImage(img, -offset.x / scale, -offset.y / scale, cropW / scale, cropH / scale, 0, 0, exportW, exportH);
-    ec.toBlob((blob) => { if (blob) onConfirm(blob); }, "image/jpeg", 0.92);
+    ec.toBlob((blob) => { if (blob) onConfirm(blob); }, "image/jpeg", quality);
   };
 
   return (

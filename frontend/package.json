@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc -b && vite build",
     "deploy": "npm run build && rm -rf ../backend/static/assets && cp -r dist/. ../backend/static/",
     "lint": "eslint .",

@@ -304,8 +304,6 @@ async def upload_avatar(
     session: Session = Depends(get_session),
 ):
     data = await file.read()
-    if len(data) > 2 * 1024 * 1024:
-        raise HTTPException(status_code=413, detail="ไฟล์ใหญ่เกิน 2MB")
     if current_user.avatar_url:
         old = os.path.join(AVATAR_DIR, os.path.basename(current_user.avatar_url))
         if os.path.exists(old):

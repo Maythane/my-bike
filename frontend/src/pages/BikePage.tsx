@@ -13,7 +13,12 @@ import Lightbox from "../components/ui/Lightbox";
 import BikeSpecs from "../components/profiles/BikeSpecs";
 import ImageCropper from "../components/ui/ImageCropper";
 import { useConfirm } from "../hooks/useConfirm";
-import type { ServiceLog, FuelLog, FuelEconomy } from "../types";
+import type { ServiceLog, FuelLog } from "../types";
+import { ServiceHistoryRow, FuelHistoryRow, FuelEconomyCard } from "../components/logs/LogHistoryRows";
+import { getReminders } from "../api/reminders";
+import ReminderAlertBar from "../components/reminders/ReminderAlertBar";
+import { getExpenseSummary } from "../api/expenses";
+import ExpenseModal from "../components/expenses/ExpenseModal";
 
 export default function BikePage() {
   const { bikeId } = useParams<{ bikeId: string }>();
@@ -28,7 +33,7 @@ export default function BikePage() {
   const [editFuelLog, setEditFuelLog] = useState<FuelLog | null>(null);
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
   const [showOverflow, setShowOverflow] = useState(false);
-  const [showManual, setShowManual] = useState(false);
+  const [fabOpen, setFabOpen] = useState(false);
   const [shockLoading, setShockLoading] = useState(false);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const photoRef = useRef<HTMLInputElement>(null);
@@ -57,6 +62,20 @@ export default function BikePage() {
     queryFn: () => getFuelEconomy(bid),
     enabled: !!bid && tab === "fuel",
   });
+
+  const { data: reminders = [] } = useQuery({
+    queryKey: ["reminders", bid],
+    queryFn: () => getReminders(bid),
+    enabled: !!bid,
+  });
+
+  const now = new Date();
+  const { data: expenseSummary } = useQuery({
+    queryKey: ["expense-summary", bid, now.getFullYear(), now.getMonth() + 1],
+    queryFn: () => getExpenseSummary(bid, now.getFullYear(), now.getMonth() + 1),
+    enabled: !!bid,
+  });
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
 
   const deleteBikeMut = useMutation({
     mutationFn: () => deleteMotorcycle(bid),
@@ -178,7 +197,7 @@ export default function BikePage() {
                   style={{
                     width: "100%", height: 120, display: "flex", alignItems: "center", justifyContent: "center",
                     flexDirection: "column", gap: 8, background: "var(--glass-bg)", border: "none", cursor: "pointer",
-                    color: "var(--slate)", fontSize: 13,
+                    color: "var(--slate)", fontSize: 13, viewTransitionName: `bike-hero-${bid}`,
                   }}
                 >
                   <span style={{ fontSize: 32 }}>📷</span>
@@ -202,12 +221,6 @@ export default function BikePage() {
               </div>
               <div className="bike-detail-actions">
                 <button className="btn btn-ghost btn-sm" onClick={() => setShowEditBike(true)}>แก้ไข</button>
-                <button className="btn btn-ghost btn-sm bike-manual-btn" onClick={() => setShowManual(true)} aria-label="สมุดคู่มือรถ">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                  </svg>
-                  คู่มือ
-                </button>
                 {/* desktop: show delete inline */}
                 <button
                   className="btn btn-danger btn-sm bike-delete-desktop"
@@ -269,11 +282,9 @@ export default function BikePage() {
               )}
             </div>
 
-            {bike && (
-              <div style={{ marginBottom: 16 }}>
-                <BikeSpecs make={bike.make} model={bike.model} />
-              </div>
-            )}
+            <div style={{ marginBottom: 16 }}>
+              <BikeSpecs make={bike.make} model={bike.model} />
+            </div>
 
             <div className="bike-detail-primary-actions">
               <button className="btn btn-primary" style={{ fontSize: 14 }} onClick={() => setShowFuelForm(true)}>
@@ -288,6 +299,72 @@ export default function BikePage() {
             </div>
             </div>{/* end padding div */}
           </div>
+
+          {/* Reminder alert bar (urgent only) */}
+          <ReminderAlertBar bikeId={bid} reminders={reminders} />
+
+          {/* Reminder card — always visible */}
+          {(() => {
+            const overdue = reminders.filter((r) => r.enabled && r.status === "overdue").length;
+            const dueSoon = reminders.filter((r) => r.enabled && r.status === "due_soon").length;
+            const statusColor = overdue > 0 ? "var(--red)" : dueSoon > 0 ? "#f59e0b" : "var(--green)";
+            const statusText = overdue > 0 ? `${overdue} รายการเกินกำหนด` : dueSoon > 0 ? `${dueSoon} รายการใกล้ถึงรอบ` : "ปกติทุกรายการ";
+            const statusIcon = overdue > 0 ? "⚠️" : dueSoon > 0 ? "🔔" : "✅";
+            return (
+              <div className="card" style={{ marginBottom: 10, padding: "10px 14px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontSize: 14 }}>{statusIcon}</span>
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: "var(--ink)" }}>การบำรุงรักษา</div>
+                      <div style={{ fontSize: 11, color: statusColor, marginTop: 1 }}>{statusText}</div>
+                    </div>
+                  </div>
+                  <button className="btn btn-sm" style={{ fontSize: 11, color: "var(--slate)" }}
+                    onClick={() => navigate(`/bikes/${bid}/reminders`, { viewTransition: true })}>
+                    จัดการ →
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Expense summary card */}
+          {expenseSummary && expenseSummary.total > 0 && (
+            <div className="card" style={{ marginBottom: 10, padding: "12px 14px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
+                  💰 ค่าใช้จ่ายเดือนนี้
+                </span>
+                <div style={{ display: "flex", gap: 6 }}>
+                  <button className="btn btn-sm"
+                    style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)", fontSize: 11 }}
+                    onClick={() => setShowExpenseModal(true)}>+ เพิ่ม</button>
+                  <button className="btn btn-sm" style={{ fontSize: 11, color: "var(--slate)" }}
+                    onClick={() => navigate(`/expenses`, { state: { bikeId: bid }, viewTransition: true })}>
+                    ดูทั้งหมด →
+                  </button>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <div style={{ textAlign: "center", minWidth: 70 }}>
+                  <div style={{ fontSize: 20, fontWeight: 700, color: "var(--purple)" }}>
+                    ฿{expenseSummary.total.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: 10, color: "var(--slate)" }}>รวม</div>
+                </div>
+                <div style={{ width: 1, height: 36, background: "var(--hairline)" }} />
+                <div style={{ display: "flex", flexDirection: "column", gap: 5, flex: 1 }}>
+                  {expenseSummary.by_category.slice(0, 3).map((c) => (
+                    <div key={c.category} style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
+                      <span style={{ color: "var(--slate)" }}>{c.icon} {c.label}</span>
+                      <span style={{ color: "var(--ink)", fontWeight: 500 }}>฿{c.amount.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Tab bar — segment control */}
           <div className="bike-segmented">
@@ -377,6 +454,9 @@ export default function BikePage() {
               )}
             </>
           )}
+          {showExpenseModal && (
+            <ExpenseModal bikeId={bid} onClose={() => setShowExpenseModal(false)} />
+          )}
         </>
       )}
 
@@ -403,159 +483,29 @@ export default function BikePage() {
       {cropSrc && <ImageCropper src={cropSrc} aspectRatio={2} onConfirm={handleCropConfirm} onCancel={handleCropCancel} />}
       {lightbox && <Lightbox images={lightbox.images} initialIndex={lightbox.index} onClose={() => setLightbox(null)} />}
 
-      {showManual && (
-        <div className="modal-overlay bike-manual-overlay" onClick={() => setShowManual(false)}>
-          <div className="bike-manual-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="bike-manual-header">
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--purple)", flexShrink: 0 }}>
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                </svg>
-                <span style={{ fontWeight: 700, fontSize: 15 }}>สมุดคู่มือรถ</span>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <a href="/manual-grandfilano.pdf" target="_blank" rel="noopener noreferrer"
-                  className="btn btn-ghost btn-sm" style={{ fontSize: 13 }}>
-                  เปิดใหม่ ↗
-                </a>
-                <button type="button" className="btn btn-ghost btn-sm modal-close" onClick={() => setShowManual(false)}>✕</button>
-              </div>
-            </div>
-            <iframe
-              src="/manual-grandfilano.pdf"
-              className="bike-manual-iframe"
-              title="สมุดคู่มือรถ Grand Filano"
-            />
+      {/* ── Quick-log FAB ── */}
+      {fabOpen && (
+        <>
+          <div className="bike-fab-backdrop" onClick={() => setFabOpen(false)} />
+          <div className="bike-fab-popup">
+            <button className="quick-log-item" onClick={() => { setFabOpen(false); setShowLogForm(true); }}>
+              <span className="quick-log-icon" style={{ background: "var(--purple-bg)", border: "1px solid var(--purple-border)" }}>🔧</span>
+              บำรุงรักษา
+            </button>
+            <button className="quick-log-item" onClick={() => { setFabOpen(false); setShowFuelForm(true); }}>
+              <span className="quick-log-icon" style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.28)" }}>⛽</span>
+              เติมน้ำมัน
+            </button>
           </div>
-        </div>
+        </>
       )}
+      <button
+        className={`bike-fab${fabOpen ? " is-open" : ""}`}
+        onClick={() => setFabOpen((v) => !v)}
+        aria-label="บันทึกรายการ"
+      >+</button>
+
+
     </div>
   );
-}
-
-function ServiceHistoryRow({ log, unit, isLast, onEdit, onDelete, onImageClick }: {
-  log: ServiceLog; unit: string; isLast: boolean; onEdit: () => void; onDelete: () => void; onImageClick: (images: string[], index: number) => void;
-}) {
-  return (
-    <div className="log-row">
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 26, paddingTop: 15, flexShrink: 0 }}>
-        <div style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--purple)", flexShrink: 0 }} />
-        {!isLast && <div style={{ width: 1, flex: 1, background: "var(--hairline)", marginTop: 5, minHeight: 8 }} />}
-      </div>
-      <div className="log-row-content" style={{ padding: "8px 10px 10px" }}>
-        <div className="history-row-main">
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 500, fontSize: 14, color: "var(--ink)", marginBottom: 3 }}>{log.name}</div>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <span style={{ fontSize: 12, color: "var(--slate)" }}>{fmtDate(log.date_performed)}</span>
-              <span style={{ fontSize: 12, color: "var(--slate)" }}>{log.mileage_at_service.toLocaleString()} {unit}</span>
-              {log.cost && <span style={{ fontSize: 12, color: "var(--slate)" }}>฿{log.cost.toLocaleString()}</span>}
-              {log.location && <span style={{ fontSize: 12, color: "var(--slate)" }}>📍 {log.location}</span>}
-            </div>
-            {log.notes && <div style={{ fontSize: 12, color: "var(--steel)", marginTop: 3, fontStyle: "italic" }}>{log.notes}</div>}
-            {log.images.length > 0 && (
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
-                {log.images.map((img, imgIdx) => (
-                  <img key={img.id} src={img.image_path} alt="service" className="history-thumb"
-                    onClick={() => onImageClick(log.images.map(i => i.image_path), imgIdx)} />
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="row-actions">
-            <button onClick={onEdit} className="btn btn-sm" style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)" }}>แก้ไข</button>
-            <button onClick={onDelete} className="btn btn-sm" style={{ color: "var(--steel)", borderColor: "var(--hairline)", background: "transparent" }}>ลบ</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FuelHistoryRow({ log, unit, isLast, onEdit, onDelete, onImageClick }: {
-  log: FuelLog; unit: string; isLast: boolean; onEdit: () => void; onDelete: () => void; onImageClick: (images: string[], index: number) => void;
-}) {
-  return (
-    <div className="log-row">
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 26, paddingTop: 15, flexShrink: 0 }}>
-        <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#f59e0b", flexShrink: 0 }} />
-        {!isLast && <div style={{ width: 1, flex: 1, background: "var(--hairline)", marginTop: 5, minHeight: 8 }} />}
-      </div>
-      <div className="log-row-content" style={{ padding: "8px 10px 10px" }}>
-        <div className="history-row-main">
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
-              <span style={{ fontWeight: 600, fontSize: 14, color: "var(--ink)" }}>{log.mileage_at_fillup.toLocaleString()} {unit}</span>
-              {log.km_per_liter && <span style={{ fontSize: 12, color: "var(--green)", fontWeight: 600, flexShrink: 0 }}>{log.km_per_liter} km/L</span>}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3, flexWrap: "wrap" }}>
-              <span style={{ fontSize: 11, fontWeight: 600, padding: "1px 7px", borderRadius: 99, background: "rgba(245,158,11,0.12)", color: "#b45309" }}>{log.fuel_type}</span>
-              {log.is_full_tank && (
-                <span style={{ fontSize: 11, fontWeight: 600, padding: "1px 7px", borderRadius: 99, background: "rgba(15,123,108,0.10)", color: "var(--green)" }}>เต็มถัง</span>
-              )}
-              {log.distance_km && (
-                <span style={{ fontSize: 11, color: "var(--slate)" }}>+{log.distance_km.toLocaleString()} {unit}</span>
-              )}
-            </div>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <span style={{ fontSize: 12, color: "var(--slate)" }}>{fmtDate(log.date)}</span>
-              <span style={{ fontSize: 12, color: "var(--slate)" }}>{log.fuel_amount} ลิตร</span>
-              {log.cost && <span style={{ fontSize: 12, color: "var(--slate)" }}>฿{log.cost.toLocaleString()}</span>}
-              {log.location && <span style={{ fontSize: 12, color: "var(--slate)" }}>📍 {log.location}</span>}
-            </div>
-            {log.notes && <div style={{ fontSize: 12, color: "var(--steel)", marginTop: 3, fontStyle: "italic" }}>{log.notes}</div>}
-            {log.images.length > 0 && (
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
-                {log.images.map((img, imgIdx) => (
-                  <img key={img.id} src={img.image_path} alt="receipt" className="history-thumb"
-                    onClick={() => onImageClick(log.images.map(i => i.image_path), imgIdx)} />
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="row-actions">
-            <button onClick={onEdit} className="btn btn-sm" style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)" }}>แก้ไข</button>
-            <button onClick={onDelete} className="btn btn-sm" style={{ color: "var(--steel)", borderColor: "var(--hairline)", background: "transparent" }}>ลบ</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FuelEconomyCard({ economy }: { economy: FuelEconomy }) {
-  return (
-    <div className="card" style={{ marginBottom: 20, padding: "20px 20px 18px" }}>
-      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--steel)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 16 }}>
-        อัตราสิ้นเปลือง
-      </div>
-      <div className="economy-hero">
-        <div className="economy-hero-value">
-          {economy.avg_km_per_liter ?? "—"}
-        </div>
-        <span style={{ fontSize: 14, color: "var(--slate)", paddingBottom: 6 }}>km/L เฉลี่ย</span>
-      </div>
-      <div style={{ borderTop: "1px solid var(--hairline)", marginBottom: 14 }} />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))", gap: 12 }}>
-        <StatItem label="ล่าสุด" value={economy.last_km_per_liter} suffix="km/L" />
-        <StatItem label="ดีสุด" value={economy.best_km_per_liter} suffix="km/L" />
-        <StatItem label="น้ำมันรวม" value={economy.total_fuel} suffix="L" />
-        {economy.total_cost != null && <StatItem label="ค่าน้ำมันรวม" value={`฿${economy.total_cost.toLocaleString()}`} />}
-      </div>
-    </div>
-  );
-}
-
-function StatItem({ label, value, suffix }: { label: string; value: number | string | null | undefined; suffix?: string }) {
-  const display = value == null ? "—" : typeof value === "string" ? value : `${value}${suffix ? ` ${suffix}` : ""}`;
-  return (
-    <div>
-      <div style={{ fontSize: 11, color: "var(--steel)", marginBottom: 2 }}>{label}</div>
-      <div style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)" }}>{display}</div>
-    </div>
-  );
-}
-
-function fmtDate(d: string) {
-  return new Date(d + "T00:00:00").toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" });
 }

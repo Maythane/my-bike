@@ -32,15 +32,15 @@ def main():
     print('─' * 60)
     print('  Ctrl+C to stop\n')
 
-    if not os.environ.get('NO_BROWSER'):
-        webbrowser.open(f'http://localhost{path}')
-
     env = os.environ.copy()
 
     if 'AUTH_SECRET_KEY' not in env:
         print('ERROR: AUTH_SECRET_KEY env var is required')
         print('  Generate one: export AUTH_SECRET_KEY="$(openssl rand -hex 32)"')
         sys.exit(1)
+
+    if not os.environ.get('NO_BROWSER'):
+        webbrowser.open(f'http://localhost{path}')
 
     env['DB_PATH'] = str(DB_PATH)
 

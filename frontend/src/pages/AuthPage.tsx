@@ -145,10 +145,10 @@ export default function AuthPage() {
           <div className="auth-header">
             <img src="/favicon.svg" className="auth-logo" alt="My Bike" />
             <div className="auth-header-brand">
-              <span className="auth-app-name">My Bike</span>
-              <h1>Welcome back</h1>
+              <span className="auth-app-name">Moto Tracker</span>
+              <h1>ยินดีต้อนรับกลับมา</h1>
             </div>
-            <p>บันทึกการบำรุงรักษาและเชื้อเพลิงรถมอเตอร์ไซค์</p>
+            <p>ติดตามการบำรุงรักษาและอัตราบริโภคเชื้อเพลิงรถของคุณ</p>
           </div>
 
           <div className="auth-body">
@@ -165,7 +165,7 @@ export default function AuthPage() {
 
             <form onSubmit={handleSubmit} className="auth-form">
               <div className="auth-field">
-                <label htmlFor="login-identifier">Email / Username / เบอร์โทร</label>
+                <label htmlFor="login-identifier">Email / Username / Telephone</label>
                 <div className="auth-input-wrap">
                   <span className="auth-input-icon"><MailIcon width={16} height={16} /></span>
                   <input
@@ -223,7 +223,7 @@ export default function AuthPage() {
                 <div className="auth-field">
                   <div className="auth-field-header">
                     <label htmlFor="login-password">Password</label>
-                    <a href="#" className="auth-link">Forgot Password?</a>
+                    <a href="#" className="auth-link">ลืมรหัสผ่าน?</a>
                   </div>
                   <div className="auth-input-wrap">
                     <span className="auth-input-icon"><LockIcon width={16} height={16} /></span>
@@ -257,16 +257,16 @@ export default function AuthPage() {
                   className="btn btn-primary auth-submit-btn"
                   disabled={loading || (isPhone && otpSent && (otp.length < 6 || countdown === 0))}
                 >
-                  {loading ? "กำลังดำเนินการ…" : isPhone ? "ยืนยัน OTP" : "Sign in"}
+                  {loading ? "กำลังดำเนินการ…" : isPhone ? "ยืนยัน OTP" : "เข้าสู่ระบบ"}
                   {!loading && !isPhone && <ArrowRightIcon width={16} height={16} />}
                 </button>
               )}
             </form>
 
             <p className="auth-footer-text">
-              No account?{" "}
+              ยังไม่มีบัญชีใช้งาน?{" "}
               <button type="button" className="auth-link auth-link--btn" onClick={() => handleTabChange("register")}>
-                Create an account
+                สร้างบัญชีใหม่
               </button>
             </p>
           </div>
@@ -274,10 +274,10 @@ export default function AuthPage() {
       ) : (
         <div className="auth-card auth-card--wide">
           <div className="auth-header">
-            <img src="/favicon.svg" className="auth-logo" alt="My Bike" />
+            <img src="/favicon.svg" className="auth-logo" alt="Moto Tracker" />
             <div className="auth-header-brand">
-              <span className="auth-app-name">My Bike</span>
-              <h1>Create an account</h1>
+              <span className="auth-app-name">Moto Tracker</span>
+              <h1>สร้างบัญชีใหม่</h1>
             </div>
             <p>สมัครสมาชิกเพื่อเริ่มบันทึกข้อมูลรถของคุณ</p>
           </div>
@@ -354,10 +354,10 @@ export default function AuthPage() {
                 onChange={(e) => setAgreeTerms(e.target.checked)}
               />
               <span>
-                I agree to the{" "}
-                <a href="#" className="auth-link">Terms</a>
-                {" "}and{" "}
-                <a href="#" className="auth-link">Conditions</a>
+                ฉันยอมรับ{" "}
+                <a href="#" className="auth-link">ข้อกำหนด</a>
+                {" "}และ{" "}
+                <a href="#" className="auth-link">เงื่อนไข</a>
               </span>
             </label>
 
@@ -368,15 +368,15 @@ export default function AuthPage() {
               className="btn btn-primary auth-submit-btn"
               disabled={loading || !agreeTerms}
             >
-              {loading ? "กำลังดำเนินการ…" : "Create free account"}
+              {loading ? "กำลังดำเนินการ…" : "สร้างบัญชีใหม่"}
             </button>
           </form>
 
           <div className="auth-card-footer">
             <p className="auth-footer-text">
-              Already have an account?{" "}
+              มีบัญชีแล้ว?{" "}
               <button type="button" className="auth-link auth-link--btn" onClick={() => handleTabChange("login")}>
-                Sign in
+                เข้าสู่ระบบ
               </button>
             </p>
           </div>

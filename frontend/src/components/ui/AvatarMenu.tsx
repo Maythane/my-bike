@@ -7,6 +7,37 @@ import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
 import AccountModal from "./AccountModal";
 
+const IconUser = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+  </svg>
+);
+const IconSettings = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+  </svg>
+);
+const IconLogout = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
+const IconMoon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+);
+const IconSun = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="5" />
+    <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+  </svg>
+);
+
 export default function AvatarMenu() {
   const [open, setOpen] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
@@ -31,41 +62,50 @@ export default function AvatarMenu() {
     return () => document.removeEventListener("mousedown", onMouseDown);
   }, []);
 
-  const displayName = user?.username ? `@${user.username}` : (user?.email ?? "…");
-  const initial = (user?.username?.[0] ?? user?.email?.[0] ?? "?").toUpperCase();
+  const displayName = user?.display_name || (user?.username ? `@${user.username}` : (user?.email ?? "…"));
+  const initial = (user?.display_name?.[0] ?? user?.username?.[0] ?? user?.email?.[0] ?? "?").toUpperCase();
 
   return (
     <>
       <div className="avatar-menu" ref={ref}>
-        <button className="avatar-btn" onClick={() => setOpen((v) => !v)} title="บัญชีผู้ใช้">
-          {initial}
+        <button className="avatar-btn" onClick={() => setOpen((v) => !v)} title="บัญชีผู้ใช้" aria-label="บัญชีผู้ใช้">
+          {user?.avatar_url
+            ? <img src={user.avatar_url} alt={displayName} />
+            : initial
+          }
         </button>
 
         {open && (
           <div className="avatar-dropdown">
             <div className="avatar-dropdown-header">
-              <div className="avatar-dropdown-email">Signed in as</div>
+              <div className="avatar-dropdown-email">ลงชื่อเข้าใช้เป็น</div>
               <div className="avatar-dropdown-user">{displayName}</div>
             </div>
 
             <div
               className="avatar-dropdown-item"
+              role="button"
+              tabIndex={0}
               onClick={() => { setOpen(false); setShowAccount(true); }}
+              onKeyDown={(e) => e.key === "Enter" && (setOpen(false), setShowAccount(true))}
             >
-              <span>👤</span> Manage Account
+              <IconUser /> จัดการบัญชี
             </div>
             <div
               className="avatar-dropdown-item"
+              role="button"
+              tabIndex={0}
               onClick={() => { setOpen(false); navigate("/settings", { viewTransition: true }); }}
+              onKeyDown={(e) => e.key === "Enter" && (setOpen(false), navigate("/settings", { viewTransition: true }))}
             >
-              <span>⚙️</span> Settings
+              <IconSettings /> Settings
             </div>
 
             <div className="avatar-dropdown-divider" />
 
-            <div className="avatar-dropdown-item" onClick={toggle} style={{ justifyContent: "space-between" }}>
+            <div className="avatar-dropdown-item" role="button" tabIndex={0} onClick={toggle} style={{ justifyContent: "space-between" }}>
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span>{theme === "dark" ? "🌙" : "☀️"}</span> Dark Mode
+                {theme === "dark" ? <IconMoon /> : <IconSun />} Dark Mode
               </span>
               <span style={{
                 display: "inline-flex", width: 36, height: 20, borderRadius: 99,
@@ -76,8 +116,9 @@ export default function AvatarMenu() {
                 <span style={{
                   width: 16, height: 16, borderRadius: "50%", background: "#fff",
                   boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
-                  marginLeft: theme === "dark" ? "auto" : 0,
-                  transition: "margin 0.2s",
+                  transform: theme === "dark" ? "translateX(16px)" : "translateX(0)",
+                  transition: "transform 0.2s ease",
+                  flexShrink: 0,
                 }} />
               </span>
             </div>
@@ -86,9 +127,12 @@ export default function AvatarMenu() {
 
             <div
               className="avatar-dropdown-item danger"
+              role="button"
+              tabIndex={0}
               onClick={() => { setOpen(false); logout(); }}
+              onKeyDown={(e) => e.key === "Enter" && (setOpen(false), logout())}
             >
-              <span>🚪</span> Logout
+              <IconLogout /> ออกจากระบบ
             </div>
           </div>
         )}
