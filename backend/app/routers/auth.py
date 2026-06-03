@@ -45,8 +45,9 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 
 class RegisterRequest(BaseModel):
-    email: str
+    username: str
     password: str
+    email: Optional[str] = None
 
 
 class LoginRequest(BaseModel):
@@ -61,7 +62,7 @@ class TokenResponse(BaseModel):
 
 class UserRead(BaseModel):
     id: int
-    email: str
+    email: Optional[str] = None
     username: Optional[str] = None
     phone: Optional[str] = None
     phone_verified: bool = False
@@ -83,12 +84,24 @@ def _seed_user_defaults(user: User, session: Session) -> None:
 
 @router.post("/register", response_model=TokenResponse, status_code=201)
 def register(data: RegisterRequest, session: Session = Depends(get_session)):
-    email = data.email.lower().strip()
-    if session.exec(select(User).where(User.email == email)).first():
-        raise HTTPException(status_code=409, detail="Email already registered")
+    if not re.match(r'^[a-zA-Z0-9_]{3,30}$', data.username):
+        raise HTTPException(status_code=422, detail="Username ต้องใช้ a–z, 0–9, _ · 3–30 ตัวอักษร")
+    if session.exec(select(User).where(User.username == data.username)).first():
+        raise HTTPException(status_code=409, detail="Username นี้ถูกใช้แล้ว")
     if len(data.password) < 8:
-        raise HTTPException(status_code=422, detail="Password must be at least 8 characters")
-    user = User(email=email, hashed_password=hash_password(data.password))
+        raise HTTPException(status_code=422, detail="Password ต้องมีอย่างน้อย 8 ตัวอักษร")
+
+    email: Optional[str] = None
+    if data.email and data.email.strip():
+        email = data.email.lower().strip()
+        if session.exec(select(User).where(User.email == email)).first():
+            raise HTTPException(status_code=409, detail="Email นี้ถูกใช้แล้ว")
+
+    user = User(
+        username=data.username,
+        email=email,
+        hashed_password=hash_password(data.password),
+    )
     session.add(user)
     session.commit()
     session.refresh(user)
