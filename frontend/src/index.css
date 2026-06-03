@@ -3431,6 +3431,8 @@ textarea.expense-field {
 
 .acct-hero {
   background: linear-gradient(135deg, rgba(124,58,237,0.22), rgba(79,70,229,0.14));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(124,58,237,0.28);
   border-radius: var(--r-lg);
   padding: 20px 16px 18px;
@@ -3453,7 +3455,10 @@ textarea.expense-field {
   background: none;
   cursor: pointer;
   flex-shrink: 0;
+  transition: opacity 0.15s;
 }
+
+.acct-hero-avatar-btn:active { opacity: 0.7; }
 
 .acct-hero-avatar-btn img,
 .acct-hero-avatar-inner {
@@ -3465,30 +3470,59 @@ textarea.expense-field {
   align-items: center;
   justify-content: center;
   background: var(--purple);
-  color: #fff;
+  color: rgba(255,255,255,0.92);
   font-size: 22px;
   font-weight: 700;
+}
+
+.acct-hero-avatar-loading {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.acct-hero-avatar-loading::after {
+  content: "";
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: acct-spin 0.7s linear infinite;
+}
+
+@keyframes acct-spin {
+  to { transform: rotate(360deg); }
 }
 
 .acct-hero-avatar-badge {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--elevated);
   border: 2px solid var(--canvas);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
   color: var(--slate);
   pointer-events: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.acct-hero-avatar-btn:hover .acct-hero-avatar-badge {
+  background: var(--purple);
+  color: #fff;
 }
 
 .acct-hero-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--ink);
   line-height: 1.2;
@@ -3511,6 +3545,8 @@ textarea.expense-field {
 
 .acct-page-section {
   background: var(--surface);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
   border: 1px solid var(--hairline);
   border-radius: var(--r-lg);
   overflow: hidden;
@@ -3522,6 +3558,7 @@ textarea.expense-field {
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
+  min-height: 44px;
   border-bottom: 1px solid var(--hairline);
   cursor: pointer;
   user-select: none;
@@ -3530,6 +3567,12 @@ textarea.expense-field {
 
 .acct-page-row:last-child {
   border-bottom: none;
+}
+
+@media (hover: hover) {
+  .acct-page-row:hover {
+    background: var(--elevated);
+  }
 }
 
 .acct-page-row:active {
@@ -3567,6 +3610,24 @@ textarea.expense-field {
   flex-shrink: 0;
 }
 
+.acct-row-chevron {
+  display: flex;
+  align-items: center;
+  color: var(--steel);
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.15s;
+}
+
+.acct-page-row.is-open .acct-row-chevron {
+  transform: rotate(90deg);
+  color: var(--purple);
+}
+
+@keyframes acct-row-body-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .acct-page-row-body {
   padding: 12px 14px 14px;
   border-bottom: 1px solid var(--hairline);
@@ -3574,6 +3635,7 @@ textarea.expense-field {
   flex-direction: column;
   gap: 10px;
   background: var(--surface-soft);
+  animation: acct-row-body-in 0.18s ease-out both;
 }
 
 .acct-page-row-body:last-child {
@@ -3588,4 +3650,11 @@ textarea.expense-field {
 
 html.light .acct-hero {
   background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(79,70,229,0.07));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acct-page-row-body { animation: none; }
+  .acct-row-chevron   { transition: none; }
+  .acct-hero-avatar-btn { transition: none; }
+  .acct-hero-avatar-loading::after { animation: none; }
 }

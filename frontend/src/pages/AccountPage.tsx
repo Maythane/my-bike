@@ -30,6 +30,13 @@ const BackIcon = () => (
   </svg>
 );
 
+const EditIcon = () => (
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+  </svg>
+);
+
 export default function AccountPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -242,13 +249,15 @@ export default function AccountPage() {
             ? <img src={user.avatar_url} alt={headingName} style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover" }} />
             : <div className="acct-hero-avatar-inner">{initial}</div>
           }
-          <span className="acct-hero-avatar-badge">✎</span>
+          {avatarLoading
+            ? <div className="acct-hero-avatar-loading" />
+            : <span className="acct-hero-avatar-badge"><EditIcon /></span>
+          }
         </button>
         <div>
           <div className="acct-hero-name">{headingName}</div>
           {user?.username && <div className="acct-hero-username">@{user.username}</div>}
         </div>
-        {avatarLoading && <div style={{ fontSize: 12, color: "var(--slate)" }}>กำลังอัปโหลด…</div>}
       </div>
       <input
         ref={avatarInputRef}
@@ -264,7 +273,7 @@ export default function AccountPage() {
 
         {/* Display name */}
         <div
-          className="acct-page-row"
+          className={`acct-page-row${open === "displayName" ? " is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("displayName", () => setDisplayName(user?.display_name ?? ""))}
@@ -272,7 +281,7 @@ export default function AccountPage() {
         >
           <span className="acct-page-row-label">ชื่อที่แสดง</span>
           <span className="acct-page-row-value">{user?.display_name || <em>ยังไม่ได้ตั้ง</em>}</span>
-          <ChevronIcon />
+          <span className="acct-row-chevron"><ChevronIcon /></span>
         </div>
         {open === "displayName" && (
           <div className="acct-page-row-body">
@@ -297,7 +306,7 @@ export default function AccountPage() {
 
         {/* Username */}
         <div
-          className="acct-page-row"
+          className={`acct-page-row${open === "username" ? " is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("username")}
@@ -307,7 +316,7 @@ export default function AccountPage() {
           <span className="acct-page-row-value">
             {user?.username ? `@${user.username}` : <em>ยังไม่ได้ตั้ง</em>}
           </span>
-          <ChevronIcon />
+          <span className="acct-row-chevron"><ChevronIcon /></span>
         </div>
         {open === "username" && (
           <div className="acct-page-row-body">
@@ -335,7 +344,7 @@ export default function AccountPage() {
 
         {/* Email */}
         <div
-          className="acct-page-row"
+          className={`acct-page-row${open === "email" ? " is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("email")}
@@ -346,7 +355,7 @@ export default function AccountPage() {
           <span className="acct-page-row-value">{user?.email || <em>ยังไม่ได้เพิ่ม</em>}</span>
           {!user?.email
             ? <span className="acct-page-add-badge">+ เพิ่ม</span>
-            : <ChevronIcon />
+            : <span className="acct-row-chevron"><ChevronIcon /></span>
           }
         </div>
         {open === "email" && (
@@ -378,7 +387,7 @@ export default function AccountPage() {
 
         {/* Password */}
         <div
-          className="acct-page-row"
+          className={`acct-page-row${open === "password" ? " is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("password")}
@@ -386,7 +395,7 @@ export default function AccountPage() {
         >
           <span className="acct-page-row-label">Password</span>
           <span className="acct-page-row-value">••••••••</span>
-          <ChevronIcon />
+          <span className="acct-row-chevron"><ChevronIcon /></span>
         </div>
         {open === "password" && (
           <div className="acct-page-row-body">
@@ -443,7 +452,7 @@ export default function AccountPage() {
 
         {/* Phone */}
         <div
-          className="acct-page-row"
+          className={`acct-page-row${open === "phone" ? " is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("phone")}
@@ -456,7 +465,7 @@ export default function AccountPage() {
           </span>
           {!user?.phone_verified
             ? <span className="acct-page-add-badge">+ เพิ่ม</span>
-            : <ChevronIcon />
+            : <span className="acct-row-chevron"><ChevronIcon /></span>
           }
         </div>
         {open === "phone" && (
