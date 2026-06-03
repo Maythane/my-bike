@@ -27,8 +27,8 @@ export function useAuth() {
     setToken(access_token);
   }
 
-  async function register(email: string, password: string): Promise<void> {
-    const { access_token } = await fetchRegister(email, password);
+  async function register(username: string, password: string, email?: string): Promise<void> {
+    const { access_token } = await fetchRegister(username, password, email);
     setToken(access_token);
   }
 

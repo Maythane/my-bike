@@ -7,7 +7,7 @@ export interface TokenResponse {
 
 export interface UserInfo {
   id: number;
-  email: string;
+  email: string | null;
   username: string | null;
   phone: string | null;
   phone_verified: boolean;
@@ -16,8 +16,14 @@ export interface UserInfo {
   created_at: string;
 }
 
-export async function fetchRegister(email: string, password: string): Promise<TokenResponse> {
-  const { data } = await client.post<TokenResponse>("/api/auth/register", { email, password });
+export async function fetchRegister(
+  username: string,
+  password: string,
+  email?: string,
+): Promise<TokenResponse> {
+  const body: Record<string, string> = { username, password };
+  if (email) body.email = email;
+  const { data } = await client.post<TokenResponse>("/api/auth/register", body);
   return data;
 }
 
