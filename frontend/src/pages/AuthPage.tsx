@@ -63,7 +63,8 @@ export default function AuthPage() {
   const [confirm, setConfirm] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [username, setUsername] = useState("");
+  const [regEmail, setRegEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -123,7 +124,7 @@ export default function AuthPage() {
       } else if (tab === "login") {
         await login(identifier.trim(), password);
       } else {
-        await register(identifier.trim(), password);
+        await register(username.trim(), password, regEmail.trim() || undefined);
       }
       navigate("/", { replace: true });
     } catch (err: any) {
@@ -284,22 +285,26 @@ export default function AuthPage() {
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="auth-field">
-              <label htmlFor="reg-email">Email address</label>
+              <label htmlFor="reg-username">Username <span style={{ color: "var(--purple)" }}>*</span></label>
               <input
-                id="reg-email"
+                id="reg-username"
                 className="auth-input"
-                type="email"
-                value={identifier}
-                onChange={(e) => { setIdentifier(e.target.value); setError(null); }}
-                placeholder="you@example.com"
+                type="text"
+                value={username}
+                onChange={(e) => { setUsername(e.target.value); setError(null); }}
+                placeholder="rider_mark"
+                pattern="[a-zA-Z0-9_]+"
+                minLength={3}
+                maxLength={30}
                 required
                 autoFocus
-                autoComplete="email"
+                autoComplete="username"
               />
+              <p style={{ fontSize: 11, color: "var(--slate)", margin: "2px 0 0" }}>a–z, 0–9, _ · 3–30 ตัวอักษร</p>
             </div>
 
             <div className="auth-field">
-              <label htmlFor="reg-password">Password</label>
+              <label htmlFor="reg-password">Password <span style={{ color: "var(--purple)" }}>*</span></label>
               <div className="auth-input-wrap">
                 <input
                   id="reg-password"
@@ -307,23 +312,21 @@ export default function AuthPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="อย่างน้อย 8 ตัวอักษร"
+                  minLength={8}
                   required
                   autoComplete="new-password"
                 />
-                <button
-                  type="button"
-                  className="auth-eye-btn"
+                <button type="button" className="auth-eye-btn"
                   onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? "ซ่อน password" : "แสดง password"}
-                >
+                  aria-label={showPassword ? "ซ่อน password" : "แสดง password"}>
                   {showPassword ? <EyeOffIcon width={16} height={16} /> : <EyeIcon width={16} height={16} />}
                 </button>
               </div>
             </div>
 
             <div className="auth-field">
-              <label htmlFor="reg-confirm">Confirm Password</label>
+              <label htmlFor="reg-confirm">ยืนยัน Password <span style={{ color: "var(--purple)" }}>*</span></label>
               <div className="auth-input-wrap">
                 <input
                   id="reg-confirm"
@@ -335,40 +338,37 @@ export default function AuthPage() {
                   required
                   autoComplete="new-password"
                 />
-                <button
-                  type="button"
-                  className="auth-eye-btn"
+                <button type="button" className="auth-eye-btn"
                   onClick={() => setShowConfirm((v) => !v)}
-                  aria-label={showConfirm ? "ซ่อน password" : "แสดง password"}
-                >
+                  aria-label={showConfirm ? "ซ่อน password" : "แสดง password"}>
                   {showConfirm ? <EyeOffIcon width={16} height={16} /> : <EyeIcon width={16} height={16} />}
                 </button>
               </div>
             </div>
 
-            <label className="auth-checkbox-row">
+            <div className="auth-field">
+              <label htmlFor="reg-email" style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                Email
+                <span style={{ fontSize: 11, color: "var(--steel)", fontWeight: 400 }}>(ไม่บังคับ)</span>
+              </label>
               <input
-                type="checkbox"
-                className="auth-checkbox"
-                checked={agreeTerms}
-                onChange={(e) => setAgreeTerms(e.target.checked)}
+                id="reg-email"
+                className="auth-input"
+                type="email"
+                value={regEmail}
+                onChange={(e) => setRegEmail(e.target.value)}
+                placeholder="email@example.com"
+                autoComplete="email"
+                style={{ borderStyle: "dashed", opacity: 0.8 }}
               />
-              <span>
-                ฉันยอมรับ{" "}
-                <a href="#" className="auth-link">ข้อกำหนด</a>
-                {" "}และ{" "}
-                <a href="#" className="auth-link">เงื่อนไข</a>
-              </span>
-            </label>
+              <p style={{ fontSize: 11, color: "var(--slate)", margin: "2px 0 0" }}>แนะนำ — ใช้กู้รหัสผ่าน, เพิ่มทีหลังได้ใน Account</p>
+            </div>
 
             {error && <p className="auth-error">{error}</p>}
 
-            <button
-              type="submit"
-              className="btn btn-primary auth-submit-btn"
-              disabled={loading || !agreeTerms}
-            >
-              {loading ? "กำลังดำเนินการ…" : "สร้างบัญชีใหม่"}
+            <button type="submit" className="btn btn-primary auth-submit-btn" disabled={loading}>
+              {loading ? "กำลังดำเนินการ…" : "สร้างบัญชี"}
+              {!loading && <ArrowRightIcon width={16} height={16} />}
             </button>
           </form>
 
