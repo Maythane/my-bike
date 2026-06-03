@@ -27,7 +27,7 @@ class AppSettings(SQLModel, table=True):
 class User(SQLModel, table=True):
     __tablename__ = "users"
     id: Optional[int] = Field(default=None, primary_key=True)
-    email: str = Field(unique=True, index=True)
+    email: Optional[str] = Field(default=None, unique=True, index=True)
     hashed_password: str
     is_active: bool = Field(default=True)
     is_admin: bool = Field(default=False)

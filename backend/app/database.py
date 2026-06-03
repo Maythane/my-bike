@@ -23,6 +23,42 @@ def create_db():
     _migrate_reminders()
     _migrate_expenses()
     _migrate_user_profile()
+    _migrate_email_optional()
+
+
+def _migrate_email_optional():
+    """Make users.email nullable (idempotent). SQLite requires table recreation."""
+    with engine.connect() as conn:
+        info = conn.execute(text("PRAGMA table_info(users)")).fetchall()
+        col = next((r for r in info if r[1] == "email"), None)
+        if col is None or col[3] == 0:
+            return  # column missing or already nullable
+        conn.execute(text("PRAGMA foreign_keys = OFF"))
+        conn.execute(text("""
+            CREATE TABLE users_new (
+                id INTEGER PRIMARY KEY,
+                email TEXT UNIQUE,
+                hashed_password TEXT NOT NULL,
+                is_active INTEGER NOT NULL DEFAULT 1,
+                is_admin INTEGER NOT NULL DEFAULT 0,
+                username TEXT UNIQUE,
+                phone TEXT UNIQUE,
+                phone_verified INTEGER NOT NULL DEFAULT 0,
+                display_name TEXT,
+                avatar_url TEXT,
+                created_at DATETIME NOT NULL
+            )
+        """))
+        conn.execute(text("""
+            INSERT INTO users_new
+            SELECT id, email, hashed_password, is_active, is_admin,
+                   username, phone, phone_verified, display_name, avatar_url, created_at
+            FROM users
+        """))
+        conn.execute(text("DROP TABLE users"))
+        conn.execute(text("ALTER TABLE users_new RENAME TO users"))
+        conn.execute(text("PRAGMA foreign_keys = ON"))
+        conn.commit()
 
 
 def _migrate_user_profile():
