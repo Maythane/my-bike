@@ -94,6 +94,8 @@ def register(data: RegisterRequest, session: Session = Depends(get_session)):
     email: Optional[str] = None
     if data.email and data.email.strip():
         email = data.email.lower().strip()
+        if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
+            raise HTTPException(status_code=422, detail="รูปแบบ email ไม่ถูกต้อง")
         if session.exec(select(User).where(User.email == email)).first():
             raise HTTPException(status_code=409, detail="Email นี้ถูกใช้แล้ว")
 
