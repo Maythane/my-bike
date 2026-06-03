@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMe } from "../../api/auth";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
-import AccountModal from "./AccountModal";
 
 const IconUser = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -40,7 +38,6 @@ const IconSun = () => (
 
 export default function AvatarMenu() {
   const [open, setOpen] = useState(false);
-  const [showAccount, setShowAccount] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -66,8 +63,7 @@ export default function AvatarMenu() {
   const initial = (user?.display_name?.[0] ?? user?.username?.[0] ?? user?.email?.[0] ?? "?").toUpperCase();
 
   return (
-    <>
-      <div className="avatar-menu" ref={ref}>
+    <div className="avatar-menu" ref={ref}>
         <button className="avatar-btn" onClick={() => setOpen((v) => !v)} title="บัญชีผู้ใช้" aria-label="บัญชีผู้ใช้">
           {user?.avatar_url
             ? <img src={user.avatar_url} alt={displayName} />
@@ -86,8 +82,8 @@ export default function AvatarMenu() {
               className="avatar-dropdown-item"
               role="button"
               tabIndex={0}
-              onClick={() => { setOpen(false); setShowAccount(true); }}
-              onKeyDown={(e) => e.key === "Enter" && (setOpen(false), setShowAccount(true))}
+              onClick={() => { setOpen(false); navigate("/account", { viewTransition: true }); }}
+              onKeyDown={(e) => e.key === "Enter" && (setOpen(false), navigate("/account", { viewTransition: true }))}
             >
               <IconUser /> จัดการบัญชี
             </div>
@@ -137,11 +133,5 @@ export default function AvatarMenu() {
           </div>
         )}
       </div>
-
-      {showAccount && createPortal(
-        <AccountModal onClose={() => setShowAccount(false)} />,
-        document.body
-      )}
-    </>
   );
 }

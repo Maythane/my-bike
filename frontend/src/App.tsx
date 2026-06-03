@@ -15,6 +15,7 @@ const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 const ShockSetupPage = lazy(() => import("./pages/ShockSetupPage"));
 const ServiceRemindersPage = lazy(() => import("./pages/ServiceRemindersPage"));
 const ExpenseDashboardPage = lazy(() => import("./pages/ExpenseDashboardPage"));
+const AccountPage = lazy(() => import("./pages/AccountPage"));
 
 const qc = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000 } } });
 
@@ -105,6 +106,7 @@ function AppShell() {
                     <Route path="/settings/bikes/:bikeId/shock" element={<ShockSetupPage />} />
                     <Route path="/bikes/:bikeId/reminders" element={<ServiceRemindersPage />} />
                     <Route path="/expenses" element={<ExpenseDashboardPage />} />
+                    <Route path="/account" element={<AccountPage />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </Suspense>
