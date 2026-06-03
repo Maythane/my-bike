@@ -39,6 +39,7 @@ export default function AccountPage() {
   // Avatar state
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const cropSrcRef = useRef<string | null>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [avatarLoading, setAvatarLoading] = useState(false);
 
@@ -71,6 +72,7 @@ export default function AccountPage() {
 
   useEffect(() => () => {
     if (cropSrcRef.current) URL.revokeObjectURL(cropSrcRef.current);
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
   }, []);
 
   function reset() {
@@ -108,8 +110,8 @@ export default function AccountPage() {
       const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
       await fetchUploadAvatar(file);
       qc.invalidateQueries({ queryKey: ["me"] });
-    } catch {
-      // silent — avatar just doesn't update visually
+    } catch (err) {
+      setError(safeError(err));
     } finally {
       setAvatarLoading(false);
     }
@@ -134,7 +136,8 @@ export default function AccountPage() {
       await fetchUpdateDisplayName(displayName.trim());
       qc.invalidateQueries({ queryKey: ["me"] });
       setSuccess("อัปเดตแล้ว");
-      setTimeout(() => { setOpen(null); reset(); }, 900);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = setTimeout(() => { setOpen(null); reset(); }, 900);
     } catch (err) { setError(safeError(err)); }
     finally { setLoading(false); }
   }
@@ -147,7 +150,8 @@ export default function AccountPage() {
       await fetchUpdateUsername(newUsername.trim());
       qc.invalidateQueries({ queryKey: ["me"] });
       setSuccess("อัปเดตแล้ว");
-      setTimeout(() => { setOpen(null); reset(); }, 900);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = setTimeout(() => { setOpen(null); reset(); }, 900);
     } catch (err) { setError(safeError(err)); }
     finally { setLoading(false); }
   }
@@ -160,7 +164,8 @@ export default function AccountPage() {
       await fetchUpdateEmail(newEmail.trim());
       qc.invalidateQueries({ queryKey: ["me"] });
       setSuccess("อัปเดตแล้ว");
-      setTimeout(() => { setOpen(null); reset(); }, 900);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = setTimeout(() => { setOpen(null); reset(); }, 900);
     } catch (err) { setError(safeError(err)); }
     finally { setLoading(false); }
   }
@@ -173,7 +178,8 @@ export default function AccountPage() {
     try {
       await fetchUpdatePassword(currentPw, newPw);
       setSuccess("เปลี่ยน password แล้ว");
-      setTimeout(() => { setOpen(null); reset(); }, 900);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = setTimeout(() => { setOpen(null); reset(); }, 900);
     } catch (err) { setError(safeError(err)); }
     finally { setLoading(false); }
   }
@@ -183,7 +189,9 @@ export default function AccountPage() {
     setLoading(true); setError(null);
     try {
       await fetchRequestPhone(phone.trim());
-      setOtpSent(true); setCountdown(300);
+      setOtpSent(true);
+      setOtpCode("");
+      setCountdown(300);
     } catch (err) { setError(safeError(err)); }
     finally { setLoading(false); }
   }
@@ -196,7 +204,8 @@ export default function AccountPage() {
       await fetchConfirmPhone(phone.trim(), otpCode);
       qc.invalidateQueries({ queryKey: ["me"] });
       setSuccess("ยืนยันเบอร์โทรแล้ว");
-      setTimeout(() => { setOpen(null); reset(); }, 900);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = setTimeout(() => { setOpen(null); reset(); }, 900);
     } catch (err) { setError(safeError(err)); }
     finally { setLoading(false); }
   }
@@ -306,7 +315,7 @@ export default function AccountPage() {
               <input
                 className="auth-input"
                 value={newUsername}
-                onChange={(e) => setNewUsername(e.target.value)}
+                onChange={(e) => setNewUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))}
                 pattern="[a-zA-Z0-9_]+"
                 minLength={3}
                 maxLength={30}
