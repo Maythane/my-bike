@@ -491,10 +491,6 @@ html.light .modal { background: rgba(245, 245, 255, 0.88); }
   html.light .modal-actions {
     background: linear-gradient(to top, rgba(242, 242, 255, 0.98), rgba(242, 242, 255, 0.88));
   }
-  .modal-actions .btn {
-    flex: 1 1 0;
-    min-height: 44px;
-  }
 }
 
 .modal-form {
@@ -822,11 +818,6 @@ html.light .modal { background: rgba(245, 245, 255, 0.88); }
     flex-direction: column;
     gap: 4px;
   }
-  .row-actions .btn {
-    min-height: 28px;
-    padding: 3px 10px;
-    font-size: 12px;
-  }
 }
 @media (hover: hover) {
   .row-actions { opacity: 0; }
@@ -1053,15 +1044,6 @@ html.light .modal { background: rgba(245, 245, 255, 0.88); }
   .bike-detail-actions {
     width: 100%;
   }
-  .bike-detail-actions .btn {
-    flex: 1 1 0;
-    min-height: 44px;
-  }
-  .bike-detail-actions .btn-ghost {
-    background: var(--surface);
-    border-color: var(--hairline);
-    color: var(--ink);
-  }
   /* hide inline delete, show overflow ⋮ on mobile */
   .bike-delete-desktop { display: none; }
   .bike-delete-mobile  { display: block; flex-shrink: 0; }
@@ -1231,9 +1213,6 @@ html.light .quick-log-menu {
   .bike-detail-primary-actions {
     flex-direction: column;
     padding-bottom: 16px;
-  }
-  .bike-detail-primary-actions .btn {
-    width: 100%;
   }
 }
 
@@ -2131,11 +2110,6 @@ html.light .shock-preset-card {
 .shock-edit-preset-actions {
   justify-content: flex-start;
   gap: 8px;
-}
-.shock-edit-preset-actions .btn-danger {
-  background: var(--red-bg);
-  border-color: rgba(255, 112, 112, 0.28);
-  color: var(--red);
 }
 @media (max-width: 639px) {
   .shock-edit-preset-actions {
