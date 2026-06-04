@@ -141,42 +141,56 @@ export default function AuthPage() {
   const mm = String(Math.floor(countdown / 60)).padStart(2, "0");
   const ss = String(countdown % 60).padStart(2, "0");
 
+  /* Shared card classes */
+  const cardBase =
+    "w-full bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-8 flex flex-col gap-6 relative z-10 shadow-[var(--shadow-card)]";
+
   return (
-    <div className="auth-page">
+    <div className="min-h-dvh flex items-center justify-center p-5">
       <Blobs />
 
       {tab === "login" ? (
-        <div className="auth-card">
-          <div className="auth-header">
-            <img src="/favicon.svg" className="auth-logo" alt="My Bike" />
-            <div className="auth-header-brand">
-              <span className="auth-app-name">Moto Tracker</span>
-              <h1>ยินดีต้อนรับกลับมา</h1>
+        <div className={`${cardBase} max-w-[360px]`}>
+          {/* Header */}
+          <div className="flex flex-col items-center gap-2 text-center">
+            <img src="/favicon.svg" className="w-12 h-12 flex-shrink-0" alt="My Bike" />
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-xs font-semibold tracking-[0.12em] uppercase text-[var(--purple)]">Moto Tracker</span>
+              <h1 className="text-[1.625rem] font-bold text-[var(--ink)] m-0">ยินดีต้อนรับกลับมา</h1>
             </div>
-            <p>ติดตามการบำรุงรักษาและอัตราบริโภคเชื้อเพลิงรถของคุณ</p>
+            <p className="text-sm text-[var(--slate)] m-0 max-w-[28ch]">ติดตามการบำรุงรักษาและอัตราบริโภคเชื้อเพลิงรถของคุณ</p>
           </div>
 
-          <div className="auth-body">
-            <button type="button" className="auth-google-btn" disabled>
-              <GoogleIcon className="auth-google-icon" />
+          {/* Body */}
+          <div className="flex flex-col gap-5">
+            {/* Google button */}
+            <button
+              type="button"
+              disabled
+              className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-[var(--surface)] border border-[var(--glass-border)] rounded-[var(--r)] text-[0.9375rem] font-medium text-[var(--ink)] cursor-pointer transition-[background,border-color] duration-150 hover:not-disabled:bg-[var(--elevated)] hover:not-disabled:border-[var(--hairline-strong)] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <GoogleIcon className="w-[18px] h-[18px] flex-shrink-0" />
               Sign in with Google
             </button>
 
-            <div className="auth-separator">
-              <span className="auth-separator-line" />
-              <span className="auth-separator-text">or sign in with email</span>
-              <span className="auth-separator-line" />
+            {/* Separator */}
+            <div className="flex items-center gap-3">
+              <span className="flex-1 h-px bg-[var(--hairline)]" />
+              <span className="text-[0.8125rem] text-[var(--slate)] whitespace-nowrap">or sign in with email</span>
+              <span className="flex-1 h-px bg-[var(--hairline)]" />
             </div>
 
-            <form onSubmit={handleSubmit} className="auth-form">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="login-identifier" className="text-xs font-semibold text-muted-foreground">Email / Username / Telephone</label>
-                <div className="auth-input-wrap">
-                  <span className="auth-input-icon"><MailIcon width={16} height={16} /></span>
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center text-[var(--slate)] pointer-events-none">
+                    <MailIcon width={16} height={16} />
+                  </span>
                   <Input
                     id="login-identifier"
                     type="text"
-                    className="auth-input--icon-left"
+                    className="pl-[2.375rem]"
                     value={identifier}
                     onChange={(e) => { setIdentifier(e.target.value); resetOtp(); setError(null); }}
                     placeholder="you@example.com"
@@ -212,10 +226,15 @@ export default function AuthPage() {
                     required
                     autoFocus
                   />
-                  <div className="auth-otp-hint">
+                  <div className="flex items-center gap-2 text-xs text-[var(--slate)] -mt-1">
                     {countdown > 0 ? `OTP หมดอายุใน ${mm}:${ss}` : "OTP หมดอายุแล้ว"}
                     {countdown === 0 && (
-                      <button type="button" onClick={handleSendOtp} disabled={loading} className="auth-resend-btn">
+                      <button
+                        type="button"
+                        onClick={handleSendOtp}
+                        disabled={loading}
+                        className="text-[var(--purple)] text-xs bg-none border-none cursor-pointer p-0 hover:underline"
+                      >
                         ส่งใหม่
                       </button>
                     )}
@@ -225,15 +244,17 @@ export default function AuthPage() {
 
               {!isPhone && (
                 <div className="flex flex-col gap-1.5">
-                  <div className="auth-field-header">
+                  <div className="flex items-center justify-between">
                     <label htmlFor="login-password" className="text-xs font-semibold text-muted-foreground">Password</label>
                     <a href="#" className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline">ลืมรหัสผ่าน?</a>
                   </div>
-                  <div className="auth-input-wrap">
-                    <span className="auth-input-icon"><LockIcon width={16} height={16} /></span>
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 flex items-center text-[var(--slate)] pointer-events-none">
+                      <LockIcon width={16} height={16} />
+                    </span>
                     <Input
                       id="login-password"
-                      className="auth-input--icon-left auth-input--icon-right"
+                      className="pl-[2.375rem] pr-10"
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -243,7 +264,7 @@ export default function AuthPage() {
                     />
                     <button
                       type="button"
-                      className="auth-eye-btn"
+                      className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center text-[var(--slate)] rounded-r-[var(--r)] transition-colors duration-150 hover:text-[var(--ink)]"
                       onClick={() => setShowPassword((v) => !v)}
                       aria-label={showPassword ? "ซ่อน password" : "แสดง password"}
                     >
@@ -259,7 +280,7 @@ export default function AuthPage() {
                 <Button
                   type="submit"
                   variant="default"
-                  className="auth-submit-btn"
+                  className="w-full flex items-center justify-center gap-2 mt-1"
                   disabled={loading || (isPhone && otpSent && (otp.length < 6 || countdown === 0))}
                 >
                   {loading ? "กำลังดำเนินการ…" : isPhone ? "ยืนยัน OTP" : "เข้าสู่ระบบ"}
@@ -268,26 +289,31 @@ export default function AuthPage() {
               )}
             </form>
 
-            <p className="auth-footer-text">
+            <p className="text-sm text-[var(--slate)] text-center">
               ยังไม่มีบัญชีใช้งาน?{" "}
-              <button type="button" className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]" onClick={() => handleTabChange("register")}>
+              <button
+                type="button"
+                className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]"
+                onClick={() => handleTabChange("register")}
+              >
                 สร้างบัญชีใหม่
               </button>
             </p>
           </div>
         </div>
       ) : (
-        <div className="auth-card auth-card--wide">
-          <div className="auth-header">
-            <img src="/favicon.svg" className="auth-logo" alt="Moto Tracker" />
-            <div className="auth-header-brand">
-              <span className="auth-app-name">Moto Tracker</span>
-              <h1>สร้างบัญชีใหม่</h1>
+        <div className={`${cardBase} max-w-[400px]`}>
+          {/* Header */}
+          <div className="flex flex-col items-center gap-2 text-center">
+            <img src="/favicon.svg" className="w-12 h-12 flex-shrink-0" alt="Moto Tracker" />
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-xs font-semibold tracking-[0.12em] uppercase text-[var(--purple)]">Moto Tracker</span>
+              <h1 className="text-[1.625rem] font-bold text-[var(--ink)] m-0">สร้างบัญชีใหม่</h1>
             </div>
-            <p>สมัครสมาชิกเพื่อเริ่มบันทึกข้อมูลรถของคุณ</p>
+            <p className="text-sm text-[var(--slate)] m-0 max-w-[28ch]">สมัครสมาชิกเพื่อเริ่มบันทึกข้อมูลรถของคุณ</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="auth-form">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-username" className="text-xs font-semibold text-muted-foreground">Username <span style={{ color: "var(--purple)" }}>*</span></label>
               <Input
@@ -308,10 +334,10 @@ export default function AuthPage() {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-password" className="text-xs font-semibold text-muted-foreground">Password <span style={{ color: "var(--purple)" }}>*</span></label>
-              <div className="auth-input-wrap">
+              <div className="relative flex items-center">
                 <Input
                   id="reg-password"
-                  className="auth-input--icon-right"
+                  className="pr-10"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -320,9 +346,12 @@ export default function AuthPage() {
                   required
                   autoComplete="new-password"
                 />
-                <button type="button" className="auth-eye-btn"
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center text-[var(--slate)] rounded-r-[var(--r)] transition-colors duration-150 hover:text-[var(--ink)]"
                   onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? "ซ่อน password" : "แสดง password"}>
+                  aria-label={showPassword ? "ซ่อน password" : "แสดง password"}
+                >
                   {showPassword ? <EyeOffIcon width={16} height={16} /> : <EyeIcon width={16} height={16} />}
                 </button>
               </div>
@@ -330,10 +359,10 @@ export default function AuthPage() {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-confirm" className="text-xs font-semibold text-muted-foreground">ยืนยัน Password <span style={{ color: "var(--purple)" }}>*</span></label>
-              <div className="auth-input-wrap">
+              <div className="relative flex items-center">
                 <Input
                   id="reg-confirm"
-                  className="auth-input--icon-right"
+                  className="pr-10"
                   type={showConfirm ? "text" : "password"}
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
@@ -341,9 +370,12 @@ export default function AuthPage() {
                   required
                   autoComplete="new-password"
                 />
-                <button type="button" className="auth-eye-btn"
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center text-[var(--slate)] rounded-r-[var(--r)] transition-colors duration-150 hover:text-[var(--ink)]"
                   onClick={() => setShowConfirm((v) => !v)}
-                  aria-label={showConfirm ? "ซ่อน password" : "แสดง password"}>
+                  aria-label={showConfirm ? "ซ่อน password" : "แสดง password"}
+                >
                   {showConfirm ? <EyeOffIcon width={16} height={16} /> : <EyeIcon width={16} height={16} />}
                 </button>
               </div>
@@ -368,16 +400,20 @@ export default function AuthPage() {
 
             {error && <p className="text-xs text-destructive mt-1">{error}</p>}
 
-            <Button type="submit" variant="default" className="auth-submit-btn" disabled={loading}>
+            <Button type="submit" variant="default" className="w-full flex items-center justify-center gap-2 mt-1" disabled={loading}>
               {loading ? "กำลังดำเนินการ…" : "สร้างบัญชี"}
               {!loading && <ArrowRightIcon width={16} height={16} />}
             </Button>
           </form>
 
-          <div className="auth-card-footer">
-            <p className="auth-footer-text">
+          <div className="border-t border-[var(--hairline)] pt-4 -mt-2">
+            <p className="text-sm text-[var(--slate)] text-center">
               มีบัญชีแล้ว?{" "}
-              <button type="button" className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]" onClick={() => handleTabChange("login")}>
+              <button
+                type="button"
+                className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]"
+                onClick={() => handleTabChange("login")}
+              >
                 เข้าสู่ระบบ
               </button>
             </p>
