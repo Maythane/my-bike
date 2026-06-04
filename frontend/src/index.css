@@ -1,133 +1,124 @@
-/* ─── Jelly Glass Design System ─────────────────────────────────────────── */
-/* Dark mode is the default/base. html.light overrides for light mode.       */
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
 
-:root {
-  /* ── Base surfaces (dark glass) ── */
-  --canvas:       #09091a;
-  --surface:      rgba(255, 255, 255, 0.06);
-  --surface-soft: rgba(255, 255, 255, 0.04);
-  --elevated:     rgba(255, 255, 255, 0.11);
+/* Dark is default. html.light enables light mode. */
+@custom-variant dark (&:not(.light));
 
-  /* ── Glass tokens ── */
-  --glass-bg:     rgba(255, 255, 255, 0.07);
-  --glass-border: rgba(255, 255, 255, 0.15);
-
-  /* ── Purple accent ── */
-  --purple:        #a78bfa;
-  --purple-hover:  #c4b5fd;
-  --purple-bg:     rgba(167, 139, 250, 0.15);
-  --purple-border: rgba(167, 139, 250, 0.35);
-
-  /* ── Text ── */
-  --ink:   rgba(255, 255, 255, 0.92);
-  --slate: rgba(255, 255, 255, 0.52);
-  --steel: rgba(255, 255, 255, 0.32);
-  --muted: rgba(255, 255, 255, 0.16);
-  --text-secondary: rgba(255, 255, 255, 0.52);
-  --text-muted:     rgba(255, 255, 255, 0.32);
-
-  /* ── Hairlines ── */
-  --hairline:        rgba(255, 255, 255, 0.10);
-  --hairline-strong: rgba(255, 255, 255, 0.18);
-
-  /* ── Semantic colours ── */
-  --red:          #ff7070;
-  --red-bg:       rgba(255, 112, 112, 0.12);
-  --green:        #39ff96;
-  --green-bg:     rgba(57, 255, 150, 0.12);
-  --green-border: rgba(57, 255, 150, 0.32);
-  --amber-bg:     rgba(255, 190, 11, 0.12);
-  --amber-border: rgba(255, 190, 11, 0.28);
-
-  /* ── Data-viz phosphors (expense categories) ── */
-  --data-cyan:    #2dd3ee;
-  --data-teal:    #4dd5b0;
-  --data-cyan-bg: rgba(45, 211, 238, 0.12);
-  --data-teal-bg: rgba(77, 213, 176, 0.12);
-
-  /* ── Expense data roles — restrained, semantic colour ── */
-  --expense-fuel:             oklch(0.82 0.16 78);
-  --expense-fuel-bg:          oklch(0.82 0.16 78 / 0.13);
-  --expense-maintenance:      oklch(0.75 0.18 292);
-  --expense-maintenance-bg:   oklch(0.75 0.18 292 / 0.14);
-  --expense-other:            oklch(0.78 0.14 205);
-  --expense-other-bg:         oklch(0.78 0.14 205 / 0.12);
-  --expense-insurance:        oklch(0.76 0.13 218);
-  --expense-registration:     oklch(0.78 0.13 185);
-  --expense-parts:            oklch(0.78 0.14 158);
-  --expense-hero-bg:          linear-gradient(135deg, oklch(0.27 0.08 292 / 0.64), oklch(0.17 0.05 258 / 0.56));
-  --expense-hero-border:      oklch(0.75 0.18 292 / 0.34);
-  --expense-hero-glow:        oklch(0.75 0.18 292 / 0.20);
-
-  /* Task status accents */
-  --accent-green: #39ff96;
-  --accent-amber: #ffbe0b;
-  --accent-red:   #ff7070;
-
-  /* ── Radius — Jelly proportions ── */
-  --r:      16px;
-  --r-md:   24px;
-  --r-lg:   32px;
-  --r-full: 9999px;
-
-  /* ── Jelly physics ── */
-  --jelly-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --jelly-fast: cubic-bezier(0.40, 1.60, 0.40, 0.90);
-  --spring:     0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  /* ── Shadows ── */
-  --shadow-card:  0 8px 32px rgba(0, 0, 0, 0.40);
-  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.65);
+/* ── Tailwind v4: map CSS vars → utility classes ── */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
 }
 
-/* Light mode overrides */
+/* ── Direction C: Dark Formal tokens ── */
+:root {
+  /* shadcn-compatible variable names */
+  --background:            oklch(0.09 0 0);        /* #0d0d0d */
+  --foreground:            oklch(0.96 0 0);
+  --card:                  oklch(0.11 0 0);        /* #141414 */
+  --card-foreground:       oklch(0.96 0 0);
+  --popover:               oklch(0.13 0 0);        /* #1a1a1a */
+  --popover-foreground:    oklch(0.96 0 0);
+  --primary:               oklch(0.60 0.22 293);   /* #8b5cf6 */
+  --primary-foreground:    oklch(0.98 0 0);
+  --secondary:             oklch(0.13 0 0);
+  --secondary-foreground:  oklch(0.96 0 0);
+  --muted:                 oklch(0.15 0 0);        /* #1f1f1f */
+  --muted-foreground:      oklch(0.64 0 0);
+  --accent:                oklch(0.60 0.22 293);
+  --accent-foreground:     oklch(0.98 0 0);
+  --destructive:           oklch(0.65 0.22 25);    /* #f87171 */
+  --border:                oklch(0.18 0 0);        /* border hairline */
+  --input:                 oklch(0.15 0 0);
+  --ring:                  oklch(0.60 0.22 293);
+  --radius:                0.5rem;                  /* 8px */
+
+  /* App-specific (glass + status) */
+  --glass-bg:     rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --success:      oklch(0.73 0.20 148);            /* #4ade80 */
+  --warning:      oklch(0.85 0.17 84);             /* #fbbf24 */
+
+  /* Legacy aliases — kept during migration, removed in Phase 3 */
+  --canvas:       oklch(0.09 0 0);
+  --surface:      rgba(255, 255, 255, 0.08);
+  --glass-bg-old: rgba(255, 255, 255, 0.07);
+  --purple:       oklch(0.60 0.22 293);
+  --ink:          rgba(255, 255, 255, 0.92);
+  --slate:        rgba(255, 255, 255, 0.55);
+  --steel:        rgba(255, 255, 255, 0.35);
+  --hairline:     rgba(255, 255, 255, 0.10);
+  --hairline-strong: rgba(255, 255, 255, 0.18);
+  --r:            6px;
+  --r-md:         8px;
+  --r-lg:         12px;
+  --r-full:       9999px;
+  --shadow-card:  0 8px 32px rgba(0, 0, 0, 0.40);
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.65);
+  --jelly-ease:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring:       0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Light mode overrides ── */
 html.light {
-  --canvas:       #ecedf8;
-  --surface:      rgba(255, 255, 255, 0.55);
-  --surface-soft: rgba(255, 255, 255, 0.40);
-  --elevated:     rgba(255, 255, 255, 0.72);
-  --glass-bg:     rgba(255, 255, 255, 0.52);
-  --glass-border: rgba(255, 255, 255, 0.88);
-  --purple:        #6e5dd4;
-  --purple-hover:  #5e4ec4;
-  --purple-bg:     rgba(110, 93, 212, 0.10);
-  --purple-border: rgba(110, 93, 212, 0.30);
-  --ink:           rgba(15, 15, 35, 0.92);
-  --slate:         rgba(15, 15, 35, 0.52);
-  --steel:         rgba(15, 15, 35, 0.36);
-  --muted:         rgba(15, 15, 35, 0.20);
-  --text-secondary: rgba(15, 15, 35, 0.52);
-  --text-muted:     rgba(15, 15, 35, 0.36);
-  --hairline:        rgba(0, 0, 0, 0.08);
-  --hairline-strong: rgba(0, 0, 0, 0.14);
-  --red:          #e05050;
-  --red-bg:       rgba(224, 80, 80, 0.10);
-  --green:        #0f9b6c;
-  --green-bg:     rgba(15, 155, 108, 0.10);
-  --green-border: rgba(15, 155, 108, 0.28);
-  --amber-bg:     rgba(217, 119, 6, 0.10);
-  --amber-border: rgba(217, 119, 6, 0.25);
-  --data-cyan:    #0891b2;
-  --data-teal:    #0d9488;
-  --data-cyan-bg: rgba(8, 145, 178, 0.10);
-  --data-teal-bg: rgba(13, 148, 136, 0.10);
-  --expense-fuel:             oklch(0.62 0.15 72);
-  --expense-fuel-bg:          oklch(0.62 0.15 72 / 0.12);
-  --expense-maintenance:      oklch(0.52 0.17 292);
-  --expense-maintenance-bg:   oklch(0.52 0.17 292 / 0.10);
-  --expense-other:            oklch(0.55 0.13 205);
-  --expense-other-bg:         oklch(0.55 0.13 205 / 0.10);
-  --expense-insurance:        oklch(0.53 0.13 218);
-  --expense-registration:     oklch(0.52 0.12 185);
-  --expense-parts:            oklch(0.52 0.13 158);
-  --expense-hero-bg:          linear-gradient(135deg, oklch(0.94 0.035 292 / 0.88), oklch(0.96 0.025 205 / 0.78));
-  --expense-hero-border:      oklch(0.52 0.17 292 / 0.24);
-  --expense-hero-glow:        oklch(0.52 0.17 292 / 0.12);
-  --accent-green: #16a34a;
-  --accent-amber: #d97706;
-  --accent-red:   #ef4444;
-  --shadow-card:  0 4px 24px rgba(0, 0, 0, 0.10);
-  --shadow-modal: 0 16px 48px rgba(0, 0, 0, 0.18);
+  --background:            oklch(0.98 0 0);
+  --foreground:            oklch(0.09 0 0);
+  --card:                  oklch(1 0 0);
+  --card-foreground:       oklch(0.09 0 0);
+  --popover:               oklch(1 0 0);
+  --popover-foreground:    oklch(0.09 0 0);
+  --primary:               oklch(0.53 0.24 293);
+  --primary-foreground:    oklch(0.98 0 0);
+  --secondary:             oklch(0.95 0 0);
+  --secondary-foreground:  oklch(0.09 0 0);
+  --muted:                 oklch(0.95 0 0);
+  --muted-foreground:      oklch(0.45 0 0);
+  --accent:                oklch(0.53 0.24 293);
+  --accent-foreground:     oklch(0.98 0 0);
+  --destructive:           oklch(0.58 0.22 25);
+  --border:                oklch(0.90 0 0);
+  --input:                 oklch(0.95 0 0);
+  --ring:                  oklch(0.53 0.24 293);
+  --glass-bg:    rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --success:     oklch(0.55 0.17 145);
+  --warning:     oklch(0.65 0.15 84);
+  /* Legacy */
+  --canvas:      oklch(0.94 0.005 240);
+  --ink:         rgba(15, 15, 35, 0.92);
+  --slate:       rgba(15, 15, 35, 0.55);
+  --steel:       rgba(15, 15, 35, 0.35);
+  --hairline:    rgba(0, 0, 0, 0.08);
+}
+
+/* ── Base ── */
+@layer base {
+  * { border-color: var(--border); }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
 /* ─── Reset ──────────────────────────────────────────────────────────────── */
