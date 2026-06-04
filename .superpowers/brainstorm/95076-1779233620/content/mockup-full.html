@@ -1,0 +1,345 @@
+<h2>Mockup — Auth UI + ShockSetting per Bike</h2>
+<p class="subtitle">ครบทุก screen ที่จะสร้าง — ใช้ Jelly Glass CSS variables จริง</p>
+
+<style>
+  /* Jelly Glass design tokens (actual values from index.css) */
+  .jg {
+    --canvas:       #09091a;
+    --surface:      rgba(255,255,255,0.06);
+    --surface-soft: rgba(255,255,255,0.04);
+    --elevated:     rgba(255,255,255,0.11);
+    --glass-bg:     rgba(255,255,255,0.07);
+    --glass-border: rgba(255,255,255,0.15);
+    --purple:       #a78bfa;
+    --purple-bg:    rgba(167,139,250,0.15);
+    --purple-border:rgba(167,139,250,0.35);
+    --ink:          rgba(255,255,255,0.92);
+    --slate:        rgba(255,255,255,0.52);
+    --steel:        rgba(255,255,255,0.32);
+    --muted:        rgba(255,255,255,0.16);
+    --hairline:     rgba(255,255,255,0.10);
+    --red:          #ff7070;
+    --red-bg:       rgba(255,112,112,0.12);
+    --green:        #39ff96;
+    --green-bg:     rgba(57,255,150,0.12);
+    --green-border: rgba(57,255,150,0.32);
+    --r:            16px;
+    --r-md:         24px;
+    --r-lg:         32px;
+    --r-full:       9999px;
+  }
+  .screen-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .screen-box {
+    flex: 1;
+    min-width: 260px;
+    max-width: 360px;
+  }
+  .screen-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .phone {
+    background: #09091a;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    position: relative;
+  }
+  /* blobs */
+  .blob { position:absolute; border-radius:50%; filter:blur(60px); opacity:0.18; pointer-events:none; }
+  .blob-1 { width:200px;height:200px;background:#a78bfa;top:-40px;left:-40px; }
+  .blob-2 { width:160px;height:160px;background:#39ff96;bottom:-30px;right:-30px; }
+</style>
+
+<!-- ══════════ ROW 1: Auth Page ══════════ -->
+<div class="section">
+  <h3>1 · Auth Page <span style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:400;">/login</span></h3>
+  <div class="screen-row">
+
+    <!-- Login tab -->
+    <div class="screen-box">
+      <div class="screen-label">Login tab (default)</div>
+      <div class="phone jg" style="padding:40px 24px 32px;">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div style="text-align:center;margin-bottom:24px;position:relative;">
+          <div style="font-size:32px;margin-bottom:6px;">🏍️</div>
+          <div style="font-size:18px;font-weight:700;color:var(--ink);">Moto Tracker</div>
+          <div style="font-size:12px;color:var(--slate);margin-top:4px;">ติดตามการบำรุงรักษารถมอเตอร์ไซค์</div>
+        </div>
+        <!-- Tabs -->
+        <div style="display:flex;background:var(--surface);border-radius:var(--r);padding:4px;gap:3px;margin-bottom:16px;position:relative;">
+          <div style="flex:1;text-align:center;padding:8px;border-radius:calc(var(--r) - 4px);background:var(--green-bg);color:var(--green);font-size:13px;font-weight:600;">เข้าสู่ระบบ</div>
+          <div style="flex:1;text-align:center;padding:8px;border-radius:calc(var(--r) - 4px);color:var(--slate);font-size:13px;">สมัครสมาชิก</div>
+        </div>
+        <!-- Form -->
+        <div style="display:flex;flex-direction:column;gap:10px;position:relative;">
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Email
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:10px 14px;font-size:14px;color:var(--steel);">you@example.com</div>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Password
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:10px 14px;font-size:14px;color:var(--steel);">••••••••</div>
+          </label>
+          <div style="background:var(--green);color:#000;font-weight:700;text-align:center;padding:12px;border-radius:var(--r);font-size:15px;margin-top:4px;">เข้าสู่ระบบ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register tab -->
+    <div class="screen-box">
+      <div class="screen-label">Register tab</div>
+      <div class="phone jg" style="padding:40px 24px 32px;">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div style="text-align:center;margin-bottom:24px;position:relative;">
+          <div style="font-size:32px;margin-bottom:6px;">🏍️</div>
+          <div style="font-size:18px;font-weight:700;color:var(--ink);">Moto Tracker</div>
+          <div style="font-size:12px;color:var(--slate);margin-top:4px;">ติดตามการบำรุงรักษารถมอเตอร์ไซค์</div>
+        </div>
+        <!-- Tabs -->
+        <div style="display:flex;background:var(--surface);border-radius:var(--r);padding:4px;gap:3px;margin-bottom:16px;position:relative;">
+          <div style="flex:1;text-align:center;padding:8px;border-radius:calc(var(--r) - 4px);color:var(--slate);font-size:13px;">เข้าสู่ระบบ</div>
+          <div style="flex:1;text-align:center;padding:8px;border-radius:calc(var(--r) - 4px);background:var(--green-bg);color:var(--green);font-size:13px;font-weight:600;">สมัครสมาชิก</div>
+        </div>
+        <!-- Form -->
+        <div style="display:flex;flex-direction:column;gap:10px;position:relative;">
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Email
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:10px 14px;font-size:14px;color:var(--steel);">you@example.com</div>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Password
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:10px 14px;font-size:14px;color:var(--steel);">••••••••</div>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Confirm Password
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:10px 14px;font-size:14px;color:var(--steel);">••••••••</div>
+          </label>
+          <div style="background:var(--green);color:#000;font-weight:700;text-align:center;padding:12px;border-radius:var(--r);font-size:15px;margin-top:4px;">สมัครสมาชิก</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ ROW 2: NavBar + Avatar dropdown ══════════ -->
+<div class="section">
+  <h3>2 · NavBar + Avatar Dropdown</h3>
+  <div class="screen-row">
+    <div class="screen-box" style="max-width:460px;">
+      <div class="screen-label">Avatar คลิก → dropdown</div>
+      <div class="phone jg" style="padding:0;">
+        <!-- NavBar -->
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--glass-bg);border-bottom:1px solid var(--hairline);">
+          <span style="font-size:18px;">🏍️</span>
+          <span style="color:var(--slate);font-size:14px;">My Garage</span>
+          <span style="color:var(--purple);font-size:14px);margin-left:4px;">ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <span style="font-size:18px;">☀️</span>
+          <!-- Avatar -->
+          <div style="width:34px;height:34px;border-radius:var(--r-full);background:linear-gradient(135deg,var(--green),#00d2ff);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#000;cursor:pointer;box-shadow:0 0 0 2px var(--green-border);">M</div>
+        </div>
+        <!-- Dropdown -->
+        <div style="display:flex;justify-content:flex-end;padding:4px 12px 0;">
+          <div style="background:var(--elevated);border:1px solid var(--glass-border);border-radius:var(--r-md);padding:6px;box-shadow:0 12px 40px rgba(0,0,0,0.6);width:220px;">
+            <!-- Header -->
+            <div style="padding:10px 12px 10px;border-bottom:1px solid var(--hairline);margin-bottom:4px;">
+              <div style="font-size:11px;color:var(--steel);">Signed in as</div>
+              <div style="font-size:13px;color:var(--green);font-weight:600;margin-top:2px;">maythane.psb@gmail.com</div>
+            </div>
+            <!-- Items -->
+            <div style="padding:9px 12px;border-radius:calc(var(--r-md) - 6px);display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <span style="font-size:15px;">👤</span>
+              <span style="color:var(--ink);font-size:13px;">Manage Account</span>
+            </div>
+            <div style="padding:9px 12px;border-radius:calc(var(--r-md) - 6px);display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <span style="font-size:15px;">⚙️</span>
+              <span style="color:var(--ink);font-size:13px;">Settings</span>
+            </div>
+            <div style="height:1px;background:var(--hairline);margin:4px 0;"></div>
+            <div style="padding:9px 12px;border-radius:calc(var(--r-md) - 6px);display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <span style="font-size:15px;">🚪</span>
+              <span style="color:var(--red);font-size:13px;">Logout</span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:16px;color:var(--muted);font-size:12px;">เนื้อหาหน้า My Garage...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ROW 3: Modals ══════════ -->
+<div class="section">
+  <h3>3 · Manage Account Modal + Settings Modal</h3>
+  <div class="screen-row">
+
+    <!-- Manage Account (Email tab) -->
+    <div class="screen-box">
+      <div class="screen-label">Manage Account — Email tab</div>
+      <div class="phone jg" style="padding:0;">
+        <div style="padding:12px 16px;background:var(--glass-bg);border-bottom:1px solid var(--hairline);">
+          <span style="color:var(--slate);font-size:12px;">My Garage</span>
+        </div>
+        <!-- Overlay -->
+        <div style="background:rgba(0,0,0,0.6);padding:20px;">
+          <div style="background:rgba(18,18,40,0.98);border:1px solid var(--glass-border);border-radius:var(--r-md);padding:20px;">
+            <!-- Header -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <div style="font-size:15px;font-weight:600;color:var(--ink);">👤 Manage Account</div>
+              <div style="color:var(--steel);font-size:18px;cursor:pointer;">✕</div>
+            </div>
+            <!-- Tabs -->
+            <div style="display:flex;background:var(--surface);border-radius:var(--r);padding:3px;gap:3px;margin-bottom:14px;">
+              <div style="flex:1;text-align:center;padding:7px;border-radius:calc(var(--r) - 3px);background:var(--green-bg);color:var(--green);font-size:12px;font-weight:600;">Email</div>
+              <div style="flex:1;text-align:center;padding:7px;border-radius:calc(var(--r) - 3px);color:var(--slate);font-size:12px;">Password</div>
+            </div>
+            <!-- Form -->
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="background:var(--surface-soft);border:1px solid var(--hairline);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--steel);">maythane.psb@gmail.com (ปัจจุบัน)</div>
+              <div style="background:var(--surface);border:1px solid var(--green-border);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--slate);">New email address...</div>
+              <div style="background:var(--green);color:#000;font-weight:700;text-align:center;padding:10px;border-radius:var(--r);font-size:13px;margin-top:2px;">Update Email</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings modal -->
+    <div class="screen-box">
+      <div class="screen-label">Settings Modal</div>
+      <div class="phone jg" style="padding:0;">
+        <div style="padding:12px 16px;background:var(--glass-bg);border-bottom:1px solid var(--hairline);">
+          <span style="color:var(--slate);font-size:12px;">My Garage</span>
+        </div>
+        <!-- Overlay -->
+        <div style="background:rgba(0,0,0,0.6);padding:20px;">
+          <div style="background:rgba(18,18,40,0.98);border:1px solid var(--glass-border);border-radius:var(--r-md);padding:20px;">
+            <!-- Header -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+              <div style="font-size:15px;font-weight:600;color:var(--ink);">⚙️ Settings</div>
+              <div style="color:var(--steel);font-size:18px;cursor:pointer;">✕</div>
+            </div>
+            <!-- Unit toggle -->
+            <div style="margin-bottom:16px;">
+              <div style="font-size:11px;color:var(--steel);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Distance Unit</div>
+              <div style="display:flex;gap:6px;">
+                <div style="flex:1;text-align:center;padding:9px;border-radius:var(--r);background:var(--green-bg);border:1px solid var(--green-border);color:var(--green);font-size:13px;font-weight:600;">km</div>
+                <div style="flex:1;text-align:center;padding:9px;border-radius:var(--r);background:var(--surface);border:1px solid var(--hairline);color:var(--slate);font-size:13px;">miles</div>
+              </div>
+            </div>
+            <!-- Timezone -->
+            <div style="margin-bottom:18px;">
+              <div style="font-size:11px;color:var(--steel);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Timezone</div>
+              <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--ink);">Asia/Bangkok</div>
+            </div>
+            <div style="background:var(--green);color:#000;font-weight:700;text-align:center;padding:10px;border-radius:var(--r);font-size:13px;">Save Settings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ ROW 4: ShockSettings with bike selector ══════════ -->
+<div class="section">
+  <h3>4 · ShockSettings — Bike Selector</h3>
+  <div class="screen-row">
+    <div class="screen-box" style="max-width:460px;">
+      <div class="screen-label">รถแต่ละคันมี shock setting แยกกัน</div>
+      <div class="phone jg" style="padding:0;">
+        <!-- NavBar -->
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--glass-bg);border-bottom:1px solid var(--hairline);">
+          <span style="color:var(--purple);font-size:14px;font-weight:600;">⚙️ ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <div style="width:30px;height:30px;border-radius:var(--r-full);background:linear-gradient(135deg,var(--green),#00d2ff);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#000;">M</div>
+        </div>
+        <!-- Bike selector -->
+        <div style="padding:16px 16px 0;">
+          <div style="font-size:11px;color:var(--steel);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">เลือกรถ</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div style="padding:8px 16px;border-radius:var(--r-full);background:var(--purple-bg);border:1px solid var(--purple-border);color:var(--purple);font-size:13px;font-weight:600;">Honda CB500X</div>
+            <div style="padding:8px 16px;border-radius:var(--r-full);background:var(--surface);border:1px solid var(--hairline);color:var(--slate);font-size:13px;">Yamaha MT-07</div>
+          </div>
+        </div>
+        <!-- Shock setting for selected bike -->
+        <div style="padding:16px;">
+          <div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--r-md);padding:16px;">
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:14px;">Honda CB500X — โช้คหลัง</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div>
+                <div style="font-size:11px;color:var(--steel);margin-bottom:5px;">Rider Weight (kg)</div>
+                <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:9px 14px;font-size:14px;color:var(--ink);">75</div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--steel);margin-bottom:5px;">Passenger Weight (kg)</div>
+                <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:9px 14px;font-size:14px;color:var(--ink);">0</div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--steel);margin-bottom:5px;">Mode</div>
+                <div style="display:flex;gap:6px;">
+                  <div style="flex:1;text-align:center;padding:8px;border-radius:var(--r);background:var(--green-bg);border:1px solid var(--green-border);color:var(--green);font-size:12px;font-weight:600;">street</div>
+                  <div style="flex:1;text-align:center;padding:8px;border-radius:var(--r);background:var(--surface);border:1px solid var(--hairline);color:var(--slate);font-size:12px;">touring</div>
+                  <div style="flex:1;text-align:center;padding:8px;border-radius:var(--r);background:var(--surface);border:1px solid var(--hairline);color:var(--slate);font-size:12px;">track</div>
+                </div>
+              </div>
+              <div style="background:var(--green);color:#000;font-weight:700;text-align:center;padding:10px;border-radius:var(--r);font-size:13px;">Save</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ShockPreset with brand/model fields -->
+    <div class="screen-box">
+      <div class="screen-label">ShockPreset — เพิ่ม brand/model fields</div>
+      <div class="phone jg" style="padding:16px;">
+        <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px;">💾 บันทึก Preset</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Preset name
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:9px 14px;font-size:13px;color:var(--ink);">Street 75kg solo</div>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Shock Brand <span style="color:var(--steel);">(optional)</span>
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:9px 14px;font-size:13px;color:var(--steel);">เช่น Öhlins, YSS...</div>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Shock Model <span style="color:var(--steel);">(optional)</span>
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:9px 14px;font-size:13px;color:var(--steel);">เช่น STX 36, G-Series...</div>
+          </label>
+          <div style="height:1px;background:var(--hairline);margin:2px 0;"></div>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+            Preload (mm)
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:9px 14px;font-size:13px;color:var(--ink);">12</div>
+          </label>
+          <div style="display:flex;gap:8px;">
+            <label style="flex:1;display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+              Comp
+              <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:9px 14px;font-size:13px;color:var(--ink);">8</div>
+            </label>
+            <label style="flex:1;display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate);">
+              Rebound
+              <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--r);padding:9px 14px;font-size:13px;color:var(--ink);">10</div>
+            </label>
+          </div>
+          <div style="background:var(--green);color:#000;font-weight:700;text-align:center;padding:10px;border-radius:var(--r);font-size:13px;margin-top:4px;">บันทึก Preset</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

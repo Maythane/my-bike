@@ -1,0 +1,121 @@
+<h2>Account Page Design — /account</h2>
+<p class="subtitle">Hero profile + grouped sections · เหมือน SettingsPage pattern</p>
+
+<div class="split">
+
+  <!-- Left: Account Page mockup -->
+  <div class="mockup">
+    <div class="mockup-header">📱 /account — AccountPage</div>
+    <div class="mockup-body" style="background:#09091a;padding:16px;font-family:sans-serif;font-size:12px;min-height:480px;">
+
+      <!-- Back button + title -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <div style="color:#7c3aed;font-size:12px;">‹ กลับ</div>
+        <div style="color:#e2e8f0;font-weight:600;font-size:14px;">บัญชีของฉัน</div>
+      </div>
+
+      <!-- Hero profile -->
+      <div style="background:linear-gradient(135deg,rgba(124,58,237,0.25),rgba(79,70,229,0.15));border:1px solid rgba(124,58,237,0.3);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px;">
+        <div style="width:56px;height:56px;background:#7c3aed;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700;margin:0 auto 8px;position:relative;">
+          M
+          <div style="position:absolute;bottom:0;right:0;width:16px;height:16px;background:#4f46e5;border-radius:50%;border:2px solid #09091a;display:flex;align-items:center;justify-content:center;font-size:8px;">✎</div>
+        </div>
+        <div style="color:#e2e8f0;font-weight:600;font-size:13px;">Mark</div>
+        <div style="color:#7c3aed;font-size:11px;margin-top:2px;">@maythane01</div>
+      </div>
+
+      <!-- Section: บัญชี -->
+      <div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">บัญชี</div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <div><div style="color:#94a3b8;font-size:10px;">ชื่อที่แสดง</div><div style="color:#e2e8f0;font-size:11px;margin-top:1px;">Mark</div></div>
+          <div style="color:#475569;font-size:12px;">›</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <div><div style="color:#94a3b8;font-size:10px;">Username</div><div style="color:#e2e8f0;font-size:11px;margin-top:1px;">@maythane01</div></div>
+          <div style="color:#475569;font-size:12px;">›</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;">
+          <div><div style="color:#94a3b8;font-size:10px;">Email</div><div style="color:#64748b;font-size:11px;margin-top:1px;font-style:italic;">ยังไม่ได้เพิ่ม</div></div>
+          <div style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:5px;padding:2px 8px;color:#a78bfa;font-size:9px;">+ เพิ่ม</div>
+        </div>
+      </div>
+
+      <!-- Section: ความปลอดภัย -->
+      <div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">ความปลอดภัย</div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <div><div style="color:#94a3b8;font-size:10px;">Password</div><div style="color:#e2e8f0;font-size:11px;margin-top:1px;">••••••••</div></div>
+          <div style="color:#475569;font-size:12px;">›</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;">
+          <div><div style="color:#94a3b8;font-size:10px;">เบอร์โทร</div><div style="color:#64748b;font-size:11px;margin-top:1px;font-style:italic;">ยังไม่ได้เพิ่ม</div></div>
+          <div style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:5px;padding:2px 8px;color:#a78bfa;font-size:9px;">+ เพิ่ม</div>
+        </div>
+      </div>
+
+      <!-- Logout -->
+      <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 12px;color:#f87171;font-size:11px;text-align:center;">
+        🚪 ออกจากระบบ
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right: Register form mockup -->
+  <div class="mockup">
+    <div class="mockup-header">📝 Register — username-first</div>
+    <div class="mockup-body" style="background:#09091a;padding:16px;font-family:sans-serif;font-size:12px;min-height:480px;">
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="color:#e2e8f0;font-weight:700;font-size:15px;">สร้างบัญชีใหม่</div>
+        <div style="color:#64748b;font-size:10px;margin-top:4px;">ใช้ username เพื่อ login ง่ายกว่า</div>
+      </div>
+
+      <!-- Username -->
+      <div style="margin-bottom:12px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">Username <span style="color:#7c3aed;">*</span></div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(124,58,237,0.4);border-radius:8px;padding:10px 12px;color:#e2e8f0;font-size:12px;">rider_mark</div>
+        <div style="color:#475569;font-size:9px;margin-top:3px;">a–z, 0–9, _ · 3–30 ตัวอักษร</div>
+      </div>
+
+      <!-- Password -->
+      <div style="margin-bottom:12px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">Password <span style="color:#7c3aed;">*</span></div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;color:#64748b;font-size:12px;">••••••••</div>
+      </div>
+
+      <!-- Confirm -->
+      <div style="margin-bottom:12px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">ยืนยัน Password <span style="color:#7c3aed;">*</span></div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;color:#64748b;font-size:12px;">••••••••</div>
+      </div>
+
+      <!-- Email optional -->
+      <div style="margin-bottom:16px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">Email <span style="color:#475569;">(ไม่บังคับ)</span></div>
+        <div style="background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;color:#475569;font-size:12px;">email@example.com</div>
+        <div style="color:#475569;font-size:9px;margin-top:3px;">แนะนำ — ใช้กู้รหัสผ่าน, เพิ่มทีหลังได้ใน Account</div>
+      </div>
+
+      <div style="background:#7c3aed;border-radius:10px;padding:12px;text-align:center;color:#fff;font-size:13px;font-weight:600;">สร้างบัญชี</div>
+
+      <div style="text-align:center;margin-top:12px;color:#64748b;font-size:10px;">
+        มีบัญชีแล้ว? <span style="color:#7c3aed;">เข้าสู่ระบบ</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>การเปลี่ยนแปลงหลัก</h3>
+  <ul style="font-size:13px;color:#94a3b8;line-height:1.8;">
+    <li><strong style="color:#e2e8f0;">AvatarMenu</strong> — "จัดการบัญชี" เปลี่ยนจาก modal → <code>navigate('/account')</code></li>
+    <li><strong style="color:#e2e8f0;">AccountModal</strong> — ลบออก ย้าย logic ทั้งหมดไป AccountPage</li>
+    <li><strong style="color:#e2e8f0;">Backend</strong> — <code>User.email</code> เป็น nullable · <code>RegisterRequest</code> ใช้ username · migration ใน <code>create_db()</code></li>
+    <li><strong style="color:#e2e8f0;">Route</strong> — เพิ่ม <code>/account</code> ใน App.tsx</li>
+    <li><strong style="color:#e2e8f0;">Login</strong> — ยังรองรับ email หรือ username เหมือนเดิม (existing users ไม่กระทบ)</li>
+  </ul>
+</div>

@@ -1,0 +1,167 @@
+<h2>Header Image — ผูกกับ Shock Brand ที่ User เลือก</h2>
+<p class="subtitle">เลือก Profender → ทุกหน้าของ user นั้นเห็น banner Profender · เลือก brand อื่น → banner ของ brand นั้น · ไม่เลือก → ไม่มี banner</p>
+
+<style>
+  .jg {
+    --canvas:#09091a; --surface:rgba(255,255,255,0.06); --surface-soft:rgba(255,255,255,0.04);
+    --elevated:rgba(255,255,255,0.11); --glass-bg:rgba(255,255,255,0.07);
+    --glass-border:rgba(255,255,255,0.15); --purple:#a78bfa; --purple-hover:#c4b5fd;
+    --purple-bg:rgba(167,139,250,0.15); --purple-border:rgba(167,139,250,0.35);
+    --ink:rgba(255,255,255,0.92); --slate:rgba(255,255,255,0.52);
+    --steel:rgba(255,255,255,0.32); --muted:rgba(255,255,255,0.16);
+    --hairline:rgba(255,255,255,0.10); --red:#ff7070;
+    --green:#39ff96; --green-bg:rgba(57,255,150,0.12); --green-border:rgba(57,255,150,0.32);
+    --r:16px; --r-md:24px; --r-full:9999px;
+  }
+  .row { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:32px; }
+  .col { flex:1; min-width:250px; max-width:360px; }
+  .lbl { font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.08em; }
+  .phone { background:#09091a; border-radius:16px; border:1px solid rgba(255,255,255,0.12);
+           overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+  .navbar { display:flex; align-items:center; gap:8px; padding:10px 14px;
+            background:rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.08); }
+  .avatar { width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#39ff96,#00d2ff);
+            display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000; }
+  .chip-on  { padding:5px 12px;border-radius:999px;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:11px;font-weight:600; }
+  .chip-off { padding:5px 12px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);font-size:11px; }
+</style>
+
+<!-- ══════ ROW 1: User A (Profender) vs User B (no brand) ══════ -->
+<div class="section">
+  <h3>1 · My Garage — เปรียบต่าง</h3>
+  <div class="row">
+
+    <!-- User A: selected Profender -->
+    <div class="col">
+      <div class="lbl">✅ User ที่เลือก Profender</div>
+      <div class="phone jg">
+        <!-- Brand banner -->
+        <div style="height:100px;background:#000;position:relative;overflow:hidden;">
+          <img src="profender.png" style="width:100%;height:100%;object-fit:contain;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,rgba(9,9,26,0.9));"></div>
+        </div>
+        <div class="navbar">
+          <span style="font-size:13px;">🏍️</span>
+          <span style="color:rgba(255,255,255,0.7);font-size:12px;">My Garage</span>
+          <span style="color:#a78bfa;font-size:12px;margin-left:2px;">ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <div class="avatar">M</div>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:11px;">
+            <div style="font-size:10px;color:rgba(255,255,255,0.35);">Honda CB500X</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.85);font-weight:600;margin-top:2px;">15,420 km</div>
+          </div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.2);text-align:center;">...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User B: no brand selected -->
+    <div class="col">
+      <div class="lbl">⬜ User ที่ยังไม่เลือก brand</div>
+      <div class="phone jg">
+        <!-- No banner -->
+        <div class="navbar">
+          <span style="font-size:13px;">🏍️</span>
+          <span style="color:rgba(255,255,255,0.7);font-size:12px;">My Garage</span>
+          <span style="color:#a78bfa;font-size:12px;margin-left:2px;">ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <div class="avatar">S</div>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:11px;">
+            <div style="font-size:10px;color:rgba(255,255,255,0.35);">Yamaha MT-07</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.85);font-weight:600;margin-top:2px;">8,210 km</div>
+          </div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.2);text-align:center;">...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ ROW 2: ShockSettings ══════ -->
+<div class="section">
+  <h3>2 · ShockSettings — User Profender เห็น banner ทุกหน้า</h3>
+  <div class="row">
+
+    <div class="col" style="max-width:340px;">
+      <div class="lbl">ตั้งค่าโช้ค (Profender user)</div>
+      <div class="phone jg">
+        <!-- Banner -->
+        <div style="height:90px;background:#000;position:relative;overflow:hidden;">
+          <img src="profender.png" style="width:100%;height:100%;object-fit:contain;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(9,9,26,0.95));"></div>
+        </div>
+        <div class="navbar">
+          <span style="color:#a78bfa;font-size:12px;font-weight:600;">⚙️ ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <div class="avatar">M</div>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:10px;">
+          <!-- Step 1 -->
+          <div style="display:flex;gap:8px;align-items:flex-start;">
+            <div style="width:18px;height:18px;border-radius:50%;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</div>
+            <div style="flex:1;">
+              <div style="font-size:9px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Shock Brand</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                <div class="chip-on jg">Profender</div>
+                <div class="chip-off jg">Öhlins</div>
+                <div class="chip-off jg">YSS</div>
+              </div>
+            </div>
+          </div>
+          <!-- Step 2 -->
+          <div style="display:flex;gap:8px;align-items:flex-start;">
+            <div style="width:18px;height:18px;border-radius:50%;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</div>
+            <div style="flex:1;">
+              <div style="font-size:9px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Shock Model</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                <div class="chip-on jg">P-Series</div>
+                <div class="chip-off jg">G30</div>
+              </div>
+            </div>
+          </div>
+          <!-- Step 3 -->
+          <div style="display:flex;gap:8px;align-items:flex-start;">
+            <div style="width:18px;height:18px;border-radius:50%;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</div>
+            <div style="flex:1;">
+              <div style="font-size:9px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Motorcycle</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                <div class="chip-on jg">CB500X</div>
+                <div class="chip-off jg">MT-07</div>
+              </div>
+            </div>
+          </div>
+          <!-- Weight row -->
+          <div style="display:flex;gap:6px;">
+            <div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:7px 10px;">
+              <div style="font-size:8px;color:rgba(255,255,255,0.3);">Rider</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.9);">75 kg</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:7px 10px;">
+              <div style="font-size:8px;color:rgba(255,255,255,0.3);">Passenger</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.9);">0 kg</div>
+            </div>
+          </div>
+          <div style="background:#a78bfa;color:#fff;font-weight:600;text-align:center;padding:9px;border-radius:16px;font-size:12px;box-shadow:0 4px 16px rgba(167,139,250,0.30);">บันทึก Setting</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ ROW 3: Backend logic ══════ -->
+<div class="section">
+  <h3>3 · Logic — brand → banner</h3>
+  <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;font-size:12px;color:rgba(255,255,255,0.6);line-height:2;">
+    <div><span style="color:#a78bfa;font-weight:600;">ShockBrand</span> table: <code style="color:rgba(255,255,255,0.75);">id · name · header_image_url</code></div>
+    <div><span style="color:rgba(255,255,255,0.3);">User เลือก brand</span> → <code>shock_brand = "Profender"</code> เก็บใน ShockSetting</div>
+    <div><span style="color:rgba(255,255,255,0.3);">Frontend init</span> → query <code>GET /api/shock-brands</code> → cache brand list + image URL</div>
+    <div><span style="color:rgba(255,255,255,0.3);">แสดง banner</span> → ถ้า <code>user.shock_brand</code> ตรงกับ brand ที่มี image → render ด้านบน layout</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,0.25);">Admin: <code>PUT /api/admin/shock-brands/{id}/image</code> → upload PNG/JPG → เก็บใน backend/static/</div>
+  </div>
+</div>

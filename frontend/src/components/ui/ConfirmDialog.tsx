@@ -1,11 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { cn } from "@/lib/utils";
 
 const WarningIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-    <path d="M12 9v4" />
-    <path d="M12 17h.01" />
+    <path d="M12 9v4" /><path d="M12 17h.01" />
   </svg>
 );
 
@@ -27,30 +35,28 @@ export default function ConfirmDialog({
   danger = true,
 }: Props) {
   return (
-    <Dialog open onOpenChange={(open) => !open && onCancel()}>
-      <DialogContent className="max-w-[360px]">
-        <div className="confirm-dialog-body">
+    <AlertDialog open>
+      <AlertDialogContent>
+        <AlertDialogHeader>
           {danger && (
-            <div className="confirm-dialog-icon">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/12 text-destructive mb-2">
               <WarningIcon />
             </div>
           )}
-          <div className="confirm-dialog-text">
-            {title && <div className="confirm-dialog-title">{title}</div>}
-            <p className="confirm-dialog-message">{message}</p>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="ghost" onClick={onCancel}>ยกเลิก</Button>
-          <Button
-            variant={danger ? "destructive" : "default"}
+          <AlertDialogTitle>{title ?? "ยืนยัน"}</AlertDialogTitle>
+          <AlertDialogDescription>{message}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={onCancel}>ยกเลิก</AlertDialogCancel>
+          <AlertDialogAction
             onClick={onConfirm}
             autoFocus
+            className={cn(danger && "bg-destructive/70 text-white border-destructive/30 hover:bg-destructive/80")}
           >
             {confirmLabel}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

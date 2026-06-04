@@ -1,0 +1,60 @@
+<h2>Register Form — Email Optional UX</h2>
+<p class="subtitle">email ไม่ required แล้ว — user เพิ่มเองใน Account ได้ทีหลัง</p>
+
+<div class="cards">
+
+  <!-- Option A: Username + Password เท่านั้น -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0f0f22;padding:20px;font-family:sans-serif;">
+      <div style="color:#e2e8f0;font-size:13px;font-weight:700;margin-bottom:14px;text-align:center;">สร้างบัญชีใหม่</div>
+      <div style="margin-bottom:10px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">Username *</div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;color:#e2e8f0;font-size:12px;">rider_mark</div>
+        <div style="color:#64748b;font-size:9px;margin-top:2px;">a–z, 0–9, _ · 3–30 ตัวอักษร</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">Password *</div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;color:#64748b;font-size:12px;">••••••••</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">ยืนยัน Password *</div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;color:#64748b;font-size:12px;">••••••••</div>
+      </div>
+      <div style="background:#7c3aed;border-radius:8px;padding:10px;text-align:center;color:#fff;font-size:12px;font-weight:600;">สร้างบัญชี</div>
+    </div>
+    <div class="card-body">
+      <h3>A — Username + Password เท่านั้น</h3>
+      <p>ฟอร์มสั้นสุด — สมัครได้ทันที ไม่ต้องกรอก email เลย เพิ่ม email ได้ใน Account page ทีหลัง</p>
+    </div>
+  </div>
+
+  <!-- Option B: Username + Password + Email optional (collapse) -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0f0f22;padding:20px;font-family:sans-serif;">
+      <div style="color:#e2e8f0;font-size:13px;font-weight:700;margin-bottom:14px;text-align:center;">สร้างบัญชีใหม่</div>
+      <div style="margin-bottom:10px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">Username *</div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;color:#e2e8f0;font-size:12px;">rider_mark</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">Password *</div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;color:#64748b;font-size:12px;">••••••••</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:4px;">ยืนยัน Password *</div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;color:#64748b;font-size:12px;">••••••••</div>
+      </div>
+      <div style="margin-bottom:14px;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;">
+        <div style="color:#64748b;font-size:10px;margin-bottom:5px;">Email (ไม่บังคับ)</div>
+        <div style="background:rgba(255,255,255,0.05);border-radius:6px;padding:7px 10px;color:#64748b;font-size:11px;">email@example.com</div>
+        <div style="color:#475569;font-size:9px;margin-top:3px;">สำหรับกู้รหัสผ่านในอนาคต</div>
+      </div>
+      <div style="background:#7c3aed;border-radius:8px;padding:10px;text-align:center;color:#fff;font-size:12px;font-weight:600;">สร้างบัญชี</div>
+    </div>
+    <div class="card-body">
+      <h3>B — Username + Password + Email (optional)</h3>
+      <p>แสดง email field ในฟอร์มทันที แต่ไม่บังคับ — user เห็นว่ามีตัวเลือก แต่ข้ามได้</p>
+    </div>
+  </div>
+
+</div>

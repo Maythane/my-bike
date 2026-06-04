@@ -1,0 +1,7 @@
+{"type":"server-started","port":63644,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:63644","screen_dir":"/Volumes/Maythane/My-Project/My-bike/.superpowers/brainstorm/97091-1779238102/content","state_dir":"/Volumes/Maythane/My-Project/My-bike/.superpowers/brainstorm/97091-1779238102/state"}
+{"type":"screen-added","file":"/Volumes/Maythane/My-Project/My-bike/.superpowers/brainstorm/97091-1779238102/content/mockup-brands.html"}
+{"type":"screen-added","file":"/Volumes/Maythane/My-Project/My-bike/.superpowers/brainstorm/97091-1779238102/content/mockup-scope.html"}
+{"type":"screen-added","file":"/Volumes/Maythane/My-Project/My-bike/.superpowers/brainstorm/97091-1779238102/content/q-per-bike-shock.html"}
+{"source":"user-event","type":"click","text":"⚙️ Settings\n        \n        \n          \n          \n            🏍️ Honda CB500X\n            \n              Profender\n              P-Series\n            \n          \n          \n          \n            🏍️ Yamaha MT-07\n            \n              Öhlins\n              STX 36\n            \n          \n        \n      \n    \n    \n      A — ตั้งโช้คต่อคัน\n      แต่ละรถมีโช้คยี่ห้อ/รุ่นเป็นของตัวเอง — หน้า Shock ใช้สีของรถที่เลือกอยู่","choice":"A","id":null,"timestamp":1779238793604}
+{"type":"screen-added","file":"/Volumes/Maythane/My-Project/My-bike/.superpowers/brainstorm/97091-1779238102/content/mockup-final.html"}
+{"type":"server-stopped","reason":"idle timeout"}

@@ -1,0 +1,260 @@
+<h2>Brand-Matched UI — 3 Shock Brands</h2>
+<p class="subtitle">แต่ละยี่ห้อมีสี accent เป็นของตัวเอง — banner + chip + button + navbar tint</p>
+
+<style>
+  /* Base Jelly Glass tokens */
+  :root {
+    --canvas: #09091a;
+    --surface: rgba(255,255,255,0.06);
+    --elevated: rgba(255,255,255,0.11);
+    --glass-bg: rgba(255,255,255,0.07);
+    --glass-border: rgba(255,255,255,0.15);
+    --ink: rgba(255,255,255,0.92);
+    --slate: rgba(255,255,255,0.52);
+    --steel: rgba(255,255,255,0.32);
+    --hairline: rgba(255,255,255,0.10);
+    --r: 16px; --r-full: 9999px;
+  }
+
+  /* ── Per-brand accent overrides ── */
+  .brand-profender {
+    --accent:        #e8251a;
+    --accent-bg:     rgba(232,37,26,0.14);
+    --accent-border: rgba(232,37,26,0.40);
+    --accent-glow:   rgba(232,37,26,0.28);
+    --banner-bg:     #000;
+    --banner-grad:   linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.92));
+  }
+  .brand-ohlins {
+    --accent:        #f4a620;
+    --accent-bg:     rgba(244,166,32,0.14);
+    --accent-border: rgba(244,166,32,0.45);
+    --accent-glow:   rgba(244,166,32,0.28);
+    --banner-bg:     #1a5fb4;
+    --banner-grad:   linear-gradient(to bottom, transparent 40%, rgba(9,9,26,0.95));
+  }
+  .brand-yss {
+    --accent:        #e01010;
+    --accent-bg:     rgba(224,16,16,0.14);
+    --accent-border: rgba(224,16,16,0.40);
+    --accent-glow:   rgba(224,16,16,0.28);
+    --banner-bg:     #000;
+    --banner-grad:   linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.92));
+  }
+
+  .row { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:8px; }
+  .col { flex:1; min-width:240px; max-width:320px; }
+  .lbl { font-size:10px; color:rgba(255,255,255,0.4); margin-bottom:8px;
+         text-transform:uppercase; letter-spacing:0.08em; }
+
+  .phone { background:#09091a; border-radius:16px; border:1px solid rgba(255,255,255,0.12);
+           overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+
+  /* Banner */
+  .banner { height:88px; position:relative; overflow:hidden; }
+  .banner img { width:100%; height:100%; object-fit:contain; object-position:center; display:block; }
+  .banner-grad { position:absolute; inset:0; }
+
+  /* NavBar tint — subtle brand colour on left edge */
+  .navbar {
+    display:flex; align-items:center; gap:8px; padding:9px 13px;
+    background:rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.08);
+    position:relative;
+  }
+  .navbar::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--accent); border-radius:0 2px 2px 0;
+  }
+
+  /* Avatar */
+  .avatar { width:27px; height:27px; border-radius:50%; display:flex; align-items:center;
+            justify-content:center; font-size:11px; font-weight:700; color:#000;
+            background:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #fff)); }
+
+  /* Steps */
+  .step-num {
+    width:18px; height:18px; border-radius:50%; flex-shrink:0; margin-top:1px;
+    background:var(--accent-bg); border:1px solid var(--accent-border); color:var(--accent);
+    font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  }
+
+  /* Chips */
+  .chip-on {
+    padding:4px 11px; border-radius:var(--r-full);
+    background:var(--accent-bg); border:1px solid var(--accent-border);
+    color:var(--accent); font-size:11px; font-weight:600;
+  }
+  .chip-off {
+    padding:4px 11px; border-radius:var(--r-full);
+    background:var(--surface); border:1px solid var(--hairline);
+    color:var(--slate); font-size:11px;
+  }
+
+  /* Button */
+  .btn-brand {
+    background:var(--accent); color:#fff; font-weight:700; text-align:center;
+    padding:9px; border-radius:var(--r); font-size:12px;
+    box-shadow: 0 4px 16px var(--accent-glow);
+  }
+
+  /* Active tab */
+  .tab-on {
+    flex:1; text-align:center; padding:6px; border-radius:12px;
+    background:var(--accent-bg); border:1px solid var(--accent-border);
+    color:var(--accent); font-size:11px; font-weight:600;
+  }
+  .tab-off { flex:1; text-align:center; padding:6px; border-radius:12px; color:var(--slate); font-size:11px; }
+</style>
+
+<div class="section">
+  <div class="row">
+
+    <!-- ── PROFENDER ── -->
+    <div class="col brand-profender">
+      <div class="lbl" style="color:rgba(232,37,26,0.7);">● Profender</div>
+      <div class="phone">
+        <div class="banner" style="background:var(--banner-bg);">
+          <img src="profender.png" />
+          <div class="banner-grad" style="background:var(--banner-grad);"></div>
+        </div>
+        <div class="navbar">
+          <span style="font-size:12px;">🏍️</span>
+          <span style="color:var(--slate);font-size:11px;">My Garage</span>
+          <span style="color:var(--accent);font-size:11px;margin-left:2px;font-weight:600;">ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <div class="avatar">M</div>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:9px;">
+          <!-- Tab switcher (auth) -->
+          <div style="display:flex;background:var(--surface);border-radius:16px;padding:3px;gap:2px;">
+            <div class="tab-on">เข้าสู่ระบบ</div>
+            <div class="tab-off">สมัครสมาชิก</div>
+          </div>
+          <!-- Shock steps -->
+          <div style="display:flex;gap:7px;align-items:center;">
+            <div class="step-num">1</div>
+            <div style="display:flex;gap:5px;">
+              <div class="chip-on">Profender</div>
+              <div class="chip-off">Öhlins</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:7px;align-items:center;">
+            <div class="step-num">2</div>
+            <div style="display:flex;gap:5px;">
+              <div class="chip-on">P-Series</div>
+              <div class="chip-off">G30</div>
+            </div>
+          </div>
+          <div class="btn-brand">บันทึก Setting</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ÖHLINS ── -->
+    <div class="col brand-ohlins">
+      <div class="lbl" style="color:rgba(244,166,32,0.8);">● Öhlins</div>
+      <div class="phone">
+        <div class="banner" style="background:var(--banner-bg);">
+          <img src="ohlins.png" style="object-fit:cover;" />
+          <div class="banner-grad" style="background:var(--banner-grad);"></div>
+        </div>
+        <div class="navbar">
+          <span style="font-size:12px;">🏍️</span>
+          <span style="color:var(--slate);font-size:11px;">My Garage</span>
+          <span style="color:var(--accent);font-size:11px;margin-left:2px;font-weight:600;">ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <div class="avatar" style="color:#000;">S</div>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;background:var(--surface);border-radius:16px;padding:3px;gap:2px;">
+            <div class="tab-on">เข้าสู่ระบบ</div>
+            <div class="tab-off">สมัครสมาชิก</div>
+          </div>
+          <div style="display:flex;gap:7px;align-items:center;">
+            <div class="step-num">1</div>
+            <div style="display:flex;gap:5px;">
+              <div class="chip-off">Profender</div>
+              <div class="chip-on">Öhlins</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:7px;align-items:center;">
+            <div class="step-num">2</div>
+            <div style="display:flex;gap:5px;">
+              <div class="chip-on">STX 36</div>
+              <div class="chip-off">EC 460</div>
+            </div>
+          </div>
+          <div class="btn-brand">บันทึก Setting</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── YSS ── -->
+    <div class="col brand-yss">
+      <div class="lbl" style="color:rgba(224,16,16,0.7);">● YSS</div>
+      <div class="phone">
+        <div class="banner" style="background:var(--banner-bg);">
+          <img src="yss.png" />
+          <div class="banner-grad" style="background:var(--banner-grad);"></div>
+        </div>
+        <div class="navbar">
+          <span style="font-size:12px;">🏍️</span>
+          <span style="color:var(--slate);font-size:11px;">My Garage</span>
+          <span style="color:var(--accent);font-size:11px;margin-left:2px;font-weight:600;">ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <div class="avatar">K</div>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;background:var(--surface);border-radius:16px;padding:3px;gap:2px;">
+            <div class="tab-on">เข้าสู่ระบบ</div>
+            <div class="tab-off">สมัครสมาชิก</div>
+          </div>
+          <div style="display:flex;gap:7px;align-items:center;">
+            <div class="step-num">1</div>
+            <div style="display:flex;gap:5px;">
+              <div class="chip-off">Profender</div>
+              <div class="chip-on">YSS</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:7px;align-items:center;">
+            <div class="step-num">2</div>
+            <div style="display:flex;gap:5px;">
+              <div class="chip-on">G-Series</div>
+              <div class="chip-off">Z-Series</div>
+            </div>
+          </div>
+          <div class="btn-brand">บันทึก Setting</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Colour token table -->
+<div class="section">
+  <h3>Brand Colour Tokens</h3>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;min-width:160px;">
+      <div style="font-size:11px;font-weight:700;color:rgba(232,37,26,1);margin-bottom:6px;">Profender</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.5);line-height:1.9;">
+        accent: <code style="color:#e8251a;">#e8251a</code><br>
+        banner bg: <code>#000</code>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;min-width:160px;">
+      <div style="font-size:11px;font-weight:700;color:rgba(244,166,32,1);margin-bottom:6px;">Öhlins</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.5);line-height:1.9;">
+        accent: <code style="color:#f4a620;">#f4a620</code><br>
+        banner bg: <code>#1a5fb4</code>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;min-width:160px;">
+      <div style="font-size:11px;font-weight:700;color:rgba(224,16,16,1);margin-bottom:6px;">YSS</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.5);line-height:1.9;">
+        accent: <code style="color:#e01010;">#e01010</code><br>
+        banner bg: <code>#000</code>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<h2>Manage Account — Layout</h2>
+<p class="subtitle">หน้า (หรือ modal) สำหรับแก้ไข email และ password</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#09091a;border-radius:8px;padding:12px;font-family:sans-serif;font-size:11px;color:rgba(255,255,255,0.85);">
+        <div style="font-size:12px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <span>👤</span> Manage Account
+        </div>
+        <!-- Change Email section -->
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;margin-bottom:6px;">
+          <div style="font-size:9px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Email</div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.5);margin-bottom:5px;">maythane.psb@gmail.com</div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(57,255,150,0.3);border-radius:4px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.7);margin-bottom:5px;">New email...</div>
+          <div style="background:rgba(57,255,150,0.12);border:1px solid rgba(57,255,150,0.25);color:#39FF14;text-align:center;border-radius:4px;padding:4px;font-size:9px;">Save Email</div>
+        </div>
+        <!-- Change Password section -->
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;">
+          <div style="font-size:9px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Password</div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.4);margin-bottom:3px;">Current password...</div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.4);margin-bottom:3px;">New password...</div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.4);margin-bottom:5px;">Confirm password...</div>
+          <div style="background:rgba(57,255,150,0.12);border:1px solid rgba(57,255,150,0.25);color:#39FF14;text-align:center;border-radius:4px;padding:4px;font-size:9px;">Save Password</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Dedicated Page <code>/account</code></h3>
+      <p>หน้าเต็ม — email section + password section แยกกัน บันทึกได้ทีละส่วน ชัดเจน</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#09091a;border-radius:8px;overflow:hidden;font-family:sans-serif;font-size:11px;color:rgba(255,255,255,0.85);">
+        <!-- Dimmed background -->
+        <div style="padding:8px 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);">
+          <div style="color:rgba(255,255,255,0.2);font-size:9px;">เนื้อหาหน้า My Garage...</div>
+        </div>
+        <!-- Modal overlay -->
+        <div style="background:rgba(0,0,0,0.6);padding:8px;">
+          <div style="background:rgba(20,20,40,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px;max-width:220px;margin:0 auto;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:11px;font-weight:600;">👤 Manage Account</div>
+              <div style="color:rgba(255,255,255,0.35);font-size:13px;">✕</div>
+            </div>
+            <!-- Tabs -->
+            <div style="display:flex;gap:2px;margin-bottom:8px;background:rgba(255,255,255,0.05);border-radius:6px;padding:2px;">
+              <div style="flex:1;text-align:center;padding:4px;border-radius:4px;background:rgba(57,255,150,0.15);color:#39FF14;font-size:9px;font-weight:600;">Email</div>
+              <div style="flex:1;text-align:center;padding:4px;border-radius:4px;color:rgba(255,255,255,0.4);font-size:9px;">Password</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.4);margin-bottom:4px;">maythane.psb@gmail.com</div>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(57,255,150,0.25);border-radius:4px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.6);margin-bottom:6px;">New email...</div>
+            <div style="background:#39FF14;color:#000;text-align:center;border-radius:4px;padding:5px;font-size:9px;font-weight:bold;">Save</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Modal + Tabs</h3>
+      <p>Popup modal ทับหน้าปัจจุบัน — tabs สลับ Email / Password — ไม่ต้องออกจากหน้า</p>
+    </div>
+  </div>
+
+</div>

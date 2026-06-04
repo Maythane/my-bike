@@ -1,0 +1,249 @@
+<h2>Expense Dashboard — All Screens</h2>
+<p class="subtitle">3 screens: Global Dashboard · Add Expense Modal · BikePage Card</p>
+
+<div class="split" style="gap:16px;align-items:flex-start">
+
+  <!-- Screen 1: Global Dashboard -->
+  <div class="mockup" style="flex:2;min-width:0">
+    <div class="mockup-header">Screen 1 — Global Dashboard (/expenses)</div>
+    <div class="mockup-body" style="font-family:sans-serif;font-size:11px;color:#a0a0c0;padding:0;background:#0a0a12">
+
+      <!-- Nav bar -->
+      <div style="display:flex;align-items:center;padding:8px 12px;border-bottom:1px solid #1a1a2e;gap:8px">
+        <span style="font-size:14px">🏍️</span>
+        <span style="flex:1;font-size:11px;color:#555">My Garage</span>
+        <span style="font-size:14px;color:#a78bfa">💰</span>
+        <div style="width:22px;height:22px;border-radius:50%;background:#a78bfa33;display:flex;align-items:center;justify-content:center;font-size:10px">M</div>
+      </div>
+
+      <div style="padding:12px">
+
+        <!-- Header -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#e0e0f0">ค่าใช้จ่าย</div>
+          </div>
+          <button style="padding:5px 12px;background:#a78bfa22;border:1px solid #a78bfa55;border-radius:6px;color:#a78bfa;font-size:10px;font-weight:600">+ เพิ่ม</button>
+        </div>
+
+        <!-- Bike filter -->
+        <div style="display:flex;gap:5px;margin-bottom:10px;overflow-x:auto">
+          <button style="padding:4px 10px;background:#a78bfa22;border:1px solid #a78bfa55;border-radius:20px;color:#a78bfa;font-size:10px;font-weight:600;white-space:nowrap">ทุกคัน</button>
+          <button style="padding:4px 10px;background:#1a1a2e;border:1px solid #252545;border-radius:20px;color:#555;font-size:10px;white-space:nowrap">🏍️ Grand Filano</button>
+        </div>
+
+        <!-- Period selector -->
+        <div style="display:flex;align-items:center;gap:4px;margin-bottom:10px;flex-wrap:wrap">
+          <button style="padding:3px 8px;background:#1a1a2e;border:1px solid #252545;border-radius:4px;color:#888;font-size:9px">‹ 2025</button>
+          <button style="padding:3px 8px;background:#a78bfa22;border:1px solid #a78bfa55;border-radius:4px;color:#a78bfa;font-size:9px;font-weight:600">2026</button>
+          <button style="padding:3px 8px;background:#1a1a2e;border:1px solid #252545;border-radius:4px;color:#555;font-size:9px;opacity:0.4">2027 ›</button>
+          <div style="height:16px;width:1px;background:#252545;margin:0 2px"></div>
+          <button style="padding:3px 6px;background:#1a1a2e;border:1px solid #252545;border-radius:4px;color:#555;font-size:9px">ม.ค.</button>
+          <button style="padding:3px 6px;background:#1a1a2e;border:1px solid #252545;border-radius:4px;color:#555;font-size:9px">ก.พ.</button>
+          <button style="padding:3px 6px;background:#1a1a2e;border:1px solid #252545;border-radius:4px;color:#555;font-size:9px">มี.ค.</button>
+          <button style="padding:3px 6px;background:#1a1a2e;border:1px solid #252545;border-radius:4px;color:#555;font-size:9px">เม.ย.</button>
+          <button style="padding:3px 6px;background:#34d39922;border:1px solid #34d39955;border-radius:4px;color:#34d399;font-size:9px;font-weight:600">พ.ค.</button>
+          <button style="padding:3px 6px;background:#1a1a2e;border:1px solid #1a1a2e;border-radius:4px;color:#333;font-size:9px">มิ.ย.</button>
+        </div>
+
+        <!-- KPI row -->
+        <div style="display:flex;gap:6px;margin-bottom:10px">
+          <div style="flex:1;background:#1a1a2e;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:17px;font-weight:700;color:#a78bfa">฿4,850</div>
+            <div style="color:#444;font-size:9px;margin-top:2px">พ.ค. 2026</div>
+          </div>
+          <div style="flex:1;background:#1a1a2e;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:17px;font-weight:700;color:#34d399">฿28,400</div>
+            <div style="color:#444;font-size:9px;margin-top:2px">ปี 2026</div>
+          </div>
+          <div style="flex:1;background:#1a1a2e;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:17px;font-weight:700;color:#f59e0b">฿1.24</div>
+            <div style="color:#444;font-size:9px;margin-top:2px">บาท/กม.</div>
+          </div>
+        </div>
+
+        <!-- Trend chart -->
+        <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin-bottom:8px">
+          <div style="color:#555;font-size:9px;text-transform:uppercase;margin-bottom:8px">แนวโน้ม 6 เดือน</div>
+          <div style="display:flex;align-items:flex-end;gap:4px;height:52px">
+            <div style="flex:1;display:flex;flex-direction:column;gap:1px;justify-content:flex-end">
+              <div style="background:#f59e0b44;border-radius:1px 1px 0 0;height:5px"></div>
+              <div style="background:#34d39944;height:14px"></div>
+              <div style="background:#a78bfa44;border-radius:0 0 2px 2px;height:10px"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:1px;justify-content:flex-end">
+              <div style="background:#f59e0b44;border-radius:1px 1px 0 0;height:8px"></div>
+              <div style="background:#34d39944;height:20px"></div>
+              <div style="background:#a78bfa44;border-radius:0 0 2px 2px;height:12px"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:1px;justify-content:flex-end">
+              <div style="background:#f59e0b44;border-radius:1px 1px 0 0;height:4px"></div>
+              <div style="background:#34d39944;height:10px"></div>
+              <div style="background:#a78bfa44;border-radius:0 0 2px 2px;height:16px"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:1px;justify-content:flex-end">
+              <div style="background:#f59e0b44;border-radius:1px 1px 0 0;height:10px"></div>
+              <div style="background:#34d39944;height:26px"></div>
+              <div style="background:#a78bfa44;border-radius:0 0 2px 2px;height:14px"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:1px;justify-content:flex-end">
+              <div style="background:#f59e0b44;border-radius:1px 1px 0 0;height:6px"></div>
+              <div style="background:#34d39944;height:12px"></div>
+              <div style="background:#a78bfa44;border-radius:0 0 2px 2px;height:18px"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:1px;justify-content:flex-end">
+              <div style="background:#f59e0b;border-radius:1px 1px 0 0;height:9px"></div>
+              <div style="background:#34d399;height:20px"></div>
+              <div style="background:#a78bfa;border-radius:0 0 2px 2px;height:16px"></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;color:#333;font-size:9px">
+            <span>ธ.ค.</span><span>ม.ค.</span><span>ก.พ.</span><span>มี.ค.</span><span>เม.ย.</span><span style="color:#a78bfa">พ.ค.</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <span style="font-size:9px;color:#a78bfa">■ น้ำมัน</span>
+            <span style="font-size:9px;color:#34d399">■ ซ่อมบำรุง</span>
+            <span style="font-size:9px;color:#f59e0b">■ อื่นๆ</span>
+          </div>
+        </div>
+
+        <!-- Category breakdown -->
+        <div style="background:#1a1a2e;border-radius:8px;padding:10px">
+          <div style="color:#555;font-size:9px;text-transform:uppercase;margin-bottom:8px">หมวดหมู่</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:6px;min-width:80px">
+                <span>⛽</span><span style="color:#ccc">น้ำมัน</span>
+              </div>
+              <div style="flex:1;margin:0 10px;height:4px;background:#252540;border-radius:99px"><div style="width:42%;height:100%;background:#a78bfa;border-radius:99px"></div></div>
+              <span style="color:#ccc;font-weight:600;font-size:11px">฿2,040</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:6px;min-width:80px">
+                <span>🔧</span><span style="color:#ccc">ซ่อมบำรุง</span>
+              </div>
+              <div style="flex:1;margin:0 10px;height:4px;background:#252540;border-radius:99px"><div style="width:31%;height:100%;background:#34d399;border-radius:99px"></div></div>
+              <span style="color:#ccc;font-weight:600;font-size:11px">฿1,500</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:6px;min-width:80px">
+                <span>🛡️</span><span style="color:#ccc">ประกันภัย</span>
+              </div>
+              <div style="flex:1;margin:0 10px;height:4px;background:#252540;border-radius:99px"><div style="width:18%;height:100%;background:#f59e0b;border-radius:99px"></div></div>
+              <span style="color:#ccc;font-weight:600;font-size:11px">฿875</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:6px;min-width:80px">
+                <span>📋</span><span style="color:#ccc">ต่อทะเบียน</span>
+              </div>
+              <div style="flex:1;margin:0 10px;height:4px;background:#252540;border-radius:99px"><div style="width:9%;height:100%;background:#64748b;border-radius:99px"></div></div>
+              <span style="color:#ccc;font-weight:600;font-size:11px">฿435</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Right column: Modal + BikePage card -->
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:16px">
+
+    <!-- Screen 2: Add Expense Modal -->
+    <div class="mockup">
+      <div class="mockup-header">Screen 2 — Add Expense Modal</div>
+      <div class="mockup-body" style="font-family:sans-serif;font-size:11px;color:#a0a0c0;background:#0a0a12;padding:0">
+        <!-- backdrop overlay hint -->
+        <div style="padding:12px">
+          <div style="background:#111120;border-radius:12px;border:1px solid #252545;padding:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <span style="font-size:13px;font-weight:600;color:#e0e0f0">เพิ่มค่าใช้จ่าย</span>
+              <span style="color:#444;font-size:14px;cursor:pointer">✕</span>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <!-- motorcycle -->
+              <div>
+                <div style="color:#555;font-size:9px;margin-bottom:4px;text-transform:uppercase">รถมอเตอร์ไซค์</div>
+                <div style="background:#1a1a2e;border:1px solid #252545;border-radius:6px;padding:7px 10px;color:#888;display:flex;justify-content:space-between">
+                  <span>🏍️ Grand Filano</span><span style="color:#444">▾</span>
+                </div>
+              </div>
+              <!-- category -->
+              <div>
+                <div style="color:#555;font-size:9px;margin-bottom:4px;text-transform:uppercase">หมวดหมู่</div>
+                <div style="display:flex;flex-wrap:wrap;gap:5px">
+                  <button style="padding:4px 8px;background:#a78bfa22;border:1px solid #a78bfa55;border-radius:20px;color:#a78bfa;font-size:9px">🛡️ ประกันภัย</button>
+                  <button style="padding:4px 8px;background:#1a1a2e;border:1px solid #252545;border-radius:20px;color:#555;font-size:9px">📋 ทะเบียน</button>
+                  <button style="padding:4px 8px;background:#1a1a2e;border:1px solid #252545;border-radius:20px;color:#555;font-size:9px">⚙️ อะไหล่</button>
+                  <button style="padding:4px 8px;background:#1a1a2e;border:1px solid #252545;border-radius:20px;color:#555;font-size:9px">🅿️ ค่าจอด</button>
+                  <button style="padding:4px 8px;background:#1a1a2e;border:1px solid #252545;border-radius:20px;color:#555;font-size:9px">📌 อื่นๆ</button>
+                  <button style="padding:4px 8px;background:#1a1a2e;border:1px solid #333;border-radius:20px;color:#444;font-size:9px">+ กำหนดเอง</button>
+                </div>
+              </div>
+              <!-- amount + date row -->
+              <div style="display:flex;gap:8px">
+                <div style="flex:1">
+                  <div style="color:#555;font-size:9px;margin-bottom:4px;text-transform:uppercase">จำนวนเงิน (฿)</div>
+                  <div style="background:#1a1a2e;border:1px solid #a78bfa55;border-radius:6px;padding:7px 10px;color:#ccc">2,500</div>
+                </div>
+                <div style="flex:1">
+                  <div style="color:#555;font-size:9px;margin-bottom:4px;text-transform:uppercase">วันที่</div>
+                  <div style="background:#1a1a2e;border:1px solid #252545;border-radius:6px;padding:7px 10px;color:#888">26/05/2026</div>
+                </div>
+              </div>
+              <!-- notes -->
+              <div>
+                <div style="color:#555;font-size:9px;margin-bottom:4px;text-transform:uppercase">หมายเหตุ (ไม่บังคับ)</div>
+                <div style="background:#1a1a2e;border:1px solid #252545;border-radius:6px;padding:7px 10px;color:#444;height:30px"></div>
+              </div>
+              <!-- save -->
+              <button style="width:100%;padding:9px;background:#a78bfa;border:none;border-radius:8px;color:#fff;font-weight:600;font-size:12px;margin-top:2px">บันทึก</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 3: BikePage expense card -->
+    <div class="mockup">
+      <div class="mockup-header">Screen 3 — BikePage Expense Card</div>
+      <div class="mockup-body" style="font-family:sans-serif;font-size:11px;color:#a0a0c0;background:#0a0a12">
+        <div style="color:#444;font-size:9px;margin-bottom:6px">… (ด้านล่าง reminder alert bar) …</div>
+
+        <div style="background:#1a1a2e;border:1px solid #252545;border-radius:8px;padding:10px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="color:#ccc;font-weight:600;font-size:12px">💰 ค่าใช้จ่ายเดือนนี้</span>
+            <div style="display:flex;gap:6px">
+              <button style="padding:3px 8px;background:#a78bfa22;border:1px solid #a78bfa55;border-radius:5px;color:#a78bfa;font-size:9px">+ เพิ่ม</button>
+              <button style="padding:3px 8px;background:#1a1a2e;border:1px solid #252545;border-radius:5px;color:#555;font-size:9px">ดูทั้งหมด →</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <div style="flex:1;text-align:center">
+              <div style="font-size:16px;font-weight:700;color:#a78bfa">฿4,850</div>
+              <div style="color:#444;font-size:9px">รวม</div>
+            </div>
+            <div style="width:1px;background:#252545"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:4px;padding-left:6px">
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:#777">⛽ น้ำมัน</span><span style="color:#a78bfa">฿2,040</span>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:#777">🔧 ซ่อม</span><span style="color:#34d399">฿1,500</span>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:#777">🛡️ ประกัน</span><span style="color:#f59e0b">฿875</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="color:#444;font-size:9px">… (tab bar เชื้อเพลิง / ประวัติ) …</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px">ดู 3 screens แล้วมีอะไรอยากปรับไหมครับ?</p>

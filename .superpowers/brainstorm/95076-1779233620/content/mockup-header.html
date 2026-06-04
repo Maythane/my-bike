@@ -1,0 +1,148 @@
+<h2>App Header — Profender Brand Banner</h2>
+<p class="subtitle">Option B — app-wide header image · ดูทั้ง NavBar และหน้า My Garage</p>
+
+<style>
+  .jg {
+    --canvas:#09091a; --surface:rgba(255,255,255,0.06); --surface-soft:rgba(255,255,255,0.04);
+    --elevated:rgba(255,255,255,0.11); --glass-bg:rgba(255,255,255,0.07);
+    --glass-border:rgba(255,255,255,0.15); --purple:#a78bfa; --purple-hover:#c4b5fd;
+    --purple-bg:rgba(167,139,250,0.15); --purple-border:rgba(167,139,250,0.35);
+    --ink:rgba(255,255,255,0.92); --slate:rgba(255,255,255,0.52);
+    --steel:rgba(255,255,255,0.32); --muted:rgba(255,255,255,0.16);
+    --hairline:rgba(255,255,255,0.10); --red:#ff7070; --red-bg:rgba(255,112,112,0.12);
+    --green:#39ff96; --green-bg:rgba(57,255,150,0.12); --green-border:rgba(57,255,150,0.32);
+    --r:16px; --r-md:24px; --r-lg:32px; --r-full:9999px;
+  }
+  .screen-row { display:flex; gap:24px; flex-wrap:wrap; margin-bottom:32px; }
+  .screen-box { flex:1; min-width:280px; max-width:400px; }
+  .screen-label { font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:10px;
+                  text-transform:uppercase; letter-spacing:0.08em; }
+  .phone { background:#09091a; border-radius:16px; border:1px solid rgba(255,255,255,0.12);
+           overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+  .btn-p { display:flex; align-items:center; justify-content:center;
+           padding:10px 20px; border-radius:16px; font-size:13px; font-weight:600;
+           background:#a78bfa; color:#fff; border:1px solid #a78bfa;
+           box-shadow:0 4px 16px rgba(167,139,250,0.30); }
+</style>
+
+<div class="section">
+  <div class="screen-row">
+
+    <!-- Full page view -->
+    <div class="screen-box" style="max-width:380px;">
+      <div class="screen-label">My Garage — หน้าหลัก</div>
+      <div class="phone jg">
+        <!-- Header image banner -->
+        <div style="position:relative;height:110px;overflow:hidden;background:#000;">
+          <img src="profender.png" alt="Profender" style="width:100%;height:100%;object-fit:contain;object-position:center;" />
+          <!-- subtle gradient overlay at bottom so NavBar text reads over it -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,transparent,rgba(9,9,26,0.8));"></div>
+        </div>
+        <!-- NavBar sits below banner -->
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.08);">
+          <span style="font-size:14px;">🏍️</span>
+          <span style="color:rgba(255,255,255,0.7);font-size:12px;">My Garage</span>
+          <span style="color:#a78bfa;font-size:12px;margin-left:4px;">ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <span style="font-size:14px;">☀️</span>
+          <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#39ff96,#00d2ff);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#000;">M</div>
+        </div>
+        <!-- Page content -->
+        <div style="padding:14px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;">
+              <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:4px;">🏍️ Honda</div>
+              <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">CB500X</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px;">15,420 km</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;">
+              <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:4px;">🏍️ Yamaha</div>
+              <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">MT-07</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px;">8,210 km</div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;">เนื้อหา...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ShockSettings page with header -->
+    <div class="screen-box" style="max-width:380px;">
+      <div class="screen-label">ShockSettings — ตั้งค่าโช้ค</div>
+      <div class="phone jg">
+        <!-- Header image banner -->
+        <div style="position:relative;height:110px;overflow:hidden;background:#000;">
+          <img src="profender.png" alt="Profender" style="width:100%;height:100%;object-fit:contain;object-position:center;" />
+          <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,transparent,rgba(9,9,26,0.8));"></div>
+        </div>
+        <!-- NavBar -->
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.08);">
+          <span style="color:#a78bfa;font-size:12px;font-weight:600;">⚙️ ตั้งค่าโช้ค</span>
+          <div style="flex:1;"></div>
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#39ff96,#00d2ff);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000;">M</div>
+        </div>
+        <!-- Shock flow steps -->
+        <div style="padding:14px;display:flex;flex-direction:column;gap:12px;">
+          <!-- Step 1 -->
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</div>
+            <div style="flex:1;">
+              <div style="font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Shock Brand</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                <div style="padding:5px 11px;border-radius:999px;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:11px;font-weight:600;">Profender</div>
+                <div style="padding:5px 11px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;">Öhlins</div>
+                <div style="padding:5px 11px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;">YSS</div>
+              </div>
+            </div>
+          </div>
+          <!-- Step 2 -->
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</div>
+            <div style="flex:1;">
+              <div style="font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Shock Model</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                <div style="padding:5px 11px;border-radius:999px;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:11px;font-weight:600;">P-Series</div>
+                <div style="padding:5px 11px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;">G30</div>
+              </div>
+            </div>
+          </div>
+          <!-- Step 3 unlocked -->
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</div>
+            <div style="flex:1;">
+              <div style="font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Motorcycle</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                <div style="padding:5px 11px;border-radius:999px;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#a78bfa;font-size:11px;font-weight:600;">CB500X</div>
+                <div style="padding:5px 11px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;">MT-07</div>
+              </div>
+            </div>
+          </div>
+          <!-- Weights row -->
+          <div style="display:flex;gap:7px;">
+            <div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:8px 10px;">
+              <div style="font-size:9px;color:rgba(255,255,255,0.35);margin-bottom:2px;">Rider</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.9);">75 kg</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:8px 10px;">
+              <div style="font-size:9px;color:rgba(255,255,255,0.35);margin-bottom:2px;">Passenger</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.9);">0 kg</div>
+            </div>
+          </div>
+          <div class="btn-p jg" style="font-size:12px;padding:9px;">บันทึก Setting</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Admin upload hint -->
+<div class="section">
+  <h3>Backend — Header Image Management</h3>
+  <p class="subtitle">admin ใส่ภาพผ่าน API · เก็บใน static files · app load ครั้งเดียวตอน init</p>
+  <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.8;">
+    <div><span style="color:#a78bfa;font-weight:600;">PUT /api/admin/header-image</span> — multipart upload (jpg/png/webp)</div>
+    <div><span style="color:rgba(255,255,255,0.4);">GET /api/header-image</span> → <code style="color:rgba(255,255,255,0.7);">{"url": "/static/header.png"}</code></div>
+    <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.3);">เก็บไฟล์ใน <code>backend/static/</code> · serve ผ่าน FastAPI StaticFiles</div>
+  </div>
+</div>

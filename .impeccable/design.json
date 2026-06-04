@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-01T00:00:00Z",
+  "title": "Design System: My Bike",
+  "extensions": {
+    "colorMeta": {
+      "void-black":        { "role": "neutral",   "displayName": "Void Black",       "canonical": "oklch(8% 0.02 275)",   "tonalRamp": ["#09091a","#0e0e1f","#131328","#1a1a33","#24243d","#32325a","#4a4a7a","#8888bb"] },
+      "glass-surface":     { "role": "neutral",   "displayName": "Glass Surface",    "canonical": "rgba(255,255,255,0.06)", "tonalRamp": ["#09091a","#0e0e1f","#131328","#1a1a35","#24243f","#30305a","#444475","#7777aa"] },
+      "phosphor-violet":   { "role": "primary",   "displayName": "Phosphor Violet",  "canonical": "oklch(71% 0.19 290)",  "tonalRamp": ["#1a0f3d","#2d1f6b","#3d2d8a","#5a46b0","#7a68d4","#a78bfa","#c4b5fd","#e9e3ff"] },
+      "phosphor-green":    { "role": "secondary", "displayName": "Phosphor Green",   "canonical": "oklch(90% 0.25 155)",  "tonalRamp": ["#003d1f","#005c2d","#008042","#00b35c","#1cd97a","#39ff96","#7fffbb","#c0ffe0"] },
+      "warning-red":       { "role": "tertiary",  "displayName": "Warning Red",      "canonical": "oklch(72% 0.20 22)",   "tonalRamp": ["#3d0808","#6b1212","#951a1a","#c42828","#e84d4d","#ff7070","#ffaaaa","#ffe0e0"] },
+      "ink-primary":       { "role": "neutral",   "displayName": "Ink Primary",      "canonical": "rgba(255,255,255,0.92)", "tonalRamp": ["#525263","#6d6d80","#858595","#a0a0b0","#b8b8c8","#d0d0dc","#e4e4ee","#ebebf5"] },
+      "ink-secondary":     { "role": "neutral",   "displayName": "Ink Secondary",    "canonical": "rgba(255,255,255,0.52)", "tonalRamp": ["#2a2a35","#3d3d50","#525263","#6a6a80","#858595","#a0a0b0","#c0c0cc","#d8d8e4"] }
+    },
+    "typographyMeta": {
+      "body":  { "displayName": "Body",  "purpose": "All reading text, descriptions, log entries. Core reading size." },
+      "title": { "displayName": "Title", "purpose": "Page headings, modal titles, bike names. Never display-sized." },
+      "label": { "displayName": "Label", "purpose": "Section headers, field labels, status badges. Tabular numerics." }
+    },
+    "shadows": [
+      { "name": "card",  "value": "0 8px 32px rgba(0,0,0,0.40)",  "purpose": "Cards and modals against the void-black canvas." },
+      { "name": "modal", "value": "0 24px 64px rgba(0,0,0,0.65)", "purpose": "Full-screen overlays and bottom sheets." }
+    ],
+    "motion": [
+      { "name": "jelly-ease", "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Spring easing for interactive state changes — snappy, physical, never bouncy." },
+      { "name": "spring",     "value": "0.38s cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Default spring transition shorthand." }
+    ],
+    "breakpoints": [
+      { "name": "sm",  "value": "640px",  "purpose": "Mobile sheet → centered dialog switch" },
+      { "name": "md",  "value": "768px",  "purpose": "Layout column expansion" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main call-to-action. Phosphor Violet, spring press feedback.",
+      "html": "<button class=\"ds-btn-primary\">บันทึก</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #a78bfa; color: #09091a; padding: 10px 20px; border-radius: 16px; border: none; font: 600 14px/1 Inter, system-ui, sans-serif; cursor: pointer; transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), background 0.15s; user-select: none; } .ds-btn-primary:hover { background: #c4b5fd; transform: scale(1.03); } .ds-btn-primary:active { transform: scale(0.94) translateY(2px); } .ds-btn-primary:focus-visible { outline: 2px solid #a78bfa; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.4; pointer-events: none; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action. Transparent, no border, subtle hover fill.",
+      "html": "<button class=\"ds-btn-ghost\">ยกเลิก</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; background: transparent; color: rgba(255,255,255,0.52); padding: 10px 20px; border-radius: 16px; border: none; font: 500 14px/1 Inter, system-ui, sans-serif; cursor: pointer; transition: background 0.15s, color 0.15s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1); } .ds-btn-ghost:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.92); } .ds-btn-ghost:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Destructive action. Always paired with a ConfirmDialog — never fires on first click.",
+      "html": "<button class=\"ds-btn-danger\">ลบ</button>",
+      "css": ".ds-btn-danger { display: inline-flex; align-items: center; justify-content: center; background: #ff7070; color: #fff; padding: 10px 20px; border-radius: 16px; border: none; font: 600 14px/1 Inter, system-ui, sans-serif; cursor: pointer; transition: filter 0.15s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1); } .ds-btn-danger:hover { filter: brightness(1.1); transform: scale(1.03); } .ds-btn-danger:active { transform: scale(0.94) translateY(2px); }"
+    },
+    {
+      "name": "Glass Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Text field on glass surface. Filled style, violet focus ring.",
+      "html": "<div class=\"ds-input-wrap\"><input class=\"ds-input\" type=\"text\" placeholder=\"กรอกข้อมูล\" /></div>",
+      "css": ".ds-input-wrap { position: relative; } .ds-input { width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.92); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; font: 400 14px/1.55 Inter, system-ui, sans-serif; transition: border-color 0.15s, box-shadow 0.15s; outline: none; } .ds-input::placeholder { color: rgba(255,255,255,0.32); } .ds-input:focus { border-color: rgba(167,139,250,0.35); box-shadow: 0 0 0 3px rgba(167,139,250,0.15); }"
+    },
+    {
+      "name": "Glass Card",
+      "kind": "card",
+      "refersTo": "card-glass",
+      "description": "Standard glass panel. Used for bike cards, log entries, settings sections.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Grand Filano</div><div class=\"ds-card-meta\">12,450 km · น้ำมันเครื่องอีก 550 km</div></div>",
+      "css": ".ds-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.40); } .ds-card-title { font: 700 16px/1.3 Inter, system-ui, sans-serif; color: rgba(255,255,255,0.92); letter-spacing: -0.01em; margin-bottom: 4px; } .ds-card-meta { font: 400 13px/1.4 Inter, system-ui, sans-serif; color: rgba(255,255,255,0.52); }"
+    },
+    {
+      "name": "ConfirmDialog",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Delete confirmation. Warning icon + title + description + ghost/danger buttons. Used for all destructive actions.",
+      "html": "<div class=\"ds-confirm\"><div class=\"ds-confirm-body\"><div class=\"ds-confirm-icon\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#ff7070\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\"/><path d=\"M12 9v4\"/><path d=\"M12 17h.01\"/></svg></div><div><div class=\"ds-confirm-title\">ลบรายการนี้?</div><p class=\"ds-confirm-msg\">ข้อมูลจะถูกลบถาวรและไม่สามารถกู้คืนได้</p></div></div><div class=\"ds-confirm-footer\"><button class=\"ds-btn-ghost\" style=\"padding:8px 16px;font-size:13px\">ยกเลิก</button><button class=\"ds-btn-danger\" style=\"padding:8px 16px;font-size:13px\">ลบ</button></div></div>",
+      "css": ".ds-confirm { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.65); } .ds-confirm-body { display: flex; align-items: flex-start; gap: 16px; padding: 20px; } .ds-confirm-icon { flex-shrink: 0; width: 42px; height: 42px; border-radius: 9999px; background: rgba(255,112,112,0.12); display: flex; align-items: center; justify-content: center; } .ds-confirm-title { font: 700 15px/1.3 Inter,system-ui,sans-serif; color: rgba(255,255,255,0.92); margin-bottom: 4px; } .ds-confirm-msg { font: 400 14px/1.6 Inter,system-ui,sans-serif; color: rgba(255,255,255,0.52); margin: 0; } .ds-confirm-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.10); } .ds-btn-ghost { display:inline-flex;align-items:center;background:transparent;color:rgba(255,255,255,0.52);padding:10px 20px;border-radius:16px;border:none;font:500 14px/1 Inter,system-ui,sans-serif;cursor:pointer; } .ds-btn-danger { display:inline-flex;align-items:center;background:#ff7070;color:#fff;padding:10px 20px;border-radius:16px;border:none;font:600 14px/1 Inter,system-ui,sans-serif;cursor:pointer; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Rider's Instrument Panel",
+    "overview": "My Bike's interface is built on a single metaphor: a precision instrument panel — dark, purposeful, and unmistakably personal. Every surface is a glass layer over a deep void, every accent is a phosphor glow. The design doesn't decorate; it informs.\n\nThe Jelly Glass system is the identity, not a theme. Dark mode is not toggled — it is the product. Surfaces are translucent glass panels stacked over #09091a void-black. Accent colors behave like instrument lights: rare, meaningful, never decorative.\n\nThis system explicitly rejects: generic SaaS grays, bloated OEM car-app chrome, over-animated interface theater, and plain-white utility design.",
+    "keyCharacteristics": [
+      "Dark-first: #09091a void-black canvas, glass surfaces at 6-11% white opacity",
+      "Spring physics: cubic-bezier(0.34, 1.56, 0.64, 1) — snappy, never bouncy",
+      "Phosphor accents: violet primary, green success, red warning — all used sparingly",
+      "Touch-native: 44px minimum targets, thumb-zone-biased layout",
+      "One sans: Inter throughout — no display font, no decorative mixing"
+    ],
+    "rules": [
+      { "name": "The One Voice Rule",      "body": "Phosphor Violet appears on ≤10% of any given screen. It marks what matters. If violet is everywhere, it marks nothing.", "section": "colors" },
+      { "name": "The Glass Stack Rule",    "body": "Surfaces are never opaque. Every card, modal, and panel is a glass layer — rgba(255,255,255,0.06–0.11) — over void-black.", "section": "colors" },
+      { "name": "The No Pure White Rule",  "body": "White text is always rgba(255,255,255,0.92), never #ffffff. Pure white on dark glass causes halation.", "section": "colors" },
+      { "name": "The No Display Font Rule","body": "Inter in its weight range is the entire typographic vocabulary. If a heading needs to feel bolder, increase weight to 700.", "section": "typography" },
+      { "name": "The Ambient-Only Rule",   "body": "No crisp, offset shadows. Every shadow should be diffuse enough to appear as a glow from underneath, not a border.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use rgba(255,255,255,0.06–0.11) glass surfaces — never solid fills for cards or panels.",
+      "Do keep Phosphor Violet to ≤10% of any screen.",
+      "Do use spring easing cubic-bezier(0.34,1.56,0.64,1) for interactive state changes.",
+      "Do size all touch targets at ≥44px height.",
+      "Do use font-variant-numeric: tabular-nums for mileage, date, and numeric columns.",
+      "Do pair destructive buttons with a ConfirmDialog — always two interactions."
+    ],
+    "donts": [
+      "Don't use generic SaaS dashboard patterns — no Notion-style sidebar, no Linear-style activity feed.",
+      "Don't use bloated OEM car-app chrome.",
+      "Don't add over-animated transitions — no bounce easing, no choreographed page-load sequences.",
+      "Don't use plain white utility styling — no white backgrounds, no light-gray card surfaces.",
+      "Don't use display or decorative fonts.",
+      "Don't use full-opacity white text — always rgba(255,255,255,0.92) or lower.",
+      "Don't use Modal as a first thought — accordion expansion is preferred."
+    ]
+  }
+}

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Bike — Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #f5f5f5;
+    --muted: #888;
+    --accent: #a78bfa;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 32px 48px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .header-title h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .header-title p {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.5;
+    max-width: 520px;
+  }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: #161616;
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .tab-btn {
+    padding: 8px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    background: #252525;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+  .tab-btn:hover:not(.active) { color: #ccc; }
+
+  /* ── Layout ── */
+  .content {
+    padding: 32px 48px 64px;
+  }
+  .direction-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .direction-card {
+    background: #161616;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .direction-card:hover {
+    border-color: #444;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .direction-card.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(167,139,250,0.15), 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .direction-label {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .direction-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .direction-name .badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .badge-rec { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .badge-new { background: rgba(57,255,150,0.12); color: #39ff96; }
+  .badge-keep { background: rgba(255,190,11,0.12); color: #ffbe0b; }
+
+  .direction-sub { font-size: 12px; color: var(--muted); }
+
+  .mockup-wrap {
+    padding: 16px;
+    background: #111;
+  }
+
+  /* ── DIRECTION A: Jelly Glass Refined (keep current) ── */
+  .mock-a {
+    background: #09091a;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 12px;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+  }
+  .mock-a .topbar {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mock-a .logo { color: #a78bfa; font-weight: 700; font-size: 14px; letter-spacing: -0.01em; }
+  .mock-a .avatar-ring {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, #a78bfa, #39ff96);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #000;
+  }
+  .mock-a .body { flex: 1; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+  .mock-a .bike-card {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .mock-a .bike-img {
+    width: 52px; height: 38px; border-radius: 8px;
+    background: linear-gradient(135deg, rgba(167,139,250,0.3), rgba(57,255,150,0.2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .mock-a .bike-info { flex: 1; }
+  .mock-a .bike-name { color: rgba(255,255,255,0.9); font-weight: 700; font-size: 13px; }
+  .mock-a .bike-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+  .mock-a .bike-badge {
+    background: rgba(57,255,150,0.12); color: #39ff96;
+    font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 99px;
+    border: 1px solid rgba(57,255,150,0.25);
+  }
+  .mock-a .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .mock-a .stat {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; padding: 10px 10px;
+    text-align: center;
+  }
+  .mock-a .stat-val { color: rgba(255,255,255,0.9); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .mock-a .stat-lbl { color: rgba(255,255,255,0.35); font-size: 10px; margin-top: 2px; }
+  .mock-a .section-title { color: rgba(255,255,255,0.4); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+  .mock-a .log-row {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.04); border-radius: 10px; padding: 9px 12px;
+  }
+  .mock-a .log-dot { width: 6px; height: 6px; border-radius: 50%; background: #39ff96; flex-shrink: 0; }
+  .mock-a .log-dot.warn { background: #ffbe0b; }
+  .mock-a .log-title { color: rgba(255,255,255,0.8); font-size: 12px; flex: 1; }
+  .mock-a .log-date { color: rgba(255,255,255,0.3); font-size: 11px; }
+  .mock-a .fab {
+    position: absolute; bottom: 16px; right: 16px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(109,40,217,0.85); backdrop-filter: blur(12px);
+    border: 1px solid rgba(167,139,250,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #fff; box-shadow: 0 4px 20px rgba(109,40,217,0.4);
+  }
+
+  /* ── DIRECTION B: Formal Light (shadcn-inspired) ── */
+  .mock-b {
+    background: #fafafa;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 12px;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    color: #0f172a;
+  }
+  .mock-b .topbar {
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .mock-b .logo { color: #0f172a; font-weight: 700; font-size: 14px; letter-spacing: -0.01em; }
+  .mock-b .nav-items { display: flex; gap: 2px; }
+  .mock-b .nav-item { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 500; color: #64748b; cursor: pointer; }
+  .mock-b .nav-item.active { background: #f1f5f9; color: #0f172a; }
+  .mock-b .avatar { width: 28px; height: 28px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 700; }
+  .mock-b .body { flex: 1; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; background: #f8fafc; }
+  .mock-b .page-title { font-size: 15px; font-weight: 700; color: #0f172a; letter-spacing: -0.01em; }
+  .mock-b .bike-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;
+    display: flex; gap: 10px; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .mock-b .bike-img { width: 46px; height: 34px; border-radius: 7px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .mock-b .bike-name { color: #0f172a; font-weight: 600; font-size: 13px; }
+  .mock-b .bike-sub { color: #94a3b8; font-size: 11px; margin-top: 2px; }
+  .mock-b .bike-badge { background: #f0fdf4; color: #16a34a; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 99px; border: 1px solid #bbf7d0; }
+  .mock-b .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .mock-b .stat { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .mock-b .stat-val { color: #0f172a; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .mock-b .stat-lbl { color: #94a3b8; font-size: 10px; margin-top: 2px; }
+  .mock-b .section-title { color: #94a3b8; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .mock-b .log-row { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; }
+  .mock-b .log-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+  .mock-b .log-dot.warn { background: #f59e0b; }
+  .mock-b .log-title { color: #334155; font-size: 12px; flex: 1; }
+  .mock-b .log-date { color: #94a3b8; font-size: 11px; }
+  .mock-b .fab-row { display: flex; gap: 6px; }
+  .mock-b .fab-btn { padding: 7px 12px; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid #e2e8f0; background: #fff; color: #334155; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+  .mock-b .fab-btn.primary { background: #6366f1; color: #fff; border-color: #6366f1; box-shadow: 0 1px 4px rgba(99,102,241,0.3); }
+
+  /* ── DIRECTION C: Dark Formal (Linear-style) ── */
+  .mock-c {
+    background: #0d0d0d;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 12px;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+  }
+  .mock-c .topbar {
+    background: #141414;
+    border-bottom: 1px solid #1f1f1f;
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .mock-c .logo { color: #fff; font-weight: 700; font-size: 14px; letter-spacing: -0.02em; }
+  .mock-c .nav-items { display: flex; gap: 2px; }
+  .mock-c .nav-item { padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 500; color: #666; cursor: pointer; }
+  .mock-c .nav-item.active { background: #1e1e1e; color: #e5e5e5; }
+  .mock-c .avatar { width: 26px; height: 26px; border-radius: 6px; background: #5b21b6; display: flex; align-items: center; justify-content: center; color: #c4b5fd; font-size: 10px; font-weight: 700; }
+  .mock-c .body { flex: 1; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; background: #0d0d0d; }
+  .mock-c .page-title { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+  .mock-c .bike-card { background: #141414; border: 1px solid #1f1f1f; border-radius: 8px; padding: 12px; display: flex; gap: 10px; align-items: center; }
+  .mock-c .bike-img { width: 46px; height: 34px; border-radius: 6px; background: #1a1a2e; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .mock-c .bike-name { color: #e5e5e5; font-weight: 600; font-size: 13px; }
+  .mock-c .bike-sub { color: #555; font-size: 11px; margin-top: 2px; }
+  .mock-c .bike-badge { background: rgba(34,197,94,0.1); color: #4ade80; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(74,222,128,0.2); }
+  .mock-c .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .mock-c .stat { background: #141414; border: 1px solid #1f1f1f; border-radius: 6px; padding: 10px; text-align: center; }
+  .mock-c .stat-val { color: #e5e5e5; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .mock-c .stat-lbl { color: #444; font-size: 10px; margin-top: 2px; }
+  .mock-c .section-title { color: #333; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  .mock-c .log-row { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #1a1a1a; padding: 8px 0; }
+  .mock-c .log-dot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
+  .mock-c .log-dot.warn { background: #fbbf24; }
+  .mock-c .log-title { color: #a3a3a3; font-size: 12px; flex: 1; }
+  .mock-c .log-date { color: #404040; font-size: 11px; }
+  .mock-c .action-row { display: flex; gap: 6px; margin-top: auto; }
+  .mock-c .action-btn { padding: 7px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
+  .mock-c .action-btn.primary { background: #5b21b6; color: #e9d5ff; border: 1px solid #7c3aed; }
+  .mock-c .action-btn.ghost { background: transparent; color: #555; border: 1px solid #222; }
+
+  /* ── Info section ── */
+  .info-panel {
+    display: none;
+    margin-top: 0;
+    gap: 24px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .info-panel.visible { display: grid; }
+
+  .info-card {
+    background: #161616;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+  }
+  .info-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .info-card h3 .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .dot-a { background: rgba(167,139,250,0.9); box-shadow: 0 0 8px rgba(167,139,250,0.6); }
+  .dot-b { background: #6366f1; box-shadow: 0 0 8px rgba(99,102,241,0.4); }
+  .dot-c { background: #5b21b6; box-shadow: 0 0 8px rgba(91,33,182,0.4); }
+
+  .pro-con { display: flex; flex-direction: column; gap: 7px; }
+  .pro-con-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; line-height: 1.5;
+  }
+  .pro-con-item .icon { flex-shrink: 0; margin-top: 1px; font-size: 13px; }
+  .pro-con-item.pro .text { color: #c3fae8; }
+  .pro-con-item.con .text { color: #ffd8a8; }
+  .pro-con-item .text { color: #aaa; }
+
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 12px 0;
+  }
+
+  /* ── Tailwind vs shadcn explainer ── */
+  .explainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+    display: none;
+  }
+  .explainer.visible { display: grid; }
+  .exp-card {
+    background: #161616; border: 1px solid var(--border); border-radius: 14px; padding: 22px;
+  }
+  .exp-card h3 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .exp-card p { font-size: 12px; color: #888; line-height: 1.6; margin-bottom: 14px; }
+  .code-block {
+    background: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 12px 14px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 11px;
+    line-height: 1.7; color: #e5e5e5; overflow: hidden;
+  }
+  .code-block .kw { color: #a78bfa; }
+  .code-block .str { color: #39ff96; }
+  .code-block .tag { color: #93c5fd; }
+  .code-block .comment { color: #555; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .pill {
+    padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 500;
+    background: #1e1e1e; border: 1px solid #2a2a2a; color: #999;
+  }
+  .pill.green { background: rgba(57,255,150,0.08); border-color: rgba(57,255,150,0.2); color: #39ff96; }
+  .pill.amber { background: rgba(255,190,11,0.08); border-color: rgba(255,190,11,0.2); color: #ffbe0b; }
+
+  /* Tabs */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Compare note */
+  .note-bar {
+    background: rgba(167,139,250,0.08);
+    border: 1px solid rgba(167,139,250,0.2);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 12px;
+    color: #c4b5fd;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .note-bar .note-icon { font-size: 15px; flex-shrink: 0; }
+
+  .section-head {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+
+  /* Migration complexity */
+  .complexity-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .complexity-item { text-align: center; }
+  .complexity-label { font-size: 11px; color: #555; margin-bottom: 6px; font-weight: 500; }
+  .complexity-bars { display: flex; gap: 3px; justify-content: center; }
+  .complexity-bar {
+    width: 14px; height: 14px; border-radius: 3px;
+    background: #1e1e1e; border: 1px solid #2a2a2a;
+  }
+  .complexity-bar.filled { background: #a78bfa; border-color: #a78bfa; }
+  .complexity-bar.filled.b { background: #6366f1; border-color: #6366f1; }
+  .complexity-bar.filled.c { background: #5b21b6; border-color: #5b21b6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">
+    <h1>My Bike — Design Direction Brainstorm</h1>
+    <p>เปรียบเทียบ 3 ทิศทาง: คลิก direction ไหนก็ได้เพื่อดู tradeoffs &nbsp;· &nbsp;tab "ทำความรู้จัก" เพื่อเข้าใจ Tailwind + shadcn</p>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showSection('directions')">Design Directions</button>
+    <button class="tab-btn" onclick="showSection('explainer')">ทำความรู้จัก Tailwind + shadcn</button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── SECTION: Directions ── -->
+  <div class="section active" id="sec-directions">
+
+    <div class="note-bar">
+      <span class="note-icon">💡</span>
+      <span>คลิก direction card ด้านล่างเพื่อดู pros/cons · mockup นี้ simulate หน้า Garage (หน้าหลักของแอป)</span>
+    </div>
+
+    <div class="section-head">เลือก direction ที่ resonates กับคุณ</div>
+
+    <div class="direction-grid">
+
+      <!-- A: Jelly Glass Refined -->
+      <div class="direction-card" id="card-a" onclick="selectCard('a')">
+        <div class="direction-label">
+          <div class="direction-name">
+            A — Jelly Glass Refined
+            <span class="badge badge-keep">ปัจจุบัน</span>
+          </div>
+          <div class="direction-sub">polished, not replaced</div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="mock-a" style="position:relative;">
+            <div class="topbar">
+              <div class="logo">⚡ My Bike</div>
+              <div class="avatar-ring">M</div>
+            </div>
+            <div class="body">
+              <div class="bike-card">
+                <div class="bike-img">🏍️</div>
+                <div class="bike-info">
+                  <div class="bike-name">Honda CB500F</div>
+                  <div class="bike-sub">12,450 km · อัปเดต 2 ชม.ที่แล้ว</div>
+                </div>
+                <div class="bike-badge">OK</div>
+              </div>
+              <div class="stats-row">
+                <div class="stat"><div class="stat-val">12,450</div><div class="stat-lbl">กม. รวม</div></div>
+                <div class="stat"><div class="stat-val">34.2</div><div class="stat-lbl">กม./ลิตร</div></div>
+                <div class="stat"><div class="stat-val" style="color:#ffbe0b;">2</div><div class="stat-lbl">แจ้งเตือน</div></div>
+              </div>
+              <div class="section-title">Log ล่าสุด</div>
+              <div class="log-row"><div class="log-dot"></div><div class="log-title">เปลี่ยนน้ำมันเครื่อง</div><div class="log-date">3 ธ.ค.</div></div>
+              <div class="log-row"><div class="log-dot warn"></div><div class="log-title">ถึงกำหนดเปลี่ยนยาง</div><div class="log-date">เกิน 200 กม.</div></div>
+            </div>
+            <div class="fab">+</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B: Formal Light -->
+      <div class="direction-card" id="card-b" onclick="selectCard('b')">
+        <div class="direction-label">
+          <div class="direction-name">
+            B — Formal Light
+            <span class="badge badge-new">shadcn</span>
+          </div>
+          <div class="direction-sub">clean · professional · bright</div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="mock-b">
+            <div class="topbar">
+              <div class="logo">My Bike</div>
+              <div class="nav-items">
+                <div class="nav-item active">Garage</div>
+                <div class="nav-item">Fuel</div>
+                <div class="nav-item">Service</div>
+              </div>
+              <div class="avatar">M</div>
+            </div>
+            <div class="body">
+              <div class="page-title">Garage</div>
+              <div class="bike-card">
+                <div class="bike-img">🏍️</div>
+                <div class="bike-info">
+                  <div class="bike-name">Honda CB500F</div>
+                  <div class="bike-sub">12,450 km · อัปเดต 2 ชม.ที่แล้ว</div>
+                </div>
+                <div class="bike-badge">Active</div>
+              </div>
+              <div class="stats-row">
+                <div class="stat"><div class="stat-val">12,450</div><div class="stat-lbl">กม. รวม</div></div>
+                <div class="stat"><div class="stat-val">34.2</div><div class="stat-lbl">กม./ลิตร</div></div>
+                <div class="stat"><div class="stat-val" style="color:#d97706;">2</div><div class="stat-lbl">แจ้งเตือน</div></div>
+              </div>
+              <div class="section-title">Log ล่าสุด</div>
+              <div class="log-row"><div class="log-dot"></div><div class="log-title">เปลี่ยนน้ำมันเครื่อง</div><div class="log-date">3 ธ.ค.</div></div>
+              <div class="log-row"><div class="log-dot warn"></div><div class="log-title">ถึงกำหนดเปลี่ยนยาง</div><div class="log-date">เกิน 200 กม.</div></div>
+              <div class="fab-row">
+                <button class="fab-btn primary">+ เติมน้ำมัน</button>
+                <button class="fab-btn">+ บำรุงรักษา</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C: Dark Formal -->
+      <div class="direction-card" id="card-c" onclick="selectCard('c')">
+        <div class="direction-label">
+          <div class="direction-name">
+            C — Dark Formal
+            <span class="badge badge-rec">Recommended</span>
+          </div>
+          <div class="direction-sub">dark · sharp · structured</div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="mock-c">
+            <div class="topbar">
+              <div class="logo">My Bike</div>
+              <div class="nav-items">
+                <div class="nav-item active">Garage</div>
+                <div class="nav-item">Fuel</div>
+                <div class="nav-item">Service</div>
+              </div>
+              <div class="avatar">M</div>
+            </div>
+            <div class="body">
+              <div class="page-title">Garage</div>
+              <div class="bike-card">
+                <div class="bike-img">🏍️</div>
+                <div class="bike-info">
+                  <div class="bike-name">Honda CB500F</div>
+                  <div class="bike-sub">12,450 km · อัปเดต 2 ชม.ที่แล้ว</div>
+                </div>
+                <div class="bike-badge">Active</div>
+              </div>
+              <div class="stats-row">
+                <div class="stat"><div class="stat-val">12,450</div><div class="stat-lbl">กม. รวม</div></div>
+                <div class="stat"><div class="stat-val">34.2</div><div class="stat-lbl">กม./ลิตร</div></div>
+                <div class="stat"><div class="stat-val" style="color:#fbbf24;">2</div><div class="stat-lbl">แจ้งเตือน</div></div>
+              </div>
+              <div class="section-title">Log ล่าสุด</div>
+              <div class="log-row"><div class="log-dot"></div><div class="log-title">เปลี่ยนน้ำมันเครื่อง</div><div class="log-date">3 ธ.ค.</div></div>
+              <div class="log-row"><div class="log-dot warn"></div><div class="log-title">ถึงกำหนดเปลี่ยนยาง</div><div class="log-date">เกิน 200 กม.</div></div>
+              <div class="action-row">
+                <button class="action-btn primary">+ เติมน้ำมัน</button>
+                <button class="action-btn ghost">+ บำรุงรักษา</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Info panel (shown on select) -->
+    <div class="info-panel" id="info-panel">
+
+      <div class="info-card" id="info-a">
+        <h3><span class="dot dot-a"></span> A — Jelly Glass Refined</h3>
+        <div class="pro-con">
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">ไม่ต้อง rebuild — polish ที่มีอยู่</span></div>
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">Identity แข็งแกร่ง มี character</span></div>
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">Dark mode เป็น first-class citizen</span></div>
+          <div class="divider"></div>
+          <div class="pro-con-item con"><span class="icon">△</span><span class="text">Glass morphism อาจดู "trendy" ไม่ timeless</span></div>
+          <div class="pro-con-item con"><span class="icon">△</span><span class="text">ไม่ได้ใช้ Tailwind/shadcn ตามที่ต้องการ</span></div>
+        </div>
+        <div class="complexity-row">
+          <div class="complexity-item">
+            <div class="complexity-label">Migration effort</div>
+            <div class="complexity-bars">
+              <div class="complexity-bar filled"></div>
+              <div class="complexity-bar"></div>
+              <div class="complexity-bar"></div>
+              <div class="complexity-bar"></div>
+              <div class="complexity-bar"></div>
+            </div>
+          </div>
+          <div class="complexity-item">
+            <div class="complexity-label">Risk</div>
+            <div class="complexity-bars">
+              <div class="complexity-bar filled"></div>
+              <div class="complexity-bar"></div>
+              <div class="complexity-bar"></div>
+              <div class="complexity-bar"></div>
+              <div class="complexity-bar"></div>
+            </div>
+          </div>
+          <div class="complexity-item">
+            <div class="complexity-label">Time estimate</div>
+            <div style="font-size:11px;color:#a78bfa;margin-top:4px;">1–2 สัปดาห์</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card" id="info-b">
+        <h3><span class="dot dot-b"></span> B — Formal Light</h3>
+        <div class="pro-con">
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">shadcn components ใช้ได้ทันที — accessible</span></div>
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">Readable มากในที่สว่าง (กลางแจ้ง)</span></div>
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">สวยงาม professional ไม่มีวันตกเทรนด์</span></div>
+          <div class="divider"></div>
+          <div class="pro-con-item con"><span class="icon">△</span><span class="text">ขัดกับ brand identity "instrument panel" ดั้งเดิม</span></div>
+          <div class="pro-con-item con"><span class="icon">△</span><span class="text">Rebuild เกือบทั้งหมด — effort สูงมาก</span></div>
+          <div class="pro-con-item con"><span class="icon">△</span><span class="text">Light อาจดู "plain" ไม่มีบุคลิก</span></div>
+        </div>
+        <div class="complexity-row">
+          <div class="complexity-item">
+            <div class="complexity-label">Migration effort</div>
+            <div class="complexity-bars">
+              <div class="complexity-bar filled b"></div>
+              <div class="complexity-bar filled b"></div>
+              <div class="complexity-bar filled b"></div>
+              <div class="complexity-bar filled b"></div>
+              <div class="complexity-bar filled b"></div>
+            </div>
+          </div>
+          <div class="complexity-item">
+            <div class="complexity-label">Risk</div>
+            <div class="complexity-bars">
+              <div class="complexity-bar filled b"></div>
+              <div class="complexity-bar filled b"></div>
+              <div class="complexity-bar filled b"></div>
+              <div class="complexity-bar filled b"></div>
+              <div class="complexity-bar"></div>
+            </div>
+          </div>
+          <div class="complexity-item">
+            <div class="complexity-label">Time estimate</div>
+            <div style="font-size:11px;color:#6366f1;margin-top:4px;">6–10 สัปดาห์</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card" id="info-c">
+        <h3><span class="dot dot-c"></span> C — Dark Formal (แนะนำ)</h3>
+        <div class="pro-con">
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">Dark ทรงพลัง + shadcn structured — best of both</span></div>
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">Tailwind ช่วย speed up dev ได้จริง</span></div>
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">Formal + clean ตรงกับที่ต้องการ</span></div>
+          <div class="pro-con-item pro"><span class="icon">✓</span><span class="text">shadcn dark theme รองรับ accessibility</span></div>
+          <div class="divider"></div>
+          <div class="pro-con-item con"><span class="icon">△</span><span class="text">ต้อง rebuild CSS เกือบทั้งหมด</span></div>
+          <div class="pro-con-item con"><span class="icon">△</span><span class="text">Migration glass → flat surfaces ต้องระวัง identity</span></div>
+        </div>
+        <div class="complexity-row">
+          <div class="complexity-item">
+            <div class="complexity-label">Migration effort</div>
+            <div class="complexity-bars">
+              <div class="complexity-bar filled c"></div>
+              <div class="complexity-bar filled c"></div>
+              <div class="complexity-bar filled c"></div>
+              <div class="complexity-bar"></div>
+              <div class="complexity-bar"></div>
+            </div>
+          </div>
+          <div class="complexity-item">
+            <div class="complexity-label">Risk</div>
+            <div class="complexity-bars">
+              <div class="complexity-bar filled c"></div>
+              <div class="complexity-bar filled c"></div>
+              <div class="complexity-bar filled c"></div>
+              <div class="complexity-bar"></div>
+              <div class="complexity-bar"></div>
+            </div>
+          </div>
+          <div class="complexity-item">
+            <div class="complexity-label">Time estimate</div>
+            <div style="font-size:11px;color:#c4b5fd;margin-top:4px;">3–5 สัปดาห์</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ── SECTION: Explainer ── -->
+  <div class="section" id="sec-explainer">
+
+    <div class="explainer visible">
+
+      <div class="exp-card">
+        <h3>🎨 Tailwind CSS คืออะไร?</h3>
+        <p>แทนที่จะเขียน CSS class แยกไฟล์ คุณใส่ utility class ลงใน HTML/JSX โดยตรง — เหมือนมี CSS shorthand สำหรับทุกอย่าง</p>
+
+        <div style="margin-bottom:8px;font-size:11px;color:#666;">แบบเดิม (custom CSS):</div>
+        <div class="code-block">
+<span class="comment">/* index.css */</span>
+<span class="tag">.card</span> {
+  background: <span class="str">rgba(255,255,255,0.07)</span>;
+  border-radius: <span class="str">24px</span>;
+  padding: <span class="str">20px</span>;
+  border: <span class="str">1px solid rgba(255,255,255,0.15)</span>;
+}
+        </div>
+
+        <div style="margin:12px 0 8px;font-size:11px;color:#666;">แบบ Tailwind:</div>
+        <div class="code-block">
+<span class="comment">{/* ใส่ class ตรงใน JSX เลย */}</span>
+&lt;<span class="tag">div</span> <span class="kw">className</span>=<span class="str">"bg-white/7 rounded-3xl
+  p-5 border border-white/15
+  backdrop-blur-xl"</span>&gt;
+  ...
+&lt;/<span class="tag">div</span>&gt;
+        </div>
+
+        <div class="pill-row">
+          <span class="pill green">ไม่ต้องตั้งชื่อ class</span>
+          <span class="pill green">consistent spacing</span>
+          <span class="pill green">สร้างเร็วมาก</span>
+          <span class="pill amber">HTML verbose ขึ้น</span>
+          <span class="pill amber">ต้อง setup build</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <h3>🧩 shadcn/ui คืออะไร?</h3>
+        <p>ไม่ใช่ library ธรรมดา — มันคือ <strong style="color:#e5e5e5;">collection of components</strong> ที่ copy-paste ลง project ของคุณ บน Radix UI (accessibility) + Tailwind</p>
+
+        <div style="margin-bottom:8px;font-size:11px;color:#666;">ติดตั้ง component เพิ่ม:</div>
+        <div class="code-block">
+<span class="kw">npx</span> shadcn add button dialog select
+<span class="comment"># → โค้ดไปอยู่ใน src/components/ui/</span>
+<span class="comment"># แก้ได้ 100% เพราะเป็น code ใน project คุณ</span>
+        </div>
+
+        <div style="margin:12px 0 8px;font-size:11px;color:#666;">ใช้งาน:</div>
+        <div class="code-block">
+<span class="kw">import</span> { <span class="str">Button</span> } from <span class="str">"@/components/ui/button"</span>
+<span class="kw">import</span> { <span class="str">Dialog</span> } from <span class="str">"@/components/ui/dialog"</span>
+
+&lt;<span class="tag">Button</span> <span class="kw">variant</span>=<span class="str">"outline"</span>&gt;บันทึก&lt;/<span class="tag">Button</span>&gt;
+&lt;<span class="tag">Dialog</span> <span class="kw">open</span>={open}&gt;...&lt;/<span class="tag">Dialog</span>&gt;
+        </div>
+
+        <div class="pill-row">
+          <span class="pill green">Accessible by default</span>
+          <span class="pill green">customize ได้เต็ม</span>
+          <span class="pill green">dark mode ใน built-in</span>
+          <span class="pill amber">ต้องใช้ Tailwind</span>
+          <span class="pill amber">ดึง Radix UI เข้ามา</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="background:#161616;border:1px solid var(--border);border-radius:14px;padding:22px;">
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px;">🤔 แล้วสองอย่างนี้ทำงานด้วยกันยังไง?</div>
+      <div style="font-size:12px;color:#888;line-height:1.8;">
+        <strong style="color:#ccc;">Tailwind</strong> = ระบบ styling (วิธีเขียน CSS)<br>
+        <strong style="color:#ccc;">shadcn/ui</strong> = ตัว component (Button, Dialog, Input, etc.) ที่ใช้ Tailwind ในการ style<br><br>
+        ใช้ด้วยกัน → คุณได้ทั้ง <em style="color:#a78bfa;">component library ที่สวย accessible</em> + <em style="color:#a78bfa;">ระบบ styling ที่ flexible</em><br><br>
+        สำหรับ My Bike: install Tailwind → ติดตั้ง shadcn → แทนที่ `.btn`, `.card`, `.modal` ด้วย shadcn components → restyle ด้วย Tailwind utilities
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function selectCard(id) {
+    document.querySelectorAll('.direction-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('card-' + id).classList.add('selected');
+    document.getElementById('info-panel').classList.add('visible');
+    // Scroll to info
+    setTimeout(() => {
+      document.getElementById('info-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+  }
+
+  // Pre-select C
+  setTimeout(() => selectCard('c'), 400);
+</script>
+
+</body>
+</html>

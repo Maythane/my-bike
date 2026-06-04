@@ -1,0 +1,320 @@
+<h2>Mockup v2 — แก้ปุ่ม + Shock flow ใหม่</h2>
+<p class="subtitle">ปุ่มใช้ btn-primary (purple) ตาม pattern เดิม · Shock brand → model → bike</p>
+
+<style>
+  .jg {
+    --canvas:#09091a; --surface:rgba(255,255,255,0.06); --surface-soft:rgba(255,255,255,0.04);
+    --elevated:rgba(255,255,255,0.11); --glass-bg:rgba(255,255,255,0.07);
+    --glass-border:rgba(255,255,255,0.15); --purple:#a78bfa; --purple-hover:#c4b5fd;
+    --purple-bg:rgba(167,139,250,0.15); --purple-border:rgba(167,139,250,0.35);
+    --ink:rgba(255,255,255,0.92); --slate:rgba(255,255,255,0.52);
+    --steel:rgba(255,255,255,0.32); --muted:rgba(255,255,255,0.16);
+    --hairline:rgba(255,255,255,0.10); --red:#ff7070; --red-bg:rgba(255,112,112,0.12);
+    --green:#39ff96; --green-bg:rgba(57,255,150,0.12); --green-border:rgba(57,255,150,0.32);
+    --r:16px; --r-md:24px; --r-lg:32px; --r-full:9999px;
+  }
+  /* btn-primary pattern (copy from index.css) */
+  .btn-p {
+    display:flex; align-items:center; justify-content:center;
+    padding:10px 20px; border-radius:16px; font-size:14px; font-weight:600;
+    background:var(--purple); color:#fff; border:1px solid var(--purple);
+    box-shadow:0 4px 16px rgba(167,139,250,0.30); cursor:pointer;
+    transition:transform 0.18s, box-shadow 0.2s;
+  }
+  .screen-row { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:32px; }
+  .screen-box { flex:1; min-width:260px; max-width:360px; }
+  .screen-label { font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:8px;
+                  text-transform:uppercase; letter-spacing:0.08em; }
+  .phone { background:#09091a; border-radius:16px; border:1px solid rgba(255,255,255,0.12);
+           overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+           position:relative; }
+  .blob { position:absolute; border-radius:50%; filter:blur(60px); opacity:0.18; pointer-events:none; }
+  .blob-1 { width:200px;height:200px;background:#a78bfa;top:-40px;left:-40px; }
+  .blob-2 { width:160px;height:160px;background:#39ff96;bottom:-30px;right:-30px; }
+  .chip-active { padding:7px 14px; border-radius:var(--r-full); background:var(--purple-bg);
+                 border:1px solid var(--purple-border); color:var(--purple);
+                 font-size:13px; font-weight:600; }
+  .chip-idle   { padding:7px 14px; border-radius:var(--r-full); background:var(--surface);
+                 border:1px solid var(--hairline); color:var(--slate); font-size:13px; }
+  .step-num { width:22px; height:22px; border-radius:50%; background:var(--purple-bg);
+              border:1px solid var(--purple-border); color:var(--purple); font-size:11px;
+              font-weight:700; display:inline-flex; align-items:center; justify-content:center;
+              flex-shrink:0; }
+  .step-row { display:flex; align-items:flex-start; gap:10px; }
+  .step-body { flex:1; }
+  .step-label { font-size:11px; color:var(--steel); text-transform:uppercase;
+                letter-spacing:0.08em; margin-bottom:7px; }
+</style>
+
+<!-- ═══════ Part 1: Auth buttons fixed ═══════ -->
+<div class="section">
+  <h3>1 · Auth Page — ปุ่มใช้ btn-primary (purple)</h3>
+  <div class="screen-row">
+
+    <div class="screen-box">
+      <div class="screen-label">Login tab</div>
+      <div class="phone jg" style="padding:36px 24px 28px;">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div style="text-align:center;margin-bottom:22px;position:relative;">
+          <div style="font-size:30px;margin-bottom:5px;">🏍️</div>
+          <div style="font-size:17px;font-weight:700;color:var(--ink);">Moto Tracker</div>
+          <div style="font-size:11px;color:var(--slate);margin-top:3px;">ติดตามการบำรุงรักษารถมอเตอร์ไซค์</div>
+        </div>
+        <div style="display:flex;background:var(--surface);border-radius:16px;padding:4px;gap:3px;margin-bottom:14px;position:relative;">
+          <div style="flex:1;text-align:center;padding:7px;border-radius:12px;background:var(--purple-bg);color:var(--purple);font-size:12px;font-weight:600;border:1px solid var(--purple-border);">เข้าสู่ระบบ</div>
+          <div style="flex:1;text-align:center;padding:7px;border-radius:12px;color:var(--slate);font-size:12px;">สมัครสมาชิก</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px;position:relative;">
+          <label style="display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--slate);">
+            Email
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:16px;padding:9px 13px;font-size:13px;color:var(--steel);">you@example.com</div>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--slate);">
+            Password
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:16px;padding:9px 13px;font-size:13px;color:var(--steel);">••••••••</div>
+          </label>
+          <div class="btn-p jg" style="margin-top:4px;">เข้าสู่ระบบ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals with purple buttons -->
+    <div class="screen-box">
+      <div class="screen-label">Manage Account modal</div>
+      <div class="phone jg" style="padding:0;">
+        <div style="padding:10px 14px;background:var(--glass-bg);border-bottom:1px solid var(--hairline);">
+          <span style="color:var(--slate);font-size:11px;">My Garage</span>
+        </div>
+        <div style="background:rgba(0,0,0,0.6);padding:18px;">
+          <div style="background:rgba(18,18,40,0.98);border:1px solid var(--glass-border);border-radius:24px;padding:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div style="font-size:14px;font-weight:600;color:var(--ink);">👤 Manage Account</div>
+              <div style="color:var(--steel);font-size:16px;">✕</div>
+            </div>
+            <div style="display:flex;background:var(--surface);border-radius:16px;padding:3px;gap:3px;margin-bottom:12px;">
+              <div style="flex:1;text-align:center;padding:6px;border-radius:12px;background:var(--purple-bg);color:var(--purple);font-size:11px;font-weight:600;border:1px solid var(--purple-border);">Email</div>
+              <div style="flex:1;text-align:center;padding:6px;border-radius:12px;color:var(--slate);font-size:11px;">Password</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <div style="background:var(--surface-soft);border:1px solid var(--hairline);border-radius:16px;padding:9px 13px;font-size:11px;color:var(--steel);">maythane.psb@gmail.com</div>
+              <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:16px;padding:9px 13px;font-size:11px;color:var(--muted);">New email address...</div>
+              <div class="btn-p jg" style="font-size:12px;padding:9px;">Update Email</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════ Part 2: Shock flow ═══════ -->
+<div class="section">
+  <h3>2 · ShockSettings — flow ใหม่ (Shock Brand → Model → Bike)</h3>
+  <div class="screen-row">
+
+    <!-- Step 1: Shock brand selected -->
+    <div class="screen-box">
+      <div class="screen-label">Step 1 — เลือกยี่ห้อโช้ค</div>
+      <div class="phone jg" style="padding:16px;">
+        <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:18px;">⚙️ ตั้งค่าโช้คหลัง</div>
+
+        <div class="step-row" style="margin-bottom:18px;">
+          <div class="step-num jg">1</div>
+          <div class="step-body jg">
+            <div class="step-label">Shock Brand</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;">
+              <div class="chip-active jg">Öhlins</div>
+              <div class="chip-idle jg">YSS</div>
+              <div class="chip-idle jg">Stock</div>
+              <div class="chip-idle jg">+ เพิ่ม</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-row" style="margin-bottom:18px;">
+          <div class="step-num jg">2</div>
+          <div class="step-body jg">
+            <div class="step-label">Shock Model</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;">
+              <div class="chip-active jg">STX 36</div>
+              <div class="chip-idle jg">EC 460</div>
+              <div class="chip-idle jg">TTX GP</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 grayed out — no data yet for this shock -->
+        <div class="step-row" style="opacity:0.35;margin-bottom:18px;">
+          <div class="step-num jg" style="background:var(--surface);border-color:var(--hairline);color:var(--steel);">3</div>
+          <div class="step-body jg">
+            <div class="step-label">Motorcycle Brand</div>
+            <div style="font-size:12px;color:var(--steel);font-style:italic;">ยังไม่มีข้อมูลสำหรับ STX 36</div>
+          </div>
+        </div>
+
+        <div class="btn-p jg" style="opacity:0.35;">บันทึก</div>
+      </div>
+    </div>
+
+    <!-- Step 2: shock has data → bike selection unlocked -->
+    <div class="screen-box">
+      <div class="screen-label">Step 3 — มีข้อมูล → เลือกรถได้</div>
+      <div class="phone jg" style="padding:16px;">
+        <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:18px;">⚙️ ตั้งค่าโช้คหลัง</div>
+
+        <div class="step-row" style="margin-bottom:14px;">
+          <div class="step-num jg">1</div>
+          <div class="step-body jg">
+            <div class="step-label">Shock Brand</div>
+            <div style="display:flex;gap:7px;">
+              <div class="chip-active jg">YSS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-row" style="margin-bottom:14px;">
+          <div class="step-num jg">2</div>
+          <div class="step-body jg">
+            <div class="step-label">Shock Model</div>
+            <div style="display:flex;gap:7px;">
+              <div class="chip-active jg">G-Series</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-row" style="margin-bottom:14px;">
+          <div class="step-num jg">3</div>
+          <div class="step-body jg">
+            <div class="step-label">Bike Brand</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;">
+              <div class="chip-active jg">Honda</div>
+              <div class="chip-idle jg">Yamaha</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-row" style="margin-bottom:18px;">
+          <div class="step-num jg">4</div>
+          <div class="step-body jg">
+            <div class="step-label">Bike Model</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;">
+              <div class="chip-active jg">CB500X</div>
+              <div class="chip-idle jg">CB650R</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rider inputs -->
+        <div style="display:flex;gap:8px;margin-bottom:10px;">
+          <label style="flex:1;display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--slate);">
+            Rider (kg)
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:16px;padding:8px 12px;font-size:13px;color:var(--ink);">75</div>
+          </label>
+          <label style="flex:1;display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--slate);">
+            Passenger (kg)
+            <div style="background:var(--surface);border:1px solid var(--glass-border);border-radius:16px;padding:8px 12px;font-size:13px;color:var(--ink);">0</div>
+          </label>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:14px;">
+          <div class="chip-active jg" style="font-size:12px;padding:6px 12px;">street</div>
+          <div class="chip-idle jg" style="font-size:12px;padding:6px 12px;">touring</div>
+          <div class="chip-idle jg" style="font-size:12px;padding:6px 12px;">track</div>
+        </div>
+
+        <div class="btn-p jg">บันทึก Setting</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════ Part 3: Header image system ═══════ -->
+<div class="section">
+  <h3>3 · Header Image System — ต้องการแบบไหน?</h3>
+  <p class="subtitle">ช่วยชี้แจงก่อนเพิ่มในสเปค — "เหมือน Grand Filao" หมายถึงอะไร?</p>
+  <div class="screen-row">
+
+    <!-- Option A: per-bike hero banner -->
+    <div class="card" data-choice="A" onclick="toggleSelect(this)">
+      <div class="card-image">
+        <div style="background:#09091a;border-radius:8px;overflow:hidden;font-family:sans-serif;">
+          <!-- Hero banner -->
+          <div style="height:80px;background:linear-gradient(135deg,rgba(167,139,250,0.3),rgba(57,255,150,0.2));position:relative;display:flex;align-items:flex-end;">
+            <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35);"></div>
+            <div style="position:relative;padding:8px 12px;">
+              <div style="font-size:15px;font-weight:700;color:#fff;">Honda CB500X</div>
+              <div style="font-size:9px;color:rgba(255,255,255,0.55);">2022 · 15,420 km</div>
+            </div>
+          </div>
+          <!-- Content below -->
+          <div style="padding:10px 12px;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.7);">🔧 Tasks</div>
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 8px;font-size:9px;color:rgba(255,255,255,0.7);">⛽ Fuel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>A — Hero image ต่อคัน</h3>
+        <p>แต่ละรถมีภาพ banner ด้านบน — อัปโหลดรูปรถจริง ทำให้หน้ารายละเอียดสวยขึ้น</p>
+      </div>
+    </div>
+
+    <!-- Option B: app-wide cover -->
+    <div class="card" data-choice="B" onclick="toggleSelect(this)">
+      <div class="card-image">
+        <div style="background:#09091a;border-radius:8px;overflow:hidden;font-family:sans-serif;">
+          <!-- Full-width app header -->
+          <div style="height:70px;background:linear-gradient(135deg,rgba(167,139,250,0.25),rgba(9,9,26,0.9));position:relative;display:flex;align-items:center;padding:0 12px;gap:10px;">
+            <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%25%22 height=%22100%25%22><rect fill=%22rgba(167,139,250,0.08)%22 width=%22100%25%22 height=%22100%25%22/></svg>');"></div>
+            <span style="font-size:20px;position:relative;">🏍️</span>
+            <div style="position:relative;">
+              <div style="font-size:14px;font-weight:700;color:#fff;">Moto Tracker</div>
+              <div style="font-size:9px;color:rgba(255,255,255,0.4);">My Garage — 2 bikes</div>
+            </div>
+          </div>
+          <div style="padding:10px 12px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:8px;font-size:9px;color:rgba(255,255,255,0.7);">Honda CB500X</div>
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:8px;font-size:9px;color:rgba(255,255,255,0.7);">Yamaha MT-07</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>B — App header image (ทั้ง app)</h3>
+        <p>ภาพ banner เดียวสำหรับทั้ง app — admin กำหนดได้ เหมือน Grand Filao มี cover image ของ property</p>
+      </div>
+    </div>
+
+    <!-- Option C: both -->
+    <div class="card" data-choice="C" onclick="toggleSelect(this)">
+      <div class="card-image">
+        <div style="background:#09091a;border-radius:8px;overflow:hidden;font-family:sans-serif;">
+          <div style="height:55px;background:linear-gradient(135deg,rgba(57,255,150,0.2),rgba(0,210,255,0.15));display:flex;align-items:center;padding:0 10px;">
+            <span style="font-size:18px;">🏍️</span>
+            <span style="color:rgba(255,255,255,0.8);font-size:11px;margin-left:8px;font-weight:600;">Moto Tracker</span>
+          </div>
+          <div style="height:1px;background:rgba(255,255,255,0.08);"></div>
+          <!-- Per-bike card with image -->
+          <div style="padding:10px;">
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;overflow:hidden;">
+              <div style="height:40px;background:linear-gradient(135deg,rgba(167,139,250,0.4),rgba(9,9,26,0.8));display:flex;align-items:flex-end;padding:4px 8px;">
+                <span style="font-size:9px;font-weight:600;color:#fff;">Honda CB500X</span>
+              </div>
+              <div style="padding:6px 8px;font-size:8px;color:rgba(255,255,255,0.4);">15,420 km · อัปโหลดรูป</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>C — ทั้งคู่</h3>
+        <p>App header + per-bike cover photo — ยืดหยุ่นสุด แต่ซับซ้อนกว่า</p>
+      </div>
+    </div>
+
+  </div>
+</div>
