@@ -1,6 +1,7 @@
 import { useState, useEffect, type FormEvent, type SVGProps } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useAuth } from "../hooks/useAuth";
 import { sendOtp } from "../api/auth";
 import Blobs from "../components/ui/Blobs";
@@ -168,14 +169,14 @@ export default function AuthPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
-              <div className="auth-field">
-                <label htmlFor="login-identifier">Email / Username / Telephone</label>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="login-identifier" className="text-xs font-semibold text-muted-foreground">Email / Username / Telephone</label>
                 <div className="auth-input-wrap">
                   <span className="auth-input-icon"><MailIcon width={16} height={16} /></span>
-                  <input
+                  <Input
                     id="login-identifier"
                     type="text"
-                    className="auth-input auth-input--icon-left"
+                    className="auth-input--icon-left"
                     value={identifier}
                     onChange={(e) => { setIdentifier(e.target.value); resetOtp(); setError(null); }}
                     placeholder="you@example.com"
@@ -198,11 +199,10 @@ export default function AuthPage() {
               )}
 
               {isPhone && otpSent && (
-                <div className="auth-field">
-                  <label htmlFor="otp-input">รหัส OTP (6 หลัก)</label>
-                  <input
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="otp-input" className="text-xs font-semibold text-muted-foreground">รหัส OTP (6 หลัก)</label>
+                  <Input
                     id="otp-input"
-                    className="auth-input"
                     type="text"
                     inputMode="numeric"
                     maxLength={6}
@@ -224,16 +224,16 @@ export default function AuthPage() {
               )}
 
               {!isPhone && (
-                <div className="auth-field">
+                <div className="flex flex-col gap-1.5">
                   <div className="auth-field-header">
-                    <label htmlFor="login-password">Password</label>
-                    <a href="#" className="auth-link">ลืมรหัสผ่าน?</a>
+                    <label htmlFor="login-password" className="text-xs font-semibold text-muted-foreground">Password</label>
+                    <a href="#" className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline">ลืมรหัสผ่าน?</a>
                   </div>
                   <div className="auth-input-wrap">
                     <span className="auth-input-icon"><LockIcon width={16} height={16} /></span>
-                    <input
+                    <Input
                       id="login-password"
-                      className="auth-input auth-input--icon-left auth-input--icon-right"
+                      className="auth-input--icon-left auth-input--icon-right"
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -253,7 +253,7 @@ export default function AuthPage() {
                 </div>
               )}
 
-              {error && <p className="auth-error">{error}</p>}
+              {error && <p className="text-xs text-destructive mt-1">{error}</p>}
 
               {!(isPhone && !otpSent) && (
                 <Button
@@ -270,7 +270,7 @@ export default function AuthPage() {
 
             <p className="auth-footer-text">
               ยังไม่มีบัญชีใช้งาน?{" "}
-              <button type="button" className="auth-link auth-link--btn" onClick={() => handleTabChange("register")}>
+              <button type="button" className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]" onClick={() => handleTabChange("register")}>
                 สร้างบัญชีใหม่
               </button>
             </p>
@@ -288,11 +288,10 @@ export default function AuthPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="auth-form">
-            <div className="auth-field">
-              <label htmlFor="reg-username">Username <span style={{ color: "var(--purple)" }}>*</span></label>
-              <input
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="reg-username" className="text-xs font-semibold text-muted-foreground">Username <span style={{ color: "var(--purple)" }}>*</span></label>
+              <Input
                 id="reg-username"
-                className="auth-input"
                 type="text"
                 value={username}
                 onChange={(e) => { setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "")); setError(null); }}
@@ -307,12 +306,12 @@ export default function AuthPage() {
               <p style={{ fontSize: 11, color: "var(--slate)", margin: "2px 0 0" }}>a–z, 0–9, _ · 3–30 ตัวอักษร</p>
             </div>
 
-            <div className="auth-field">
-              <label htmlFor="reg-password">Password <span style={{ color: "var(--purple)" }}>*</span></label>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="reg-password" className="text-xs font-semibold text-muted-foreground">Password <span style={{ color: "var(--purple)" }}>*</span></label>
               <div className="auth-input-wrap">
-                <input
+                <Input
                   id="reg-password"
-                  className="auth-input auth-input--icon-right"
+                  className="auth-input--icon-right"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -329,12 +328,12 @@ export default function AuthPage() {
               </div>
             </div>
 
-            <div className="auth-field">
-              <label htmlFor="reg-confirm">ยืนยัน Password <span style={{ color: "var(--purple)" }}>*</span></label>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="reg-confirm" className="text-xs font-semibold text-muted-foreground">ยืนยัน Password <span style={{ color: "var(--purple)" }}>*</span></label>
               <div className="auth-input-wrap">
-                <input
+                <Input
                   id="reg-confirm"
-                  className="auth-input auth-input--icon-right"
+                  className="auth-input--icon-right"
                   type={showConfirm ? "text" : "password"}
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
@@ -350,14 +349,13 @@ export default function AuthPage() {
               </div>
             </div>
 
-            <div className="auth-field">
-              <label htmlFor="reg-email" style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="reg-email" className="text-xs font-semibold text-muted-foreground" style={{ display: "flex", gap: 6, alignItems: "center" }}>
                 Email
                 <span style={{ fontSize: 11, color: "var(--steel)", fontWeight: 400 }}>(ไม่บังคับ)</span>
               </label>
-              <input
+              <Input
                 id="reg-email"
-                className="auth-input"
                 type="email"
                 value={regEmail}
                 onChange={(e) => setRegEmail(e.target.value)}
@@ -368,7 +366,7 @@ export default function AuthPage() {
               <p style={{ fontSize: 11, color: "var(--slate)", margin: "2px 0 0" }}>แนะนำ — ใช้กู้รหัสผ่าน, เพิ่มทีหลังได้ใน Account</p>
             </div>
 
-            {error && <p className="auth-error">{error}</p>}
+            {error && <p className="text-xs text-destructive mt-1">{error}</p>}
 
             <Button type="submit" variant="default" className="auth-submit-btn" disabled={loading}>
               {loading ? "กำลังดำเนินการ…" : "สร้างบัญชี"}
@@ -379,7 +377,7 @@ export default function AuthPage() {
           <div className="auth-card-footer">
             <p className="auth-footer-text">
               มีบัญชีแล้ว?{" "}
-              <button type="button" className="auth-link auth-link--btn" onClick={() => handleTabChange("login")}>
+              <button type="button" className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]" onClick={() => handleTabChange("login")}>
                 เข้าสู่ระบบ
               </button>
             </p>

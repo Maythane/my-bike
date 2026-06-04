@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, type FormEvent, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createPortal } from "react-dom";
 import {
@@ -288,8 +289,7 @@ export default function AccountPage() {
         {open === "displayName" && (
           <div className="acct-page-row-body">
             <form onSubmit={handleDisplayNameSave} className="auth-form">
-              <input
-                className="auth-input"
+              <Input
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 maxLength={50}
@@ -297,8 +297,8 @@ export default function AccountPage() {
                 autoFocus
                 required
               />
-              {error && <p className="auth-error" role="alert">{error}</p>}
-              {success && <p className="auth-success" role="status">{success}</p>}
+              {error && <p className="text-xs text-destructive mt-1" role="alert">{error}</p>}
+              {success && <p className="text-xs text-[oklch(0.73_0.20_148)] mt-1" role="status">{success}</p>}
               <Button variant="default" size="sm" disabled={loading}>
                 {loading ? "กำลังบันทึก…" : "บันทึก"}
               </Button>
@@ -323,8 +323,7 @@ export default function AccountPage() {
         {open === "username" && (
           <div className="acct-page-row-body">
             <form onSubmit={handleUsernameSave} className="auth-form">
-              <input
-                className="auth-input"
+              <Input
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))}
                 pattern="[a-zA-Z0-9_]+"
@@ -335,8 +334,8 @@ export default function AccountPage() {
                 required
               />
               <p style={{ fontSize: 11, color: "var(--slate)", margin: 0 }}>a–z, 0–9, _ · 3–30 ตัวอักษร</p>
-              {error && <p className="auth-error" role="alert">{error}</p>}
-              {success && <p className="auth-success" role="status">{success}</p>}
+              {error && <p className="text-xs text-destructive mt-1" role="alert">{error}</p>}
+              {success && <p className="text-xs text-[oklch(0.73_0.20_148)] mt-1" role="status">{success}</p>}
               <Button variant="default" size="sm" disabled={loading}>
                 {loading ? "กำลังบันทึก…" : "บันทึก"}
               </Button>
@@ -363,8 +362,7 @@ export default function AccountPage() {
         {open === "email" && (
           <div className="acct-page-row-body" style={{ borderTop: "1px solid var(--hairline)" }}>
             <form onSubmit={handleEmailSave} className="auth-form">
-              <input
-                className="auth-input"
+              <Input
                 type="email"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
@@ -372,8 +370,8 @@ export default function AccountPage() {
                 autoFocus
                 required
               />
-              {error && <p className="auth-error" role="alert">{error}</p>}
-              {success && <p className="auth-success" role="status">{success}</p>}
+              {error && <p className="text-xs text-destructive mt-1" role="alert">{error}</p>}
+              {success && <p className="text-xs text-[oklch(0.73_0.20_148)] mt-1" role="status">{success}</p>}
               <Button variant="default" size="sm" disabled={loading}>
                 {loading ? "กำลังบันทึก…" : user?.email ? "อัปเดต Email" : "เพิ่ม Email"}
               </Button>
@@ -403,8 +401,7 @@ export default function AccountPage() {
           <div className="acct-page-row-body">
             <form onSubmit={handlePasswordSave} className="auth-form">
               <div className="pw-wrap">
-                <input
-                  className="auth-input"
+                <Input
                   type={showCurrent ? "text" : "password"}
                   value={currentPw}
                   onChange={(e) => setCurrentPw(e.target.value)}
@@ -417,8 +414,7 @@ export default function AccountPage() {
                 </button>
               </div>
               <div className="pw-wrap">
-                <input
-                  className="auth-input"
+                <Input
                   type={showNew ? "text" : "password"}
                   value={newPw}
                   onChange={(e) => setNewPw(e.target.value)}
@@ -431,8 +427,7 @@ export default function AccountPage() {
                 </button>
               </div>
               <div className="pw-wrap">
-                <input
-                  className="auth-input"
+                <Input
                   type={showConfirm ? "text" : "password"}
                   value={confirmPw}
                   onChange={(e) => setConfirmPw(e.target.value)}
@@ -443,8 +438,8 @@ export default function AccountPage() {
                   <EyeIcon visible={showConfirm} />
                 </button>
               </div>
-              {error && <p className="auth-error" role="alert">{error}</p>}
-              {success && <p className="auth-success" role="status">{success}</p>}
+              {error && <p className="text-xs text-destructive mt-1" role="alert">{error}</p>}
+              {success && <p className="text-xs text-[oklch(0.73_0.20_148)] mt-1" role="status">{success}</p>}
               <Button variant="default" size="sm" disabled={loading}>
                 {loading ? "กำลังเปลี่ยน…" : "เปลี่ยน Password"}
               </Button>
@@ -474,15 +469,14 @@ export default function AccountPage() {
           <div className="acct-page-row-body" style={{ borderTop: "1px solid var(--hairline)" }}>
             {!otpSent ? (
               <div className="auth-form">
-                <input
-                  className="auth-input"
+                <Input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="0812345678"
                   autoFocus
                 />
-                {error && <p className="auth-error" role="alert">{error}</p>}
+                {error && <p className="text-xs text-destructive mt-1" role="alert">{error}</p>}
                 <Button
                   type="button"
                   variant="default"
@@ -498,8 +492,7 @@ export default function AccountPage() {
                 <p style={{ fontSize: 12, color: "var(--slate)", margin: 0 }}>
                   ส่ง OTP ไปที่ <strong style={{ color: "var(--ink)" }}>{phone}</strong>
                 </p>
-                <input
-                  className="auth-input"
+                <Input
                   type="text"
                   inputMode="numeric"
                   maxLength={6}
@@ -517,8 +510,8 @@ export default function AccountPage() {
                     </button>
                   )}
                 </div>
-                {error && <p className="auth-error" role="alert">{error}</p>}
-                {success && <p className="auth-success" role="status">{success}</p>}
+                {error && <p className="text-xs text-destructive mt-1" role="alert">{error}</p>}
+                {success && <p className="text-xs text-[oklch(0.73_0.20_148)] mt-1" role="status">{success}</p>}
                 <Button
                   type="submit"
                   variant="default"

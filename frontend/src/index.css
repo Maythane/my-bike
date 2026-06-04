@@ -2213,31 +2213,10 @@ html.light .shock-preset-card {
 /* Form */
 .auth-form { display: flex; flex-direction: column; gap: 1rem; }
 
-/* Field */
-.auth-field { display: flex; flex-direction: column; gap: 0.375rem; }
+/* Field header (used for label + forgot-password row) */
 .auth-field-header {
   display: flex; align-items: center; justify-content: space-between;
 }
-.auth-field label,
-.auth-field > label { font-size: 0.875rem; font-weight: 500; color: var(--ink); }
-
-/* Input */
-.auth-input {
-  width: 100%;
-  padding: 0.6rem 0.875rem;
-  border-radius: var(--r);
-  border: 1px solid var(--glass-border);
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 0.9375rem;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.auth-input:focus {
-  outline: none;
-  border-color: var(--purple-border);
-  box-shadow: 0 0 0 3px var(--purple-bg);
-}
-.auth-input::placeholder { color: var(--steel); }
 
 /* Input with icons */
 .auth-input-wrap { position: relative; display: flex; align-items: center; }
@@ -2285,11 +2264,6 @@ html.light .shock-preset-card {
 }
 .auth-resend-btn:hover { text-decoration: underline; }
 
-/* Links */
-.auth-link { color: var(--purple); font-weight: 500; }
-.auth-link:hover { text-decoration: underline; }
-.auth-link--btn { background: none; border: none; cursor: pointer; font: inherit; padding: 0; }
-
 /* Footer */
 .auth-footer-text { font-size: 0.875rem; color: var(--slate); text-align: center; }
 .auth-card-footer {
@@ -2297,10 +2271,6 @@ html.light .shock-preset-card {
   padding-top: 1rem;
   margin-top: -0.5rem;
 }
-
-/* Error / success */
-.auth-error   { color: var(--red);   font-size: 0.875rem; margin: 0; }
-.auth-success { color: var(--green); font-size: 0.875rem; margin: 0; }
 
 /* Shared password-wrap (used by AccountModal) */
 .pw-wrap { position: relative; }
