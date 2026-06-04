@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent, type SVGProps } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "../hooks/useAuth";
 import { sendOtp } from "../api/auth";
 import Blobs from "../components/ui/Blobs";
@@ -186,14 +187,14 @@ export default function AuthPage() {
               </div>
 
               {isPhone && !otpSent && (
-                <button
+                <Button
                   type="button"
-                  className="btn btn-primary"
+                  variant="default"
                   disabled={loading}
                   onClick={handleSendOtp}
                 >
                   {loading ? "กำลังส่ง…" : "ส่ง OTP"}
-                </button>
+                </Button>
               )}
 
               {isPhone && otpSent && (
@@ -255,14 +256,15 @@ export default function AuthPage() {
               {error && <p className="auth-error">{error}</p>}
 
               {!(isPhone && !otpSent) && (
-                <button
+                <Button
                   type="submit"
-                  className="btn btn-primary auth-submit-btn"
+                  variant="default"
+                  className="auth-submit-btn"
                   disabled={loading || (isPhone && otpSent && (otp.length < 6 || countdown === 0))}
                 >
                   {loading ? "กำลังดำเนินการ…" : isPhone ? "ยืนยัน OTP" : "เข้าสู่ระบบ"}
                   {!loading && !isPhone && <ArrowRightIcon width={16} height={16} />}
-                </button>
+                </Button>
               )}
             </form>
 
@@ -368,10 +370,10 @@ export default function AuthPage() {
 
             {error && <p className="auth-error">{error}</p>}
 
-            <button type="submit" className="btn btn-primary auth-submit-btn" disabled={loading}>
+            <Button type="submit" variant="default" className="auth-submit-btn" disabled={loading}>
               {loading ? "กำลังดำเนินการ…" : "สร้างบัญชี"}
               {!loading && <ArrowRightIcon width={16} height={16} />}
-            </button>
+            </Button>
           </form>
 
           <div className="auth-card-footer">

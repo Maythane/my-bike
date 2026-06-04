@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { BIKE_SPECS } from "../../data/bikeSpecs";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   make: string;
@@ -21,14 +22,15 @@ export default function BikeSpecs({ make, model }: Props) {
 
   return (
     <>
-      <button
+      <Button
         type="button"
-        className="btn btn-ghost btn-sm"
+        variant="ghost"
+        size="sm"
         onClick={() => setOpen(true)}
         style={{ color: "var(--purple)" }}
       >
         ข้อมูลจำเพาะ {make} {model}
-      </button>
+      </Button>
 
       {open && (
         <div className="modal-overlay" onClick={() => setOpen(false)}>

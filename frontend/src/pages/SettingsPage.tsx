@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllMotorcycles } from "../api/motorcycles";
 import { fetchSettings, updateSettings } from "../api/settings";
@@ -54,8 +55,9 @@ export default function SettingsPage() {
   return (
     <div className="page">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-        <button
-          className="btn btn-ghost btn-sm"
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => {
             document.documentElement.dataset.navDir = "back";
             setTimeout(() => { delete document.documentElement.dataset.navDir; }, 500);
@@ -64,7 +66,7 @@ export default function SettingsPage() {
           style={{ fontSize: 13 }}
         >
           ← กลับ
-        </button>
+        </Button>
         <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--ink)", margin: 0 }}>
           ⚙️ Settings
         </h1>
@@ -172,13 +174,13 @@ export default function SettingsPage() {
 
       {/* Save button (for unit/timezone) */}
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <button
-          className="btn btn-primary"
+        <Button
+          variant="default"
           onClick={() => saveSettings()}
           disabled={isPending}
         >
           {isPending ? "กำลังบันทึก…" : "Save Settings"}
-        </button>
+        </Button>
         {saveMsg && (
           <span style={{ color: "var(--green)", fontSize: 13 }}>✓ {saveMsg}</span>
         )}
@@ -205,9 +207,9 @@ function BikeSockRow({
         <div className="settings-bike-name">{bikeName}</div>
         <div className="settings-bike-shock">{shockLabel}</div>
       </div>
-      <button className="btn btn-ghost btn-sm" onClick={onEdit} style={{ fontSize: 12 }}>
+      <Button variant="ghost" size="sm" onClick={onEdit} style={{ fontSize: 12 }}>
         แก้ไข
-      </button>
+      </Button>
     </div>
   );
 }

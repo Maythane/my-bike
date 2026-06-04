@@ -1,5 +1,6 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { createServiceLog, updateServiceLog, uploadServiceLogImage, deleteServiceLogImageById } from "../../api/logs";
 import { markReminderDone } from "../../api/reminders";
 import { getAllMotorcycles } from "../../api/motorcycles";
@@ -315,14 +316,14 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
         </div>{/* modal-body */}
 
         <div className="modal-actions">
-          <button className="btn btn-ghost" onClick={handleClose}>ยกเลิก</button>
-          <button
-            className="btn btn-primary"
+          <Button variant="ghost" onClick={handleClose}>ยกเลิก</Button>
+          <Button
+            variant="default"
             disabled={!effectiveBikeId || !form.name.trim() || String(form.mileage_at_service) === "" || isPending}
             onClick={submit}
           >
             {isPending ? "กำลังบันทึก…" : isEdit ? "บันทึกการแก้ไข" : "บันทึก"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

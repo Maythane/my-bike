@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getShockSetting, updateShockSetting, getShockChart } from "../api/shock";
 import { listPresets, createPreset, updatePreset, deletePreset, type ShockPreset } from "../api/shock_presets";
@@ -378,13 +379,14 @@ export default function ShockSettingsPage() {
                 {shockModel}
               </span>
             )}
-            <button
-              className="btn btn-ghost btn-sm"
+            <Button
+              variant="ghost"
+              size="sm"
               style={{ fontSize: 11, padding: "2px 10px", marginLeft: 2 }}
               onClick={() => activeBikeId && navigate(`/settings/bikes/${activeBikeId}/shock`, { viewTransition: true, state: { from: "shock-settings" } })}
             >
               เปลี่ยนโช้ค
-            </button>
+            </Button>
           </div>
           <p className="shock-page-subtitle" style={{ marginTop: 6 }}>ตาม chart น้ำหนักรวมของผู้ขับขี่และคนซ้อน</p>
         </div>
@@ -410,7 +412,7 @@ export default function ShockSettingsPage() {
       <section className="shock-preset-strip">
         <div className="shock-preset-strip-head">
           <span className="shock-page-kicker" style={{ fontSize: 11 }}>💾 Presets</span>
-          <button type="button" className="btn shock-preset-new-btn" onClick={openSaveSheet}>
+          <button type="button" className="shock-preset-new-btn" onClick={openSaveSheet}>
             + บันทึกใหม่
           </button>
         </div>
@@ -495,7 +497,7 @@ export default function ShockSettingsPage() {
 
         <button
           type="button"
-          className="btn shock-calc-btn"
+          className="shock-calc-btn"
           onClick={() => {
             const next = {
               rider: Number(riderInput || 0),
@@ -652,8 +654,8 @@ export default function ShockSettingsPage() {
                   {editPreset.name}
                 </h3>
               </div>
-              <button type="button" className="btn btn-ghost btn-sm modal-close"
-                onClick={() => { setEditPreset(null); setEditForm(null); }}>✕</button>
+              <Button type="button" variant="ghost" size="sm" className="modal-close"
+                onClick={() => { setEditPreset(null); setEditForm(null); }}>✕</Button>
             </div>
             <div className="modal-body">
               <div className="form-group">
@@ -716,18 +718,18 @@ export default function ShockSettingsPage() {
               </div>
             </div>
             <div className="modal-actions shock-edit-preset-actions">
-              <button type="button" className="btn btn-danger btn-sm"
+              <Button type="button" variant="destructive" size="sm"
                 onClick={async () => {
                   await handleDeletePreset(editPreset.id);
                   setEditPreset(null); setEditForm(null);
                 }}>
                 ลบ
-              </button>
-              <button type="button" className="btn btn-secondary"
+              </Button>
+              <Button type="button" variant="secondary"
                 onClick={() => { loadPreset(editPreset); setEditPreset(null); setEditForm(null); }}>
                 โหลดค่านี้
-              </button>
-              <button type="button" className="btn shock-calc-btn"
+              </Button>
+              <button type="button" className="shock-calc-btn"
                 style={{ flex: 1, marginTop: 0, minHeight: 44 }}
                 onClick={handleUpdate} disabled={saving || !editForm.name.trim()}>
                 {saving ? "กำลังบันทึก…" : "บันทึกการแก้ไข"}
@@ -746,7 +748,7 @@ export default function ShockSettingsPage() {
                 <p className="shock-results-kicker">บันทึก Preset</p>
                 <h3 className="shock-info-title">ค่าที่ตั้งจริง</h3>
               </div>
-              <button type="button" className="btn btn-ghost btn-sm modal-close" onClick={() => setShowSaveSheet(false)}>✕</button>
+              <Button type="button" variant="ghost" size="sm" className="modal-close" onClick={() => setShowSaveSheet(false)}>✕</Button>
             </div>
             <div className="modal-body">
               <div className="form-group">
@@ -819,8 +821,8 @@ export default function ShockSettingsPage() {
               </div>
             </div>
             <div className="modal-actions">
-              <button type="button" className="btn btn-secondary" onClick={() => setShowSaveSheet(false)}>ยกเลิก</button>
-              <button type="button" className="btn shock-calc-btn" style={{ flex: 1, marginTop: 0, minHeight: 44 }}
+              <Button type="button" variant="secondary" onClick={() => setShowSaveSheet(false)}>ยกเลิก</Button>
+              <button type="button" className="shock-calc-btn" style={{ flex: 1, marginTop: 0, minHeight: 44 }}
                 onClick={handleSave} disabled={saving || !saveForm.name.trim()}>
                 {saving ? "กำลังบันทึก…" : "💾  บันทึก Preset"}
               </button>
@@ -837,7 +839,7 @@ export default function ShockSettingsPage() {
                 <p className="shock-results-kicker">How To Read</p>
                 <h3 className="shock-info-title">อ่านค่าโช้คยังไง</h3>
               </div>
-              <button type="button" className="btn btn-ghost btn-sm" onClick={() => setShowInfo(false)}>ปิด</button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => setShowInfo(false)}>ปิด</Button>
             </div>
             <div className="modal-body shock-info-body">
               <div className="shock-info-card">

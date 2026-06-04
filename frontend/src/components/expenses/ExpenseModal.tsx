@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createExpense, updateExpense } from "../../api/expenses";
 import { getAllMotorcycles } from "../../api/motorcycles";
@@ -212,10 +213,10 @@ export default function ExpenseModal({ bikeId, expense, onClose }: Props) {
         </div>
 
         <div className="modal-actions">
-          <button type="button" className="btn btn-ghost" onClick={onClose}>ยกเลิก</button>
-          <button className="btn btn-primary" disabled={!canSave || saveMut.isPending}>
+          <Button type="button" variant="ghost" onClick={onClose}>ยกเลิก</Button>
+          <Button variant="default" disabled={!canSave || saveMut.isPending}>
             {saveMut.isPending ? "กำลังบันทึก…" : expense ? "บันทึกการแก้ไข" : "เพิ่มค่าใช้จ่าย"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>,

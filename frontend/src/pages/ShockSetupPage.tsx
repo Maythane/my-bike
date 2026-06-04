@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getShockSetting, updateShockSetting, lookupShockChart } from "../api/shock";
 import { fetchShockBrands } from "../api/shockBrands";
@@ -84,14 +85,15 @@ export default function ShockSetupPage() {
     <div className="page">
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-        <button
-          className="btn btn-ghost btn-sm"
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => {
             document.documentElement.dataset.navDir = "back";
             setTimeout(() => { delete document.documentElement.dataset.navDir; }, 500);
             navigate(backTo, { viewTransition: true });
           }}
-        >← กลับ</button>
+        >← กลับ</Button>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--ink)", margin: 0 }}>
             ตั้งค่าโช้ค
@@ -168,14 +170,14 @@ export default function ShockSetupPage() {
         {allFilled && (
           <div>
             {!lookupResult ? (
-              <button
-                className="btn btn-primary"
+              <Button
+                variant="default"
                 style={{ width: "100%" }}
                 onClick={() => lookupMut.mutate()}
                 disabled={lookupMut.isPending}
               >
                 {lookupMut.isPending ? "กำลังค้นหา…" : "ค้นหาข้อมูล Preset"}
-              </button>
+              </Button>
             ) : lookupResult.found && lookupResult.bands ? (
               <PresetsFound
                 bands={lookupResult.bands}
@@ -296,9 +298,9 @@ function PresetsFound({ bands, shockBrand, shockModel, onSave, saving, saved }: 
       {saved ? (
         <p style={{ color: "var(--green)", fontSize: 14, textAlign: "center" }}>✓ บันทึกแล้ว กลับไปหน้าก่อนหน้า…</p>
       ) : (
-        <button className="btn btn-primary" onClick={onSave} disabled={saving}>
+        <Button variant="default" onClick={onSave} disabled={saving}>
           {saving ? "กำลังบันทึก…" : `บันทึก ${shockBrand}${shockModel ? ` ${shockModel}` : ""} ให้รถนี้`}
-        </button>
+        </Button>
       )}
     </div>
   );
@@ -329,9 +331,9 @@ function NoPresetFound({ shockBrand, shockModel, onSave, saving, saved }: {
       {saved ? (
         <p style={{ color: "var(--green)", fontSize: 14, textAlign: "center" }}>✓ บันทึกแล้ว กลับไปหน้าก่อนหน้า…</p>
       ) : (
-        <button className="btn btn-secondary" onClick={onSave} disabled={saving}>
+        <Button variant="secondary" onClick={onSave} disabled={saving}>
           {saving ? "กำลังบันทึก…" : `บันทึก ${shockBrand}${shockModel ? ` ${shockModel}` : ""} ให้รถนี้อยู่ดี`}
-        </button>
+        </Button>
       )}
     </div>
   );

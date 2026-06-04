@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { createTask, createTaskFromTemplate } from "../../api/tasks";
 import { getTemplates } from "../../api/templates";
 import type { TaskTemplate } from "../../types";
@@ -112,14 +113,14 @@ export default function TaskForm({ bikeId, onClose }: Props) {
               </div>
             ))}
             <div className="modal-actions">
-              <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-              <button
-                className="btn btn-primary"
+              <Button variant="ghost" onClick={onClose}>Cancel</Button>
+              <Button
+                variant="default"
                 disabled={!selectedTemplate || templateMut.isPending}
                 onClick={() => templateMut.mutate()}
               >
                 Add Task
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -145,14 +146,14 @@ export default function TaskForm({ bikeId, onClose }: Props) {
               <textarea value={form.notes} onChange={(e) => set("notes", e.target.value)} rows={2} placeholder="e.g. Use 10W-40 synthetic" />
             </div>
             <div className="modal-actions">
-              <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-              <button
-                className="btn btn-primary"
+              <Button variant="ghost" onClick={onClose}>Cancel</Button>
+              <Button
+                variant="default"
                 disabled={!form.name || (!form.interval_km && !form.interval_months) || customMut.isPending}
                 onClick={() => customMut.mutate()}
               >
                 Add Task
-              </button>
+              </Button>
             </div>
           </>
         )}

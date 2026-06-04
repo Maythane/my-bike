@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getReminders, updateReminders, markReminderDone, createReminder, deleteReminder } from "../api/reminders";
 import { getAllMotorcycles } from "../api/motorcycles";
@@ -93,26 +94,26 @@ export default function ServiceRemindersPage() {
     <>
     <div className="page">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-        <button className="btn btn-ghost btn-sm" onClick={() => {
+        <Button variant="ghost" size="sm" onClick={() => {
           document.documentElement.dataset.navDir = "back";
           setTimeout(() => { delete document.documentElement.dataset.navDir; }, 500);
           navigate("/", { viewTransition: true });
-        }}>← กลับ</button>
+        }}>← กลับ</Button>
         <div style={{ flex: 1 }}>
           <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--ink)", margin: 0 }}>รอบซ่อมบำรุง</h1>
           <p style={{ fontSize: 13, color: "var(--slate)", margin: "2px 0 0" }}>{bikeName}</p>
         </div>
         {!editMode ? (
-          <button className="btn btn-sm" style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)" }}
-            onClick={enterEdit}>ตั้งค่า</button>
+          <Button size="sm" style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)" }}
+            onClick={enterEdit}>ตั้งค่า</Button>
         ) : (
           <div style={{ display: "flex", gap: 8, flexDirection: "column", alignItems: "flex-end" }}>
             {saveError && <div style={{ fontSize: 11, color: "var(--red)", textAlign: "right" }}>{saveError}</div>}
             <div style={{ display: "flex", gap: 8 }}>
-              <button className="btn btn-sm" style={{ color: "var(--slate)" }} onClick={cancelEdit}>ยกเลิก</button>
-              <button className="btn btn-primary btn-sm" onClick={() => saveMut.mutate()} disabled={saveMut.isPending}>
+              <Button size="sm" style={{ color: "var(--slate)" }} onClick={cancelEdit}>ยกเลิก</Button>
+              <Button variant="default" size="sm" onClick={() => saveMut.mutate()} disabled={saveMut.isPending}>
                 {saveMut.isPending ? "กำลังบันทึก…" : "บันทึก"}
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -202,22 +203,22 @@ export default function ServiceRemindersPage() {
                     />
                     <span>กม.</span>
                     {r.is_custom && (
-                      <button
-                        className="btn btn-sm"
+                      <Button
+                        size="sm"
                         style={{ color: "var(--red)", borderColor: "transparent", background: "transparent", padding: "2px 4px", fontSize: 15 }}
                         onClick={() => deleteMut.mutate(r.item_key)}
                         disabled={deleteMut.isPending}
                       >
                         ✕
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
               )}
 
               {!editMode && displayEnabled && (
-                <button
-                  className="btn btn-sm"
+                <Button
+                  size="sm"
                   style={{ width: "100%", marginTop: 4, color: "var(--slate)", borderColor: "var(--hairline)" }}
                   onClick={() => {
                     setConfirmingKey(r.item_key);
@@ -225,7 +226,7 @@ export default function ServiceRemindersPage() {
                   }}
                 >
                   บันทึกการเปลี่ยน / ซ่อม
-                </button>
+                </Button>
               )}
             </div>
           );
@@ -255,14 +256,15 @@ export default function ServiceRemindersPage() {
                 }}
               />
               <span>กม.</span>
-              <button
-                className="btn btn-primary btn-sm"
+              <Button
+                variant="default"
+                size="sm"
                 style={{ marginLeft: "auto" }}
                 disabled={!newName.trim() || addMut.isPending}
                 onClick={() => addMut.mutate()}
               >
                 {addMut.isPending ? "…" : "เพิ่ม"}
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -314,21 +316,22 @@ export default function ServiceRemindersPage() {
 
             {doneError && <div style={{ fontSize: 11, color: "var(--red)" }}>{doneError}</div>}
             <div style={{ display: "flex", gap: 8 }}>
-              <button
-                className="btn btn-sm"
+              <Button
+                size="sm"
                 style={{ flex: 1, color: "var(--slate)" }}
                 onClick={() => { setConfirmingKey(null); setConfirmMileage(""); setDoneError(null); }}
               >
                 ยกเลิก
-              </button>
-              <button
-                className="btn btn-primary btn-sm"
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
                 style={{ flex: 1 }}
                 disabled={!confirmMileage || doneMut.isPending}
                 onClick={() => doneMut.mutate({ itemKey: confirmingKey!, mileage: Number(confirmMileage) })}
               >
                 {doneMut.isPending ? "กำลังบันทึก…" : "ยืนยัน"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

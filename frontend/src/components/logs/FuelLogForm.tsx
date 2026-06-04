@@ -1,5 +1,6 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { createFuelLog, updateFuelLog, uploadFuelLogImage, deleteFuelLogImageById } from "../../api/fuel";
 import { getAllMotorcycles } from "../../api/motorcycles";
 import { useGeoLocation } from "../../hooks/useGeoLocation";
@@ -368,10 +369,10 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
         </div>{/* modal-body */}
 
         <div className="modal-actions">
-          <button className="btn btn-ghost" onClick={handleClose}>ยกเลิก</button>
-          <button className="btn btn-primary" disabled={!valid || isPending} onClick={submit}>
+          <Button variant="ghost" onClick={handleClose}>ยกเลิก</Button>
+          <Button variant="default" disabled={!valid || isPending} onClick={submit}>
             {isPending ? "กำลังบันทึก…" : isEdit ? "บันทึกการแก้ไข" : "บันทึก"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { createMotorcycleSimple, updateMotorcycle } from "../../api/motorcycles";
 import type { Motorcycle } from "../../types";
 
@@ -127,10 +128,10 @@ export default function BikeForm({ bike, onClose }: Props) {
         </div>{/* modal-body */}
 
         <div className="modal-actions">
-          <button className="btn btn-ghost" onClick={onClose}>ยกเลิก</button>
-          <button className="btn btn-primary" disabled={!isValid || mut.isPending} onClick={() => mut.mutate()}>
+          <Button variant="ghost" onClick={onClose}>ยกเลิก</Button>
+          <Button variant="default" disabled={!isValid || mut.isPending} onClick={() => mut.mutate()}>
             {bike ? "บันทึก" : "เพิ่มรถ"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

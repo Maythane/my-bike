@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   src: string;
@@ -105,7 +106,7 @@ export default function ImageCropper({
       >
         <div style={{ padding: "16px 20px 12px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontWeight: 700, fontSize: 15 }}>ปรับตำแหน่งภาพ</span>
-          <button className="btn btn-ghost btn-sm modal-close" onClick={onCancel}>✕</button>
+          <Button variant="ghost" size="sm" className="modal-close" onClick={onCancel}>✕</Button>
         </div>
 
         <div ref={containerRef} style={{ position: "relative", lineHeight: 0, cursor: ready ? "grab" : "default" }}>
@@ -139,8 +140,8 @@ export default function ImageCropper({
         </div>
 
         <div style={{ padding: "12px 16px 18px", display: "flex", gap: 10 }}>
-          <button className="btn btn-secondary" style={{ flex: 1 }} onClick={onCancel}>ยกเลิก</button>
-          <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleConfirm} disabled={!ready}>ใช้ภาพนี้</button>
+          <Button variant="secondary" style={{ flex: 1 }} onClick={onCancel}>ยกเลิก</Button>
+          <Button variant="default" style={{ flex: 1 }} onClick={handleConfirm} disabled={!ready}>ใช้ภาพนี้</Button>
         </div>
       </div>
     </div>

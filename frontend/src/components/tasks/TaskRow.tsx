@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTask } from "../../api/tasks";
 import type { TaskWithStatus } from "../../types";
@@ -117,15 +118,15 @@ export default function TaskRow({ task, currentMileage }: Props) {
               </div>
             )}
             <div style={{ display: "flex", gap: 8 }}>
-              <button
-                className="btn btn-primary"
+              <Button
+                variant="default"
                 style={{ fontSize: 13, padding: "7px 14px" }}
                 onClick={(e) => { e.stopPropagation(); setShowLog(true); }}
               >
                 + บันทึกการเซอร์วิส
-              </button>
-              <button
-                className="btn btn-danger"
+              </Button>
+              <Button
+                variant="destructive"
                 style={{ fontSize: 13, padding: "7px 14px" }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -136,7 +137,7 @@ export default function TaskRow({ task, currentMileage }: Props) {
                 }}
               >
                 ลบ
-              </button>
+              </Button>
             </div>
           </div>
         )}

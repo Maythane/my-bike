@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllMotorcycles, uploadBikeImage, deleteBikeImage, deleteMotorcycle } from "../api/motorcycles";
 import { getFuelLogs, deleteFuelLog, getFuelEconomy } from "../api/fuel";
@@ -151,7 +152,7 @@ export default function GaragePage() {
           <div className="empty-state-icon">🏍️</div>
           <h3>ยังไม่มีรถ</h3>
           <p>เพิ่มรถเพื่อเริ่มบันทึกประวัติการบำรุงรักษา</p>
-          <button className="btn btn-primary" onClick={() => setShowForm(true)}>+ เพิ่มรถคันแรก</button>
+          <Button variant="default" onClick={() => setShowForm(true)}>+ เพิ่มรถคันแรก</Button>
         </div>
         {showForm && <BikeForm onClose={() => setShowForm(false)} />}
       </div>
@@ -281,14 +282,14 @@ export default function GaragePage() {
                   </div>
                 </div>
                 <div className="bike-detail-actions">
-                  <button className="btn btn-ghost btn-sm" onClick={() => setShowEditBike(true)}>แก้ไข</button>
-                  <button className="btn btn-danger btn-sm bike-delete-desktop"
+                  <Button variant="ghost" size="sm" onClick={() => setShowEditBike(true)}>แก้ไข</Button>
+                  <Button variant="destructive" size="sm" className="bike-delete-desktop"
                     onClick={async () => {
                       if (await confirm(`ข้อมูลรถและประวัติการบำรุงรักษาทั้งหมดจะถูกลบด้วย`, { title: `ลบรถ "${selectedBike.nickname ?? selectedBike.model}"?`, confirmLabel: "ลบรถ" }))
                         deleteBikeMut.mutate();
-                    }}>ลบ</button>
+                    }}>ลบ</Button>
                   <div className="bike-overflow-wrap bike-delete-mobile">
-                    <button className="btn btn-ghost btn-sm bike-overflow-btn" onClick={() => setShowOverflow((v) => !v)} aria-label="เมนูเพิ่มเติม">⋮</button>
+                    <Button variant="ghost" size="sm" className="bike-overflow-btn" onClick={() => setShowOverflow((v) => !v)} aria-label="เมนูเพิ่มเติม">⋮</Button>
                     {showOverflow && (
                       <>
                         <div className="bike-overflow-backdrop" onClick={() => setShowOverflow(false)} />
@@ -338,15 +339,15 @@ export default function GaragePage() {
               </div>
 
               <div className="bike-detail-primary-actions">
-                <button className="btn btn-primary" style={{ fontSize: 14 }} onClick={() => setShowFuelForm(true)}>
+                <Button variant="default" style={{ fontSize: 14 }} onClick={() => setShowFuelForm(true)}>
                   ⛽ บันทึกการเติมน้ำมัน
-                </button>
-                <button className="btn btn-secondary" style={{ fontSize: 14 }} onClick={() => setShowLogForm(true)}>
+                </Button>
+                <Button variant="secondary" style={{ fontSize: 14 }} onClick={() => setShowLogForm(true)}>
                   🔧 บันทึกการบำรุงรักษา
-                </button>
-                <button className="btn btn-secondary" style={{ fontSize: 14 }} onClick={handleShockClick} disabled={shockLoading}>
+                </Button>
+                <Button variant="secondary" style={{ fontSize: 14 }} onClick={handleShockClick} disabled={shockLoading}>
                   {shockLoading ? "…" : "⚙️ ตั้งค่าโช้ค"}
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -373,13 +374,13 @@ export default function GaragePage() {
                       <div style={{ fontSize: 11, color: statusColor, marginTop: 1 }}>{statusText}</div>
                     </div>
                   </div>
-                  <button
-                    className="btn btn-sm"
+                  <Button
+                    size="sm"
                     style={{ fontSize: 12, color: "var(--slate)", minHeight: "44px", padding: "0 14px" }}
                     onClick={() => navForward(navigate, `/bikes/${bid}/reminders`)}
                   >
                     จัดการ →
-                  </button>
+                  </Button>
                 </div>
               </div>
             );
@@ -415,9 +416,9 @@ export default function GaragePage() {
                   <div className="empty-state-icon">⛽</div>
                   <h3>ยังไม่มีข้อมูลเชื้อเพลิง</h3>
                   <p>บันทึกการเติมน้ำมันเพื่อคำนวณอัตราสิ้นเปลือง</p>
-                  <button className="btn btn-primary" style={{ fontSize: 13 }} onClick={() => setShowFuelForm(true)}>
+                  <Button variant="default" style={{ fontSize: 13 }} onClick={() => setShowFuelForm(true)}>
                     + บันทึกการเติมน้ำมัน
-                  </button>
+                  </Button>
                 </div>
               )}
               {fuelLogs.map((fl, idx) => (
@@ -437,9 +438,9 @@ export default function GaragePage() {
                   <div className="empty-state-icon">🔧</div>
                   <h3>ยังไม่มีประวัติการบำรุงรักษา</h3>
                   <p>เริ่มบันทึกเพื่อติดตามประวัติรถของคุณ</p>
-                  <button className="btn btn-primary" style={{ fontSize: 13 }} onClick={() => setShowLogForm(true)}>
+                  <Button variant="default" style={{ fontSize: 13 }} onClick={() => setShowLogForm(true)}>
                     + บันทึกการบำรุงรักษา
-                  </button>
+                  </Button>
                 </div>
               )}
               {serviceLogs.map((log, idx) => (

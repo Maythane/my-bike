@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, type FormEvent, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createPortal } from "react-dom";
 import {
@@ -226,14 +227,15 @@ export default function AccountPage() {
     <div className="page">
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-        <button
-          className="btn btn-ghost btn-sm"
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => { document.documentElement.dataset.navDir = "back"; navigate(-1); }}
           aria-label="กลับ"
           style={{ padding: "6px 8px" }}
         >
           <BackIcon />
-        </button>
+        </Button>
         <h1 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "var(--ink)" }}>บัญชีของฉัน</h1>
       </div>
 
@@ -297,9 +299,9 @@ export default function AccountPage() {
               />
               {error && <p className="auth-error" role="alert">{error}</p>}
               {success && <p className="auth-success" role="status">{success}</p>}
-              <button className="btn btn-primary btn-sm" disabled={loading}>
+              <Button variant="default" size="sm" disabled={loading}>
                 {loading ? "กำลังบันทึก…" : "บันทึก"}
-              </button>
+              </Button>
             </form>
           </div>
         )}
@@ -335,9 +337,9 @@ export default function AccountPage() {
               <p style={{ fontSize: 11, color: "var(--slate)", margin: 0 }}>a–z, 0–9, _ · 3–30 ตัวอักษร</p>
               {error && <p className="auth-error" role="alert">{error}</p>}
               {success && <p className="auth-success" role="status">{success}</p>}
-              <button className="btn btn-primary btn-sm" disabled={loading}>
+              <Button variant="default" size="sm" disabled={loading}>
                 {loading ? "กำลังบันทึก…" : "บันทึก"}
-              </button>
+              </Button>
             </form>
           </div>
         )}
@@ -372,9 +374,9 @@ export default function AccountPage() {
               />
               {error && <p className="auth-error" role="alert">{error}</p>}
               {success && <p className="auth-success" role="status">{success}</p>}
-              <button className="btn btn-primary btn-sm" disabled={loading}>
+              <Button variant="default" size="sm" disabled={loading}>
                 {loading ? "กำลังบันทึก…" : user?.email ? "อัปเดต Email" : "เพิ่ม Email"}
-              </button>
+              </Button>
             </form>
           </div>
         )}
@@ -443,9 +445,9 @@ export default function AccountPage() {
               </div>
               {error && <p className="auth-error" role="alert">{error}</p>}
               {success && <p className="auth-success" role="status">{success}</p>}
-              <button className="btn btn-primary btn-sm" disabled={loading}>
+              <Button variant="default" size="sm" disabled={loading}>
                 {loading ? "กำลังเปลี่ยน…" : "เปลี่ยน Password"}
-              </button>
+              </Button>
             </form>
           </div>
         )}
@@ -481,14 +483,15 @@ export default function AccountPage() {
                   autoFocus
                 />
                 {error && <p className="auth-error" role="alert">{error}</p>}
-                <button
+                <Button
                   type="button"
-                  className="btn btn-primary btn-sm"
+                  variant="default"
+                  size="sm"
                   onClick={handlePhoneSend}
                   disabled={loading || !phone.trim()}
                 >
                   {loading ? "กำลังส่ง…" : "ส่ง OTP"}
-                </button>
+                </Button>
               </div>
             ) : (
               <form onSubmit={handlePhoneConfirm} className="auth-form">
@@ -516,13 +519,14 @@ export default function AccountPage() {
                 </div>
                 {error && <p className="auth-error" role="alert">{error}</p>}
                 {success && <p className="auth-success" role="status">{success}</p>}
-                <button
+                <Button
                   type="submit"
-                  className="btn btn-primary btn-sm"
+                  variant="default"
+                  size="sm"
                   disabled={loading || otpCode.length < 6 || countdown === 0}
                 >
                   {loading ? "กำลังยืนยัน…" : "ยืนยัน"}
-                </button>
+                </Button>
               </form>
             )}
           </div>
@@ -531,13 +535,13 @@ export default function AccountPage() {
       </div>
 
       {/* Logout */}
-      <button
-        className="btn btn-danger"
+      <Button
+        variant="destructive"
         style={{ width: "100%", marginTop: 8, marginBottom: 32 }}
         onClick={() => logout()}
       >
         ออกจากระบบ
-      </button>
+      </Button>
 
       {/* ImageCropper portal */}
       {cropSrc && createPortal(

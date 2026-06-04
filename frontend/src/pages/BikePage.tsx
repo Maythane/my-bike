@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getMotorcycle, deleteMotorcycle, uploadBikeImage, deleteBikeImage } from "../api/motorcycles";
 import { getShockSetting } from "../api/shock";
@@ -220,22 +221,26 @@ export default function BikePage() {
                 </div>
               </div>
               <div className="bike-detail-actions">
-                <button className="btn btn-ghost btn-sm" onClick={() => setShowEditBike(true)}>แก้ไข</button>
+                <Button variant="ghost" size="sm" onClick={() => setShowEditBike(true)}>แก้ไข</Button>
                 {/* desktop: show delete inline */}
-                <button
-                  className="btn btn-danger btn-sm bike-delete-desktop"
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="bike-delete-desktop"
                   onClick={async () => {
                     if (await confirm(`ข้อมูลรถและประวัติการบำรุงรักษาทั้งหมดจะถูกลบด้วย`, { title: `ลบรถ "${bike.nickname ?? bike.model}"?`, confirmLabel: "ลบรถ" }))
                       deleteBikeMut.mutate();
                   }}
-                >ลบ</button>
+                >ลบ</Button>
                 {/* mobile: overflow ⋮ menu */}
                 <div className="bike-overflow-wrap bike-delete-mobile">
-                  <button
-                    className="btn btn-ghost btn-sm bike-overflow-btn"
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="bike-overflow-btn"
                     onClick={() => setShowOverflow((v) => !v)}
                     aria-label="เมนูเพิ่มเติม"
-                  >⋮</button>
+                  >⋮</Button>
                   {showOverflow && (
                     <>
                       <div className="bike-overflow-backdrop" onClick={() => setShowOverflow(false)} />
@@ -287,15 +292,15 @@ export default function BikePage() {
             </div>
 
             <div className="bike-detail-primary-actions">
-              <button className="btn btn-primary" style={{ fontSize: 14 }} onClick={() => setShowFuelForm(true)}>
+              <Button variant="default" style={{ fontSize: 14 }} onClick={() => setShowFuelForm(true)}>
                 ⛽ บันทึกการเติมน้ำมัน
-              </button>
-              <button className="btn btn-secondary" style={{ fontSize: 14 }} onClick={() => setShowLogForm(true)}>
+              </Button>
+              <Button variant="secondary" style={{ fontSize: 14 }} onClick={() => setShowLogForm(true)}>
                 🔧 บันทึกการบำรุงรักษา
-              </button>
-              <button className="btn btn-secondary" style={{ fontSize: 14 }} onClick={handleShockClick} disabled={shockLoading}>
+              </Button>
+              <Button variant="secondary" style={{ fontSize: 14 }} onClick={handleShockClick} disabled={shockLoading}>
                 {shockLoading ? "…" : "⚙️ ตั้งค่าโช้ค"}
-              </button>
+              </Button>
             </div>
             </div>{/* end padding div */}
           </div>
@@ -320,10 +325,10 @@ export default function BikePage() {
                       <div style={{ fontSize: 11, color: statusColor, marginTop: 1 }}>{statusText}</div>
                     </div>
                   </div>
-                  <button className="btn btn-sm" style={{ fontSize: 11, color: "var(--slate)" }}
+                  <Button size="sm" style={{ fontSize: 11, color: "var(--slate)" }}
                     onClick={() => navigate(`/bikes/${bid}/reminders`, { viewTransition: true })}>
                     จัดการ →
-                  </button>
+                  </Button>
                 </div>
               </div>
             );
@@ -337,13 +342,13 @@ export default function BikePage() {
                   💰 ค่าใช้จ่ายเดือนนี้
                 </span>
                 <div style={{ display: "flex", gap: 6 }}>
-                  <button className="btn btn-sm"
+                  <Button size="sm"
                     style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)", fontSize: 11 }}
-                    onClick={() => setShowExpenseModal(true)}>+ เพิ่ม</button>
-                  <button className="btn btn-sm" style={{ fontSize: 11, color: "var(--slate)" }}
+                    onClick={() => setShowExpenseModal(true)}>+ เพิ่ม</Button>
+                  <Button size="sm" style={{ fontSize: 11, color: "var(--slate)" }}
                     onClick={() => navigate(`/expenses`, { state: { bikeId: bid }, viewTransition: true })}>
                     ดูทั้งหมด →
-                  </button>
+                  </Button>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>

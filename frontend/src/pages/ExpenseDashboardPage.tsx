@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { getExpenseSummary } from "../api/expenses";
 import { getAllMotorcycles } from "../api/motorcycles";
 import type { ExpenseSummary, MonthBucket, CategoryTotal } from "../types";
@@ -92,11 +93,12 @@ export default function ExpenseDashboardPage() {
             {periodLabel} · {bikeLabel}
           </p>
         </div>
-        <button
-          className="btn btn-sm expense-add-button"
+        <Button
+          size="sm"
+          className="expense-add-button"
           style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)" }}
           onClick={() => setShowModal(true)}
-        >+ เพิ่มค่าใช้จ่าย</button>
+        >+ เพิ่มค่าใช้จ่าย</Button>
       </div>
 
       {/* Compact filter card */}
@@ -191,9 +193,9 @@ export default function ExpenseDashboardPage() {
           <div className="empty-state-icon">!</div>
           <h3>โหลดค่าใช้จ่ายไม่สำเร็จ</h3>
           <p>ข้อมูลยังอยู่ครบ ลองเปลี่ยนตัวกรองหรือโหลดหน้านี้ใหม่อีกครั้ง</p>
-          <button className="btn btn-secondary" onClick={() => window.location.reload()}>
+          <Button variant="secondary" onClick={() => window.location.reload()}>
             โหลดใหม่
-          </button>
+          </Button>
         </div>
       )}
 
@@ -248,9 +250,9 @@ export default function ExpenseDashboardPage() {
           <div className="empty-state-icon">฿</div>
           <h3>ยังไม่มีค่าใช้จ่ายในช่วงนี้</h3>
           <p>เริ่มจากบันทึกประกัน ต่อทะเบียน อะไหล่ หรือค่าใช้จ่ายอื่นที่ไม่ใช่น้ำมัน</p>
-          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+          <Button variant="default" onClick={() => setShowModal(true)}>
             เพิ่มค่าใช้จ่าย
-          </button>
+          </Button>
         </div>
       )}
 
