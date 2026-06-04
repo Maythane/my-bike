@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface Props {
   src: string;
@@ -98,15 +99,11 @@ export default function ImageCropper({
   };
 
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div
-        className="modal-box"
-        style={{ padding: 0, overflow: "hidden", maxWidth: 480, width: "calc(100% - 32px)" }}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Dialog open onOpenChange={(open) => !open && onCancel()}>
+      <DialogContent className="p-0 overflow-hidden max-w-[480px]">
         <div style={{ padding: "16px 20px 12px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontWeight: 700, fontSize: 15 }}>ปรับตำแหน่งภาพ</span>
-          <Button variant="ghost" size="sm" className="modal-close" onClick={onCancel}>✕</Button>
+          <Button variant="ghost" size="sm" onClick={onCancel}>✕</Button>
         </div>
 
         <div ref={containerRef} style={{ position: "relative", lineHeight: 0, cursor: ready ? "grab" : "default" }}>
@@ -143,7 +140,7 @@ export default function ImageCropper({
           <Button variant="secondary" style={{ flex: 1 }} onClick={onCancel}>ยกเลิก</Button>
           <Button variant="default" style={{ flex: 1 }} onClick={handleConfirm} disabled={!ready}>ใช้ภาพนี้</Button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

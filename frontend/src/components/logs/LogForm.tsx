@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import client from "../../api/client";
 import type { ServiceLog } from "../../types";
 import type { TaskWithStatus } from "../../types";
@@ -45,47 +46,48 @@ export default function LogForm({ task, currentMileage, onClose }: Props) {
   });
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <span className="modal-title">Log: {task.name}</span>
-          <button className="modal-close" onClick={onClose}>×</button>
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Log: {task.name}</DialogTitle>
+        </DialogHeader>
+
+        <div className="px-6 py-4">
+          <div className="form-row">
+            <div className="form-group">
+              <label>Date</label>
+              <input type="date" value={form.date_performed} onChange={(e) => set("date_performed", e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label>Mileage at Service</label>
+              <input type="number" value={form.mileage_at_service} onChange={(e) => set("mileage_at_service", +e.target.value)} />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Cost (optional)</label>
+              <input type="number" step="0.01" value={form.cost} onChange={(e) => set("cost", e.target.value)} placeholder="500.00" />
+            </div>
+            <div className="form-group">
+              <label>Location (optional)</label>
+              <input value={form.location} onChange={(e) => set("location", e.target.value)} placeholder="Shop name" />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Notes (optional)</label>
+            <textarea value={form.notes} onChange={(e) => set("notes", e.target.value)} rows={2} placeholder="Any observations..." />
+          </div>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label>Date</label>
-            <input type="date" value={form.date_performed} onChange={(e) => set("date_performed", e.target.value)} />
-          </div>
-          <div className="form-group">
-            <label>Mileage at Service</label>
-            <input type="number" value={form.mileage_at_service} onChange={(e) => set("mileage_at_service", +e.target.value)} />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label>Cost (optional)</label>
-            <input type="number" step="0.01" value={form.cost} onChange={(e) => set("cost", e.target.value)} placeholder="500.00" />
-          </div>
-          <div className="form-group">
-            <label>Location (optional)</label>
-            <input value={form.location} onChange={(e) => set("location", e.target.value)} placeholder="Shop name" />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Notes (optional)</label>
-          <textarea value={form.notes} onChange={(e) => set("notes", e.target.value)} rows={2} placeholder="Any observations..." />
-        </div>
-
-        <div className="modal-actions">
+        <DialogFooter>
           <Button variant="ghost" onClick={onClose}>Cancel</Button>
           <Button variant="default" disabled={mut.isPending} onClick={() => mut.mutate()}>
             Save Log
           </Button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

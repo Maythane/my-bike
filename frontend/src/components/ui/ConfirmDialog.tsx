@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 
 const WarningIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -26,8 +27,8 @@ export default function ConfirmDialog({
   danger = true,
 }: Props) {
   return (
-    <div className="modal-overlay" onClick={onCancel} style={{ alignItems: "center" }}>
-      <div className="modal modal-plain confirm-dialog" onClick={(e) => e.stopPropagation()}>
+    <Dialog open onOpenChange={(open) => !open && onCancel()}>
+      <DialogContent className="max-w-[360px]">
         <div className="confirm-dialog-body">
           {danger && (
             <div className="confirm-dialog-icon">
@@ -39,7 +40,7 @@ export default function ConfirmDialog({
             <p className="confirm-dialog-message">{message}</p>
           </div>
         </div>
-        <div className="confirm-dialog-footer">
+        <DialogFooter>
           <Button variant="ghost" onClick={onCancel}>ยกเลิก</Button>
           <Button
             variant={danger ? "destructive" : "default"}
@@ -48,8 +49,8 @@ export default function ConfirmDialog({
           >
             {confirmLabel}
           </Button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

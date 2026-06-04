@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { createPortal } from "react-dom";
 import {
   fetchMe,
   fetchUpdateDisplayName,
@@ -536,8 +535,8 @@ export default function AccountPage() {
         ออกจากระบบ
       </Button>
 
-      {/* ImageCropper portal */}
-      {cropSrc && createPortal(
+      {/* ImageCropper dialog */}
+      {cropSrc && (
         <ImageCropper
           src={cropSrc}
           aspectRatio={1}
@@ -545,8 +544,7 @@ export default function AccountPage() {
           quality={0.82}
           onConfirm={handleAvatarCropConfirm}
           onCancel={handleAvatarCropCancel}
-        />,
-        document.body
+        />
       )}
     </div>
   );

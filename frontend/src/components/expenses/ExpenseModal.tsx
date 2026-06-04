@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createExpense, updateExpense } from "../../api/expenses";
 import { getAllMotorcycles } from "../../api/motorcycles";
@@ -77,149 +77,147 @@ export default function ExpenseModal({ bikeId, expense, onClose }: Props) {
     && !bikesLoading
     && !bikesError;
 
-  return createPortal(
-    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <form
-        className="modal modal-form expense-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="expense-modal-title"
-        onClick={(e) => e.stopPropagation()}
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (canSave) saveMut.mutate();
-        }}
-      >
-        <div className="modal-header">
-          <h2 id="expense-modal-title" className="modal-title">
+  return (
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>
             {expense ? "แก้ไขค่าใช้จ่าย" : "เพิ่มค่าใช้จ่าย"}
-          </h2>
-          <button className="modal-close" type="button" onClick={onClose} aria-label="ปิดหน้าต่าง">×</button>
-        </div>
+          </DialogTitle>
+        </DialogHeader>
 
-        <div className="modal-body">
-          {bikesError && (
-            <div className="expense-inline-error" role="alert">
-              โหลดรายชื่อรถไม่สำเร็จ ลองปิดแล้วเปิดใหม่อีกครั้ง
-            </div>
-          )}
+        <form
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="expense-modal-title"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (canSave) saveMut.mutate();
+          }}
+        >
+          <div className="px-6 py-4">
+            {bikesError && (
+              <div className="expense-inline-error" role="alert">
+                โหลดรายชื่อรถไม่สำเร็จ ลองปิดแล้วเปิดใหม่อีกครั้ง
+              </div>
+            )}
 
-          {!bikeId && (
+            {!bikeId && (
+              <div className="form-group">
+                <label className="expense-field-label" htmlFor="expense-bike">รถมอเตอร์ไซค์</label>
+                <select
+                  id="expense-bike"
+                  className="expense-field"
+                  value={selectedBike}
+                  disabled={bikesLoading || bikes.length === 0}
+                  onChange={(e) => setSelectedBike(Number(e.target.value))}
+                >
+                  {bikesLoading && <option value={0}>กำลังโหลดรถ...</option>}
+                  {!bikesLoading && bikes.length === 0 && <option value={0}>ยังไม่มีรถ</option>}
+                  {bikes.map((b) => (
+                    <option key={b.id} value={b.id}>{b.nickname ?? `${b.make} ${b.model}`}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="form-group">
-              <label className="expense-field-label" htmlFor="expense-bike">รถมอเตอร์ไซค์</label>
-              <select
-                id="expense-bike"
-                className="expense-field"
-                value={selectedBike}
-                disabled={bikesLoading || bikes.length === 0}
-                onChange={(e) => setSelectedBike(Number(e.target.value))}
-              >
-                {bikesLoading && <option value={0}>กำลังโหลดรถ...</option>}
-                {!bikesLoading && bikes.length === 0 && <option value={0}>ยังไม่มีรถ</option>}
-                {bikes.map((b) => (
-                  <option key={b.id} value={b.id}>{b.nickname ?? `${b.make} ${b.model}`}</option>
-                ))}
-              </select>
+              <label className="expense-field-label">หมวดหมู่</label>
+              <div className="expense-category-chip-row" role="group" aria-label="เลือกหมวดหมู่ค่าใช้จ่าย">
+                {PRESET_CATS.map((p) => {
+                  const active = category === p.key;
+                  return (
+                    <button
+                      key={p.key}
+                      type="button"
+                      onClick={() => { setCategory(p.key); setCustomCat(""); }}
+                      className={`expense-chip${active ? " active" : ""}`}
+                      aria-pressed={active}
+                    >
+                      {p.icon} {p.label}
+                    </button>
+                  );
+                })}
+                <button
+                  type="button"
+                  onClick={() => setCategory("__custom__")}
+                  className={`expense-chip${isCustom ? " active" : ""}`}
+                  aria-pressed={isCustom}
+                >
+                  + กำหนดเอง
+                </button>
+              </div>
+              {isCustom && (
+                <input
+                  aria-label="ชื่อหมวดหมู่กำหนดเอง"
+                  placeholder="ชื่อหมวดหมู่"
+                  value={customCat}
+                  onChange={(e) => setCustomCat(e.target.value)}
+                  className="expense-field"
+                  style={{ marginTop: 8 }}
+                />
+              )}
             </div>
-          )}
 
-          <div className="form-group">
-            <label className="expense-field-label">หมวดหมู่</label>
-            <div className="expense-category-chip-row" role="group" aria-label="เลือกหมวดหมู่ค่าใช้จ่าย">
-              {PRESET_CATS.map((p) => {
-                const active = category === p.key;
-                return (
-                  <button
-                    key={p.key}
-                    type="button"
-                    onClick={() => { setCategory(p.key); setCustomCat(""); }}
-                    className={`expense-chip${active ? " active" : ""}`}
-                    aria-pressed={active}
-                  >
-                    {p.icon} {p.label}
-                  </button>
-                );
-              })}
-              <button
-                type="button"
-                onClick={() => setCategory("__custom__")}
-                className={`expense-chip${isCustom ? " active" : ""}`}
-                aria-pressed={isCustom}
-              >
-                + กำหนดเอง
-              </button>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="expense-field-label" htmlFor="expense-amount">จำนวนเงิน (฿)</label>
+                <input
+                  id="expense-amount"
+                  type="number"
+                  min={0}
+                  step={1}
+                  inputMode="decimal"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="expense-field"
+                  aria-invalid={amountTouched && (!Number.isFinite(parsedAmount) || parsedAmount <= 0)}
+                  aria-describedby="expense-amount-help"
+                />
+                <div id="expense-amount-help" className="expense-field-help">
+                  {amountTouched && (!Number.isFinite(parsedAmount) || parsedAmount <= 0)
+                    ? "จำนวนเงินต้องมากกว่า 0"
+                    : "ใส่เฉพาะจำนวนเงินที่จ่ายจริง"}
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="expense-field-label" htmlFor="expense-date">วันที่</label>
+                <input
+                  id="expense-date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="expense-field"
+                />
+              </div>
             </div>
-            {isCustom && (
-              <input
-                aria-label="ชื่อหมวดหมู่กำหนดเอง"
-                placeholder="ชื่อหมวดหมู่"
-                value={customCat}
-                onChange={(e) => setCustomCat(e.target.value)}
+
+            <div className="form-group">
+              <label className="expense-field-label" htmlFor="expense-notes">หมายเหตุ (ไม่บังคับ)</label>
+              <textarea
+                id="expense-notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={3}
                 className="expense-field"
-                style={{ marginTop: 8 }}
               />
+            </div>
+
+            {saveMut.isError && (
+              <div className="expense-inline-error" role="alert">
+                บันทึกค่าใช้จ่ายไม่สำเร็จ กรุณาลองอีกครั้ง
+              </div>
             )}
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label className="expense-field-label" htmlFor="expense-amount">จำนวนเงิน (฿)</label>
-              <input
-                id="expense-amount"
-                type="number"
-                min={0}
-                step={1}
-                inputMode="decimal"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="expense-field"
-                aria-invalid={amountTouched && (!Number.isFinite(parsedAmount) || parsedAmount <= 0)}
-                aria-describedby="expense-amount-help"
-              />
-              <div id="expense-amount-help" className="expense-field-help">
-                {amountTouched && (!Number.isFinite(parsedAmount) || parsedAmount <= 0)
-                  ? "จำนวนเงินต้องมากกว่า 0"
-                  : "ใส่เฉพาะจำนวนเงินที่จ่ายจริง"}
-              </div>
-            </div>
-            <div className="form-group">
-              <label className="expense-field-label" htmlFor="expense-date">วันที่</label>
-              <input
-                id="expense-date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="expense-field"
-              />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="expense-field-label" htmlFor="expense-notes">หมายเหตุ (ไม่บังคับ)</label>
-            <textarea
-              id="expense-notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              className="expense-field"
-            />
-          </div>
-
-          {saveMut.isError && (
-            <div className="expense-inline-error" role="alert">
-              บันทึกค่าใช้จ่ายไม่สำเร็จ กรุณาลองอีกครั้ง
-            </div>
-          )}
-        </div>
-
-        <div className="modal-actions">
-          <Button type="button" variant="ghost" onClick={onClose}>ยกเลิก</Button>
-          <Button variant="default" disabled={!canSave || saveMut.isPending}>
-            {saveMut.isPending ? "กำลังบันทึก…" : expense ? "บันทึกการแก้ไข" : "เพิ่มค่าใช้จ่าย"}
-          </Button>
-        </div>
-      </form>
-    </div>,
-    document.body,
+          <DialogFooter>
+            <Button type="button" variant="ghost" onClick={onClose}>ยกเลิก</Button>
+            <Button variant="default" disabled={!canSave || saveMut.isPending}>
+              {saveMut.isPending ? "กำลังบันทึก…" : expense ? "บันทึกการแก้ไข" : "เพิ่มค่าใช้จ่าย"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,11 +1,11 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { createServiceLog, updateServiceLog, uploadServiceLogImage, deleteServiceLogImageById } from "../../api/logs";
 import { markReminderDone } from "../../api/reminders";
 import { getAllMotorcycles } from "../../api/motorcycles";
 import { useGeoLocation } from "../../hooks/useGeoLocation";
-import { useAnimatedClose } from "../../hooks/useAnimatedClose";
 import Lightbox from "../ui/Lightbox";
 import type { ServiceLog, LogImage } from "../../types";
 
@@ -51,7 +51,6 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
   const qc = useQueryClient();
   const today = new Date().toISOString().split("T")[0];
   const fileRef = useRef<HTMLInputElement>(null);
-  const { closing, handleClose } = useAnimatedClose(onClose);
 
   const topLocations = useMemo(() => {
     if (!pastLocations.length) return [];
@@ -94,7 +93,7 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
     if (bikeId === undefined && pickedBike) {
       set("mileage_at_service", pickedBike.current_mileage);
     }
-  }, [pickedBike?.id]);
+  }, [pickedBike?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -168,14 +167,13 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
 
   return (
     <>
-    <div className={`modal-overlay${closing ? " is-closing" : ""}`} onClick={handleClose}>
-      <div className="modal modal-form" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <span className="modal-title">{isEdit ? "แก้ไขรายการซ่อม" : "บันทึกการซ่อม"}</span>
-          <button className="modal-close" onClick={handleClose}>×</button>
-        </div>
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{isEdit ? "แก้ไขรายการซ่อม" : "บันทึกการซ่อม"}</DialogTitle>
+        </DialogHeader>
 
-        <div className="modal-body">
+        <div className="px-6 py-4">
         {!isEdit && (
           <div className="modal-chip-scroll" style={{ marginBottom: 18 }}>
             {QUICK_ITEMS.map((item) => (
@@ -313,10 +311,10 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
           </div>
           <input ref={fileRef} type="file" accept="image/*" multiple style={{ display: "none" }} onChange={handleFiles} />
         </div>
-        </div>{/* modal-body */}
+        </div>
 
-        <div className="modal-actions">
-          <Button variant="ghost" onClick={handleClose}>ยกเลิก</Button>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose}>ยกเลิก</Button>
           <Button
             variant="default"
             disabled={!effectiveBikeId || !form.name.trim() || String(form.mileage_at_service) === "" || isPending}
@@ -324,9 +322,9 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
           >
             {isPending ? "กำลังบันทึก…" : isEdit ? "บันทึกการแก้ไข" : "บันทึก"}
           </Button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
     {lightboxIndex !== null && (
       <Lightbox images={allPreviews} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
     )}

@@ -287,86 +287,6 @@ label {
   .form-row { grid-template-columns: minmax(0, 1fr); gap: 0; align-items: stretch; }
 }
 
-/* ─── Modal ──────────────────────────────────────────────────────────────── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  z-index: 100;
-  animation: modal-overlay-in 0.20s ease;
-  touch-action: pan-y;
-  overflow: hidden;
-}
-.modal-overlay.is-closing {
-  animation: modal-overlay-out 0.20s ease forwards;
-}
-@media (min-width: 640px) { .modal-overlay { align-items: center; padding: 24px; } }
-
-.modal {
-  background: rgba(12, 12, 28, 0.82);
-  backdrop-filter: blur(36px) saturate(200%);
-  -webkit-backdrop-filter: blur(36px) saturate(200%);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg) var(--r-lg) 0 0;
-  box-shadow: var(--shadow-modal);
-  width: 100%;
-  max-width: 480px;
-  max-height: 92vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  animation: modal-slide-up 0.32s var(--jelly-ease);
-}
-.modal-overlay.is-closing .modal {
-  animation: modal-slide-down 0.20s ease forwards;
-}
-@media (min-width: 640px) {
-  .modal {
-    border-radius: var(--r-lg);
-    animation: modal-scale-in 0.28s var(--jelly-ease);
-  }
-  .modal-overlay.is-closing .modal {
-    animation: modal-scale-out 0.20s ease forwards;
-  }
-}
-@media (max-width: 639px) {
-  .modal-overlay {
-    padding-top: max(8px, env(safe-area-inset-top));
-    background: rgba(4, 6, 20, 0.72);
-  }
-  .modal {
-    max-width: none;
-    max-height: 100dvh;
-    min-height: min(720px, 92dvh);
-  }
-}
-
-html.light .modal { background: rgba(245, 245, 255, 0.88); }
-
-/* Drag handle — mobile bottom-sheet only (not for centered modals) */
-@media (max-width: 639px) {
-  .modal:not(.modal-plain)::before {
-    content: "";
-    display: block;
-    flex-shrink: 0;
-    width: 40px; height: 4px;
-    border-radius: 2px;
-    background: var(--hairline-strong);
-    margin: 10px auto 0;
-  }
-}
-
-/* Centered compact modal (no header/body/actions structure) */
-.modal-plain {
-  border-radius: var(--r-lg);
-  max-width: 360px;
-}
-
 /* ─── Confirm / Danger Dialog ────────────────────────────────── */
 .confirm-dialog { padding: 0; overflow: hidden; min-height: unset; }
 .confirm-dialog-body {
@@ -405,96 +325,9 @@ html.light .modal { background: rgba(245, 245, 255, 0.88); }
   border-top: 1px solid var(--hairline);
 }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 24px;
-  border-bottom: 1px solid var(--hairline);
-  flex-shrink: 0;
-}
 @media (max-width: 639px) {
-  .modal-header {
-    padding: 12px 16px 10px;
-  }
-}
-
-.modal-body {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 20px 24px;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-}
-@media (max-width: 639px) {
-  .modal-body {
-    padding: 16px;
-  }
   input, textarea, select {
     font-size: 16px;
-  }
-}
-
-.modal-title { font-size: 16px; font-weight: 700; color: var(--ink); }
-.modal-close {
-  width: 30px; height: 30px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; color: var(--steel);
-  border-radius: var(--r);
-  transition: background 0.15s, transform var(--spring);
-}
-.modal-close:hover { background: var(--surface); color: var(--ink); transform: scale(1.1); }
-
-.modal-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  padding: 14px 24px;
-  border-top: 1px solid var(--hairline);
-  flex-shrink: 0;
-}
-@media (max-width: 639px) {
-  .modal-actions {
-    position: sticky;
-    bottom: 0;
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-    background: linear-gradient(to top, rgba(12, 12, 28, 0.96), rgba(12, 12, 28, 0.88));
-    justify-content: stretch;
-  }
-  html.light .modal-actions {
-    background: linear-gradient(to top, rgba(242, 242, 255, 0.98), rgba(242, 242, 255, 0.88));
-  }
-}
-
-.modal-form {
-  overscroll-behavior: contain;
-}
-
-@media (max-width: 639px) {
-  .modal-form {
-    min-height: calc(100dvh - max(8px, env(safe-area-inset-top)));
-  }
-  .modal-form .modal-header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    background: linear-gradient(to bottom, rgba(12, 12, 28, 0.96), rgba(12, 12, 28, 0.9));
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-  html.light .modal-form .modal-header {
-    background: linear-gradient(to bottom, rgba(245, 245, 255, 0.98), rgba(245, 245, 255, 0.92));
-  }
-  .modal-form .modal-body {
-    padding: 14px 16px 104px;
-  }
-  .modal-form .modal-close {
-    width: 34px;
-    height: 34px;
-    background: var(--surface);
-    border: 1px solid var(--hairline);
   }
 }
 
@@ -518,27 +351,6 @@ html.light .modal { background: rgba(245, 245, 255, 0.88); }
 @keyframes lb-from-left {
   from { transform: translateX(-60px); opacity: 0; }
   to   { transform: translateX(0);     opacity: 1; }
-}
-
-/* ─── Modal enter / exit ──────────────────────────────────────────────────── */
-@keyframes modal-overlay-in  { from { opacity: 0; }   to { opacity: 1; } }
-@keyframes modal-overlay-out { from { opacity: 1; }   to { opacity: 0; } }
-
-@keyframes modal-slide-up {
-  from { transform: translateY(56px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-@keyframes modal-slide-down {
-  from { transform: translateY(0);    opacity: 1; }
-  to   { transform: translateY(72px); opacity: 0; }
-}
-@keyframes modal-scale-in {
-  from { transform: scale(0.93) translateY(10px); opacity: 0; }
-  to   { transform: scale(1)    translateY(0);    opacity: 1; }
-}
-@keyframes modal-scale-out {
-  from { transform: scale(1)    translateY(0);    opacity: 1; }
-  to   { transform: scale(0.93) translateY(10px); opacity: 0; }
 }
 
 /* ─── Lightbox enter / exit ───────────────────────────────────────────────── */
@@ -2305,42 +2117,6 @@ html.light .avatar-dropdown {
   background: rgba(245, 245, 255, 0.95);
   box-shadow: 0 12px 40px rgba(0,0,0,0.12);
 }
-
-/* ─── Account Modal ─────────────────────────────────────────────── */
-.modal-overlay.acct-overlay {
-  align-items: center;
-  z-index: 300;
-  padding: 1rem;
-}
-.modal-box {
-  background: rgba(18,18,40,0.98);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-md);
-  padding: 1.5rem;
-  width: 100%; max-width: 380px;
-  display: flex; flex-direction: column; gap: 1rem;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
-  animation: modal-in 0.2s var(--jelly-ease);
-}
-@keyframes modal-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-html.light .modal-box {
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.15);
-}
-.modal-header {
-  display: flex; justify-content: space-between; align-items: center;
-}
-.modal-title { font-size: 15px; font-weight: 600; color: var(--ink); }
-.modal-close {
-  background: none; border: none; color: var(--steel);
-  font-size: 20px; cursor: pointer; padding: 4px; line-height: 1;
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 6px; transition: color 0.12s, background 0.12s;
-}
-.modal-close:hover { color: var(--ink); background: var(--surface-soft); }
 
 /* ─── Account Modal (acct-*) ────────────────────────────────────── */
 .acct-modal {

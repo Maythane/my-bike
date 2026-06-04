@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { getShockSetting, updateShockSetting, getShockChart } from "../api/shock";
 import { listPresets, createPreset, updatePreset, deletePreset, type ShockPreset } from "../api/shock_presets";
@@ -645,223 +646,211 @@ export default function ShockSettingsPage() {
       </Card>
 
       {/* ── Edit preset sheet ── */}
-      {editPreset && editForm && (
-        <div className="modal-overlay" onClick={() => { setEditPreset(null); setEditForm(null); }}>
-          <div className="modal modal-form" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div>
+      <Dialog open={!!(editPreset && editForm)} onOpenChange={(open) => { if (!open) { setEditPreset(null); setEditForm(null); } }}>
+        <DialogContent className="overflow-y-auto">
+          {editPreset && editForm && (
+            <>
+              <DialogHeader>
                 <p className="shock-results-kicker">แก้ไข Preset</p>
-                <h3 className="shock-info-title" style={{ maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <DialogTitle style={{ maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {editPreset.name}
-                </h3>
-              </div>
-              <Button type="button" variant="ghost" size="sm" className="modal-close"
-                onClick={() => { setEditPreset(null); setEditForm(null); }}>✕</Button>
-            </div>
-            <div className="modal-body">
-              <div className="form-group">
-                <label className="shock-label">ชื่อ preset *</label>
-                <input type="text" value={editForm.name}
-                  onChange={(e) => setEditForm((f) => f && ({ ...f, name: e.target.value }))}
-                  placeholder="เช่น ขับคนเดียว ถนนเมือง" autoFocus />
-              </div>
+                </DialogTitle>
+              </DialogHeader>
+              <div className="px-6 py-4">
+                <div className="form-group">
+                  <label className="shock-label">ชื่อ preset *</label>
+                  <input type="text" value={editForm.name}
+                    onChange={(e) => setEditForm((f) => f && ({ ...f, name: e.target.value }))}
+                    placeholder="เช่น ขับคนเดียว ถนนเมือง" autoFocus />
+                </div>
 
-              <div className="shock-save-weight-row">
-                <div className="form-group">
-                  <label className="shock-label">น้ำหนักผู้ขับ (กก.)</label>
-                  <input type="number" inputMode="decimal" value={editForm.rider_weight}
-                    onChange={(e) => setEditForm((f) => f && ({ ...f, rider_weight: e.target.value }))} />
+                <div className="shock-save-weight-row">
+                  <div className="form-group">
+                    <label className="shock-label">น้ำหนักผู้ขับ (กก.)</label>
+                    <input type="number" inputMode="decimal" value={editForm.rider_weight}
+                      onChange={(e) => setEditForm((f) => f && ({ ...f, rider_weight: e.target.value }))} />
+                  </div>
+                  <div className="form-group">
+                    <label className="shock-label">น้ำหนักคนซ้อน (กก.)</label>
+                    <input type="number" inputMode="decimal" value={editForm.passenger_weight}
+                      onChange={(e) => setEditForm((f) => f && ({ ...f, passenger_weight: e.target.value }))} />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="shock-label">น้ำหนักคนซ้อน (กก.)</label>
-                  <input type="number" inputMode="decimal" value={editForm.passenger_weight}
-                    onChange={(e) => setEditForm((f) => f && ({ ...f, passenger_weight: e.target.value }))} />
-                </div>
-              </div>
 
-              <div className="form-group">
-                <label className="shock-label">โหมด</label>
-                <div className="shock-save-mode-row">
-                  {(["street", "heavy"] as RideMode[]).map((m) => (
-                    <button key={m} type="button"
-                      className={`shock-save-mode-btn${editForm.mode === m ? " is-active" : ""}`}
-                      onClick={() => setEditForm((f) => f && ({ ...f, mode: m }))}>
-                      {m === "street" ? "ใช้งานทั่วไป" : "บรรทุก/หนัก"}
-                    </button>
-                  ))}
+                <div className="form-group">
+                  <label className="shock-label">โหมด</label>
+                  <div className="shock-save-mode-row">
+                    {(["street", "heavy"] as RideMode[]).map((m) => (
+                      <button key={m} type="button"
+                        className={`shock-save-mode-btn${editForm.mode === m ? " is-active" : ""}`}
+                        onClick={() => setEditForm((f) => f && ({ ...f, mode: m }))}>
+                        {m === "street" ? "ใช้งานทั่วไป" : "บรรทุก/หนัก"}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              <div className="shock-save-vals-row">
-                <div className="form-group">
-                  <label className="shock-label">Preload (mm)</label>
-                  <input type="number" inputMode="decimal" value={editForm.preload}
-                    onChange={(e) => setEditForm((f) => f && ({ ...f, preload: e.target.value }))} />
+                <div className="shock-save-vals-row">
+                  <div className="form-group">
+                    <label className="shock-label">Preload (mm)</label>
+                    <input type="number" inputMode="decimal" value={editForm.preload}
+                      onChange={(e) => setEditForm((f) => f && ({ ...f, preload: e.target.value }))} />
+                  </div>
+                  <div className="form-group">
+                    <label className="shock-label">Comp (clicks)</label>
+                    <input type="number" inputMode="numeric" value={editForm.comp}
+                      onChange={(e) => setEditForm((f) => f && ({ ...f, comp: e.target.value }))} />
+                  </div>
+                  <div className="form-group">
+                    <label className="shock-label">Reb (clicks)</label>
+                    <input type="number" inputMode="numeric" value={editForm.reb}
+                      onChange={(e) => setEditForm((f) => f && ({ ...f, reb: e.target.value }))} />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="shock-label">Comp (clicks)</label>
-                  <input type="number" inputMode="numeric" value={editForm.comp}
-                    onChange={(e) => setEditForm((f) => f && ({ ...f, comp: e.target.value }))} />
-                </div>
-                <div className="form-group">
-                  <label className="shock-label">Reb (clicks)</label>
-                  <input type="number" inputMode="numeric" value={editForm.reb}
-                    onChange={(e) => setEditForm((f) => f && ({ ...f, reb: e.target.value }))} />
-                </div>
-              </div>
 
-              <div className="form-group">
-                <label className="shock-label">บันทึกประสบการณ์</label>
-                <textarea value={editForm.note}
-                  onChange={(e) => setEditForm((f) => f && ({ ...f, note: e.target.value }))}
-                  placeholder="เช่น นุ่มดี เหมาะถนนเมือง ไม่ตึงเกิน"
-                  rows={3} style={{ resize: "vertical" }} />
+                <div className="form-group">
+                  <label className="shock-label">บันทึกประสบการณ์</label>
+                  <textarea value={editForm.note}
+                    onChange={(e) => setEditForm((f) => f && ({ ...f, note: e.target.value }))}
+                    placeholder="เช่น นุ่มดี เหมาะถนนเมือง ไม่ตึงเกิน"
+                    rows={3} style={{ resize: "vertical" }} />
+                </div>
               </div>
-            </div>
-            <div className="modal-actions shock-edit-preset-actions">
-              <Button type="button" variant="destructive" size="sm"
-                onClick={async () => {
-                  await handleDeletePreset(editPreset.id);
-                  setEditPreset(null); setEditForm(null);
-                }}>
-                ลบ
-              </Button>
-              <Button type="button" variant="secondary"
-                onClick={() => { loadPreset(editPreset); setEditPreset(null); setEditForm(null); }}>
-                โหลดค่านี้
-              </Button>
-              <button type="button" className="shock-calc-btn"
-                style={{ flex: 1, marginTop: 0, minHeight: 44 }}
-                onClick={handleUpdate} disabled={saving || !editForm.name.trim()}>
-                {saving ? "กำลังบันทึก…" : "บันทึกการแก้ไข"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              <DialogFooter className="shock-edit-preset-actions">
+                <Button type="button" variant="destructive" size="sm"
+                  onClick={async () => {
+                    await handleDeletePreset(editPreset.id);
+                    setEditPreset(null); setEditForm(null);
+                  }}>
+                  ลบ
+                </Button>
+                <Button type="button" variant="secondary"
+                  onClick={() => { loadPreset(editPreset); setEditPreset(null); setEditForm(null); }}>
+                  โหลดค่านี้
+                </Button>
+                <button type="button" className="shock-calc-btn"
+                  style={{ flex: 1, marginTop: 0, minHeight: 44 }}
+                  onClick={handleUpdate} disabled={saving || !editForm.name.trim()}>
+                  {saving ? "กำลังบันทึก…" : "บันทึกการแก้ไข"}
+                </button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* ── Save preset sheet ── */}
-      {showSaveSheet && (
-        <div className="modal-overlay" onClick={() => setShowSaveSheet(false)}>
-          <div className="modal modal-form" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div>
-                <p className="shock-results-kicker">บันทึก Preset</p>
-                <h3 className="shock-info-title">ค่าที่ตั้งจริง</h3>
-              </div>
-              <Button type="button" variant="ghost" size="sm" className="modal-close" onClick={() => setShowSaveSheet(false)}>✕</Button>
+      <Dialog open={showSaveSheet} onOpenChange={(open) => !open && setShowSaveSheet(false)}>
+        <DialogContent className="overflow-y-auto">
+          <DialogHeader>
+            <p className="shock-results-kicker">บันทึก Preset</p>
+            <DialogTitle>ค่าที่ตั้งจริง</DialogTitle>
+          </DialogHeader>
+          <div className="px-6 py-4">
+            <div className="form-group">
+              <label className="shock-label">ชื่อ preset *</label>
+              <input
+                type="text"
+                value={saveForm.name}
+                onChange={(e) => setSaveForm((f) => ({ ...f, name: e.target.value }))}
+                placeholder="เช่น ขับคนเดียว ถนนเมือง"
+                autoFocus
+              />
             </div>
-            <div className="modal-body">
+
+            <div className="shock-save-weight-row">
               <div className="form-group">
-                <label className="shock-label">ชื่อ preset *</label>
-                <input
-                  type="text"
-                  value={saveForm.name}
-                  onChange={(e) => setSaveForm((f) => ({ ...f, name: e.target.value }))}
-                  placeholder="เช่น ขับคนเดียว ถนนเมือง"
-                  autoFocus
-                />
+                <label className="shock-label">น้ำหนักผู้ขับ (กก.)</label>
+                <input type="number" inputMode="decimal" value={saveForm.rider_weight}
+                  onChange={(e) => setSaveForm((f) => ({ ...f, rider_weight: e.target.value }))} />
               </div>
-
-              <div className="shock-save-weight-row">
-                <div className="form-group">
-                  <label className="shock-label">น้ำหนักผู้ขับ (กก.)</label>
-                  <input type="number" inputMode="decimal" value={saveForm.rider_weight}
-                    onChange={(e) => setSaveForm((f) => ({ ...f, rider_weight: e.target.value }))} />
-                </div>
-                <div className="form-group">
-                  <label className="shock-label">น้ำหนักคนซ้อน (กก.)</label>
-                  <input type="number" inputMode="decimal" value={saveForm.passenger_weight}
-                    onChange={(e) => setSaveForm((f) => ({ ...f, passenger_weight: e.target.value }))} />
-                </div>
-              </div>
-
               <div className="form-group">
-                <label className="shock-label">โหมด</label>
-                <div className="shock-save-mode-row">
-                  {(["street", "heavy"] as RideMode[]).map((m) => (
-                    <button key={m} type="button"
-                      className={`shock-save-mode-btn${saveForm.mode === m ? " is-active" : ""}`}
-                      onClick={() => setSaveForm((f) => ({ ...f, mode: m }))}>
-                      {m === "street" ? "ใช้งานทั่วไป" : "บรรทุก/หนัก"}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="shock-save-vals-row">
-                <div className="form-group">
-                  <label className="shock-label">Preload (mm)</label>
-                  <input type="number" inputMode="decimal" value={saveForm.preload}
-                    onChange={(e) => setSaveForm((f) => ({ ...f, preload: e.target.value }))}
-                    placeholder="เช่น 9" />
-                </div>
-                <div className="form-group">
-                  <label className="shock-label">Comp (clicks)</label>
-                  <input type="number" inputMode="numeric" value={saveForm.comp}
-                    onChange={(e) => setSaveForm((f) => ({ ...f, comp: e.target.value }))}
-                    placeholder="เช่น 9" />
-                </div>
-                <div className="form-group">
-                  <label className="shock-label">Reb (clicks)</label>
-                  <input type="number" inputMode="numeric" value={saveForm.reb}
-                    onChange={(e) => setSaveForm((f) => ({ ...f, reb: e.target.value }))}
-                    placeholder="เช่น 9" />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="shock-label">บันทึกประสบการณ์ (ไม่บังคับ)</label>
-                <textarea
-                  value={saveForm.note}
-                  onChange={(e) => setSaveForm((f) => ({ ...f, note: e.target.value }))}
-                  placeholder="เช่น นุ่มดี เหมาะถนนเมือง ไม่ตึงเกิน"
-                  rows={3}
-                  style={{ resize: "vertical" }}
-                />
+                <label className="shock-label">น้ำหนักคนซ้อน (กก.)</label>
+                <input type="number" inputMode="decimal" value={saveForm.passenger_weight}
+                  onChange={(e) => setSaveForm((f) => ({ ...f, passenger_weight: e.target.value }))} />
               </div>
             </div>
-            <div className="modal-actions">
-              <Button type="button" variant="secondary" onClick={() => setShowSaveSheet(false)}>ยกเลิก</Button>
-              <button type="button" className="shock-calc-btn" style={{ flex: 1, marginTop: 0, minHeight: 44 }}
-                onClick={handleSave} disabled={saving || !saveForm.name.trim()}>
-                {saving ? "กำลังบันทึก…" : "💾  บันทึก Preset"}
-              </button>
+
+            <div className="form-group">
+              <label className="shock-label">โหมด</label>
+              <div className="shock-save-mode-row">
+                {(["street", "heavy"] as RideMode[]).map((m) => (
+                  <button key={m} type="button"
+                    className={`shock-save-mode-btn${saveForm.mode === m ? " is-active" : ""}`}
+                    onClick={() => setSaveForm((f) => ({ ...f, mode: m }))}>
+                    {m === "street" ? "ใช้งานทั่วไป" : "บรรทุก/หนัก"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="shock-save-vals-row">
+              <div className="form-group">
+                <label className="shock-label">Preload (mm)</label>
+                <input type="number" inputMode="decimal" value={saveForm.preload}
+                  onChange={(e) => setSaveForm((f) => ({ ...f, preload: e.target.value }))}
+                  placeholder="เช่น 9" />
+              </div>
+              <div className="form-group">
+                <label className="shock-label">Comp (clicks)</label>
+                <input type="number" inputMode="numeric" value={saveForm.comp}
+                  onChange={(e) => setSaveForm((f) => ({ ...f, comp: e.target.value }))}
+                  placeholder="เช่น 9" />
+              </div>
+              <div className="form-group">
+                <label className="shock-label">Reb (clicks)</label>
+                <input type="number" inputMode="numeric" value={saveForm.reb}
+                  onChange={(e) => setSaveForm((f) => ({ ...f, reb: e.target.value }))}
+                  placeholder="เช่น 9" />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="shock-label">บันทึกประสบการณ์ (ไม่บังคับ)</label>
+              <textarea
+                value={saveForm.note}
+                onChange={(e) => setSaveForm((f) => ({ ...f, note: e.target.value }))}
+                placeholder="เช่น นุ่มดี เหมาะถนนเมือง ไม่ตึงเกิน"
+                rows={3}
+                style={{ resize: "vertical" }}
+              />
             </div>
           </div>
-        </div>
-      )}
+          <DialogFooter>
+            <Button type="button" variant="secondary" onClick={() => setShowSaveSheet(false)}>ยกเลิก</Button>
+            <button type="button" className="shock-calc-btn" style={{ flex: 1, marginTop: 0, minHeight: 44 }}
+              onClick={handleSave} disabled={saving || !saveForm.name.trim()}>
+              {saving ? "กำลังบันทึก…" : "💾  บันทึก Preset"}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      {showInfo && (
-        <div className="modal-overlay" onClick={() => setShowInfo(false)} style={{ alignItems: "center" }}>
-          <div className="modal shock-info-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div>
-                <p className="shock-results-kicker">How To Read</p>
-                <h3 className="shock-info-title">อ่านค่าโช้คยังไง</h3>
-              </div>
-              <Button type="button" variant="ghost" size="sm" onClick={() => setShowInfo(false)}>ปิด</Button>
+      <Dialog open={showInfo} onOpenChange={(open) => !open && setShowInfo(false)}>
+        <DialogContent className="overflow-y-auto">
+          <DialogHeader>
+            <p className="shock-results-kicker">How To Read</p>
+            <DialogTitle>อ่านค่าโช้คยังไง</DialogTitle>
+          </DialogHeader>
+          <div className="px-6 py-4 shock-info-body">
+            <div className="shock-info-card">
+              <h4><span className="shock-info-icon"><IconSpring size={18} /></span> Preload</h4>
+              <p>คือค่ากดสปริงตั้งต้น ยิ่งมากรถจะยุบตัวยากขึ้น เหมาะเมื่อมีน้ำหนักบรรทุกหรือคนซ้อนมากขึ้น</p>
             </div>
-            <div className="modal-body shock-info-body">
-              <div className="shock-info-card">
-                <h4><span className="shock-info-icon"><IconSpring size={18} /></span> Preload</h4>
-                <p>คือค่ากดสปริงตั้งต้น ยิ่งมากรถจะยุบตัวยากขึ้น เหมาะเมื่อมีน้ำหนักบรรทุกหรือคนซ้อนมากขึ้น</p>
-              </div>
-              <div className="shock-info-card">
-                <h4><span className="shock-info-icon"><IconCompression size={18} /></span> Compression</h4>
-                <p>คือความหนืดตอนโช้คยุบ ถ้าต่ำเกินไปจะนุ่มยวบ ถ้าสูงเกินไปจะกระด้างและรับแรงกระแทกแข็งขึ้น</p>
-              </div>
-              <div className="shock-info-card">
-                <h4><span className="shock-info-icon"><IconRebound size={18} /></span> Rebound</h4>
-                <p>คือความหนืดตอนโช้คคืนตัว ถ้าน้อยไปจะเด้งเร็ว ถ้ามากไปจะคืนช้าและรู้สึกอั้นเมื่อเจอลูกระนาดต่อเนื่อง</p>
-              </div>
-              <div className="shock-info-tip">
-                เริ่มจากค่ากลางที่แนะนำก่อน แล้วขยับทีละ 1 click หรือเล็กน้อย เพื่อหาความรู้สึกที่เหมาะกับน้ำหนักและสภาพถนนจริง
-              </div>
+            <div className="shock-info-card">
+              <h4><span className="shock-info-icon"><IconCompression size={18} /></span> Compression</h4>
+              <p>คือความหนืดตอนโช้คยุบ ถ้าต่ำเกินไปจะนุ่มยวบ ถ้าสูงเกินไปจะกระด้างและรับแรงกระแทกแข็งขึ้น</p>
+            </div>
+            <div className="shock-info-card">
+              <h4><span className="shock-info-icon"><IconRebound size={18} /></span> Rebound</h4>
+              <p>คือความหนืดตอนโช้คคืนตัว ถ้าน้อยไปจะเด้งเร็ว ถ้ามากไปจะคืนช้าและรู้สึกอั้นเมื่อเจอลูกระนาดต่อเนื่อง</p>
+            </div>
+            <div className="shock-info-tip">
+              เริ่มจากค่ากลางที่แนะนำก่อน แล้วขยับทีละ 1 click หรือเล็กน้อย เพื่อหาความรู้สึกที่เหมาะกับน้ำหนักและสภาพถนนจริง
             </div>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
       </div>
     </div>
   );

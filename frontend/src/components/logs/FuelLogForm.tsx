@@ -1,10 +1,10 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { createFuelLog, updateFuelLog, uploadFuelLogImage, deleteFuelLogImageById } from "../../api/fuel";
 import { getAllMotorcycles } from "../../api/motorcycles";
 import { useGeoLocation } from "../../hooks/useGeoLocation";
-import { useAnimatedClose } from "../../hooks/useAnimatedClose";
 import Lightbox from "../ui/Lightbox";
 import type { FuelLog, LogImage } from "../../types";
 
@@ -42,7 +42,6 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
   const qc = useQueryClient();
   const today = new Date().toISOString().split("T")[0];
   const fileRef = useRef<HTMLInputElement>(null);
-  const { closing, handleClose } = useAnimatedClose(onClose);
 
   const topStations = useMemo(() => {
     if (!pastLocations.length) return [];
@@ -88,7 +87,7 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
     if (bikeId === undefined && pickedBike) {
       set("mileage_at_fillup", pickedBike.current_mileage);
     }
-  }, [pickedBike?.id]);
+  }, [pickedBike?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFuelAmount = (val: string) => {
     const liters = parseFloat(val);
@@ -203,14 +202,13 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
 
   return (
     <>
-    <div className={`modal-overlay${closing ? " is-closing" : ""}`} onClick={handleClose}>
-      <div className="modal modal-form" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <span className="modal-title">{isEdit ? "แก้ไขรายการเติมน้ำมัน" : "บันทึกการเติมน้ำมัน"}</span>
-          <button className="modal-close" onClick={handleClose}>×</button>
-        </div>
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{isEdit ? "แก้ไขรายการเติมน้ำมัน" : "บันทึกการเติมน้ำมัน"}</DialogTitle>
+        </DialogHeader>
 
-        <div className="modal-body">
+        <div className="px-6 py-4">
         {bikeId === undefined && (
           <div style={{ marginBottom: 16 }}>
             <label style={{ fontSize: 12, fontWeight: 600, color: "var(--steel)", display: "block", marginBottom: 6 }}>
@@ -366,16 +364,16 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
           </div>
           <input ref={fileRef} type="file" accept="image/*" multiple style={{ display: "none" }} onChange={handleFiles} />
         </div>
-        </div>{/* modal-body */}
+        </div>
 
-        <div className="modal-actions">
-          <Button variant="ghost" onClick={handleClose}>ยกเลิก</Button>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose}>ยกเลิก</Button>
           <Button variant="default" disabled={!valid || isPending} onClick={submit}>
             {isPending ? "กำลังบันทึก…" : isEdit ? "บันทึกการแก้ไข" : "บันทึก"}
           </Button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
     {lightboxIndex !== null && (
       <Lightbox images={allPreviews} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
     )}
