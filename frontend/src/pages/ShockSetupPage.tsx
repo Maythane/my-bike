@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getShockSetting, updateShockSetting, lookupShockChart } from "../api/shock";
 import { fetchShockBrands } from "../api/shockBrands";
@@ -269,7 +270,7 @@ function PresetsFound({ bands, shockBrand, shockModel, onSave, saving, saved }: 
         </div>
       </div>
 
-      <div className="card" style={{ padding: "16px", overflowX: "auto" }}>
+      <Card style={{ padding: "16px", overflowX: "auto" }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "var(--steel)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 12 }}>
           ตารางค่าแนะนำ
         </div>
@@ -293,7 +294,7 @@ function PresetsFound({ bands, shockBrand, shockModel, onSave, saving, saved }: 
             ))}
           </tbody>
         </table>
-      </div>
+      </Card>
 
       {saved ? (
         <p style={{ color: "var(--green)", fontSize: 14, textAlign: "center" }}>✓ บันทึกแล้ว กลับไปหน้าก่อนหน้า…</p>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTask } from "../../api/tasks";
 import type { TaskWithStatus } from "../../types";
@@ -69,8 +70,7 @@ export default function TaskRow({ task, currentMileage }: Props) {
 
   return (
     <>
-      <div
-        className="card"
+      <Card
         style={{ cursor: "pointer", background: statusBg[task.status_label] }}
         onClick={() => setExpanded((v) => !v)}
       >
@@ -141,7 +141,7 @@ export default function TaskRow({ task, currentMileage }: Props) {
             </div>
           </div>
         )}
-      </div>
+      </Card>
 
       {showLog && (
         <LogForm

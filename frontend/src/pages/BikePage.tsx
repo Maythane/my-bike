@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getMotorcycle, deleteMotorcycle, uploadBikeImage, deleteBikeImage } from "../api/motorcycles";
 import { getShockSetting } from "../api/shock";
@@ -160,7 +161,7 @@ export default function BikePage() {
 
       {bike && (
         <>
-          <div className="card" style={{ marginBottom: 12, padding: 0, overflow: "hidden" }}>
+          <Card style={{ marginBottom: 12, padding: 0, overflow: "hidden" }}>
             {/* Bike photo */}
             <div style={{ position: "relative" }}>
               {bike.image_path ? (
@@ -303,7 +304,7 @@ export default function BikePage() {
               </Button>
             </div>
             </div>{/* end padding div */}
-          </div>
+          </Card>
 
           {/* Reminder alert bar (urgent only) */}
           <ReminderAlertBar bikeId={bid} reminders={reminders} />
@@ -316,7 +317,7 @@ export default function BikePage() {
             const statusText = overdue > 0 ? `${overdue} รายการเกินกำหนด` : dueSoon > 0 ? `${dueSoon} รายการใกล้ถึงรอบ` : "ปกติทุกรายการ";
             const statusIcon = overdue > 0 ? "⚠️" : dueSoon > 0 ? "🔔" : "✅";
             return (
-              <div className="card" style={{ marginBottom: 10, padding: "10px 14px" }}>
+              <Card style={{ marginBottom: 10, padding: "10px 14px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <span style={{ fontSize: 14 }}>{statusIcon}</span>
@@ -330,13 +331,13 @@ export default function BikePage() {
                     จัดการ →
                   </Button>
                 </div>
-              </div>
+              </Card>
             );
           })()}
 
           {/* Expense summary card */}
           {expenseSummary && expenseSummary.total > 0 && (
-            <div className="card" style={{ marginBottom: 10, padding: "12px 14px" }}>
+            <Card style={{ marginBottom: 10, padding: "12px 14px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                 <span style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
                   💰 ค่าใช้จ่ายเดือนนี้
@@ -368,7 +369,7 @@ export default function BikePage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Tab bar — segment control */}

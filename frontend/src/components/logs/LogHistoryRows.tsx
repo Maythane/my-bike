@@ -1,5 +1,6 @@
 import type { ServiceLog, FuelLog, FuelEconomy } from "../../types";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 export function fmtDate(d: string) {
   return new Date(d + "T00:00:00").toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" });
@@ -100,7 +101,7 @@ export function FuelHistoryRow({ log, unit, isLast, onEdit, onDelete, onImageCli
 
 export function FuelEconomyCard({ economy }: { economy: FuelEconomy }) {
   return (
-    <div className="card" style={{ marginBottom: 20, padding: "20px 20px 18px" }}>
+    <Card style={{ marginBottom: 20, padding: "20px 20px 18px" }}>
       <div style={{ fontSize: 11, fontWeight: 600, color: "var(--steel)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 16 }}>
         อัตราสิ้นเปลือง
       </div>
@@ -115,7 +116,7 @@ export function FuelEconomyCard({ economy }: { economy: FuelEconomy }) {
         <StatItem label="น้ำมันรวม" value={economy.total_fuel} suffix="L" />
         {economy.total_cost != null && <StatItem label="ค่าน้ำมันรวม" value={`฿${economy.total_cost.toLocaleString()}`} />}
       </div>
-    </div>
+    </Card>
   );
 }
 

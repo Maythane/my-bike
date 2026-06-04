@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { getShockSetting, updateShockSetting, getShockChart } from "../api/shock";
 import { listPresets, createPreset, updatePreset, deletePreset, type ShockPreset } from "../api/shock_presets";
@@ -443,7 +444,7 @@ export default function ShockSettingsPage() {
         )}
       </section>
 
-      <section className="card shock-panel">
+      <Card className="shock-panel" style={{ padding: "20px" }}>
         <div className="shock-input-grid">
           <div className="form-group">
             <label htmlFor="rider-weight" className="shock-label">น้ำหนักผู้ขับขี่ (กก.)</label>
@@ -511,9 +512,9 @@ export default function ShockSettingsPage() {
           <IconCalculator size={20} />
           คำนวณค่าแนะนำ
         </button>
-      </section>
+      </Card>
 
-      <section className="card shock-panel shock-results-panel">
+      <Card className="shock-panel shock-results-panel" style={{ padding: "20px" }}>
         <div className="shock-results-head">
           <div>
             <p className="shock-results-kicker">
@@ -602,9 +603,9 @@ export default function ShockSettingsPage() {
             </p>
           </div>
         )}
-      </section>
+      </Card>
 
-      <section className="card shock-panel">
+      <Card className="shock-panel" style={{ padding: "20px" }}>
         <div className="shock-table-head">
           <div>
             <p className="shock-results-kicker">
@@ -641,7 +642,7 @@ export default function ShockSettingsPage() {
         <p className="shock-disclaimer">
           📋 ค่าข้างต้นเป็นค่าเริ่มต้นจากโรงงาน แนะนำให้ปรับตามสภาพถนน สไตล์การขับขี่ และความรู้สึกจริงหลังทดลองขี่
         </p>
-      </section>
+      </Card>
 
       {/* ── Edit preset sheet ── */}
       {editPreset && editForm && (

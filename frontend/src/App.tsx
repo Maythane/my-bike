@@ -7,6 +7,7 @@ import Blobs from "./components/ui/Blobs";
 import AvatarMenu from "./components/ui/AvatarMenu";
 import BottomNav from "./components/ui/BottomNav";
 import AuthPage from "./pages/AuthPage";
+import { Card } from "./components/ui/card";
 
 const GaragePage = lazy(() => import("./pages/GaragePage"));
 const BikePage = lazy(() => import("./pages/BikePage"));
@@ -27,9 +28,9 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 function PageFallback() {
   return (
     <div className="page" aria-label="กำลังโหลดหน้า">
-      <div className="card" style={{ height: 72, marginBottom: 10 }} />
-      <div className="card" style={{ height: 142, marginBottom: 10 }} />
-      <div className="card" style={{ height: 118 }} />
+      <Card style={{ height: 72, marginBottom: 10 }} />
+      <Card style={{ height: 142, marginBottom: 10 }} />
+      <Card style={{ height: 118 }} />
     </div>
   );
 }

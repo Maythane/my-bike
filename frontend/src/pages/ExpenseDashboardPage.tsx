@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { getExpenseSummary } from "../api/expenses";
 import { getAllMotorcycles } from "../api/motorcycles";
 import type { ExpenseSummary, MonthBucket, CategoryTotal } from "../types";
@@ -182,9 +183,9 @@ export default function ExpenseDashboardPage() {
 
       {!allLoaded && (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }} aria-label="กำลังโหลดข้อมูลค่าใช้จ่าย">
-          <div className="card" style={{ height: 78 }} />
-          <div className="card" style={{ height: 136 }} />
-          <div className="card" style={{ height: 148 }} />
+          <Card style={{ height: 78 }} />
+          <Card style={{ height: 136 }} />
+          <Card style={{ height: 148 }} />
         </div>
       )}
 
@@ -203,7 +204,7 @@ export default function ExpenseDashboardPage() {
         <>
           {/* KPI */}
           <div className="expense-kpi-row" style={{ marginBottom: 12 }}>
-            <div className="card expense-total-card">
+            <Card className="expense-total-card">
               <div className="expense-kpi-label">รวมทั้งหมด</div>
               <div className="expense-total-value">
                 ฿{summary.total.toLocaleString()}
@@ -211,36 +212,36 @@ export default function ExpenseDashboardPage() {
               <div className="expense-kpi-context">
                 {topCategory ? `${topCategory.icon} ${topCategory.label} มากสุด ${topCategory.percent}%` : "ยังไม่มีหมวดหมู่หลัก"}
               </div>
-            </div>
+            </Card>
             {singleBikeSummary?.cost_per_km != null && (
-              <div className="card expense-cost-card">
+              <Card className="expense-cost-card">
                 <div className="expense-kpi-label">ต้นทุนต่อกม.</div>
                 <div className="expense-cost-value">
                   ฿{singleBikeSummary.cost_per_km}
                 </div>
                 <div className="expense-kpi-context">คำนวณจากระยะทางช่วงนี้</div>
-              </div>
+              </Card>
             )}
           </div>
 
           {/* Trend chart */}
           {summary.monthly_trend.length > 0 && (
-            <div className="card" style={{ marginBottom: 12 }}>
+            <Card style={{ marginBottom: 12 }}>
               <p style={{ fontSize: 13, fontWeight: 600, color: "var(--slate)", margin: "0 0 10px" }}>
                 แนวโน้ม {summary.monthly_trend.length} เดือน
               </p>
               <ExpenseTrendChart buckets={summary.monthly_trend} />
-            </div>
+            </Card>
           )}
 
           {/* Category breakdown */}
           {summary.by_category.length > 0 && (
-            <div className="card">
+            <Card>
               <p style={{ fontSize: 13, fontWeight: 600, color: "var(--slate)", margin: "0 0 10px" }}>
                 หมวดหมู่
               </p>
               <ExpenseCategoryBreakdown items={summary.by_category} />
-            </div>
+            </Card>
           )}
         </>
       )}

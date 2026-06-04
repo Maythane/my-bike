@@ -1,44 +1,18 @@
-import type { StatusLabel } from "../../types";
+import { Badge } from "@/components/ui/badge";
+
+type Status = "ok" | "warn" | "overdue";
 
 interface Props {
-  label: StatusLabel;
-  score: number;
+  status: Status;
+  label?: string;
 }
 
-const CONFIG = {
-  good: { color: "var(--accent-green)", text: "Good" },
-  due_soon: { color: "var(--accent-amber)", text: "Due Soon" },
-  overdue: { color: "var(--accent-red)", text: "Overdue" },
+const LABELS: Record<Status, string> = {
+  ok: "ปกติ",
+  warn: "ใกล้ครบ",
+  overdue: "เกินกำหนด",
 };
 
-export default function StatusBadge({ label, score }: Props) {
-  const { color, text } = CONFIG[label];
-  const pct = Math.min(score * 100, 100);
-
-  return (
-    <div style={{ width: "100%" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-        <span style={{ fontSize: 12, color, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-          {text}
-        </span>
-        <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>
-          {Math.min(Math.round(score * 100), 100)}%
-        </span>
-      </div>
-      <div style={{ height: 6, background: "var(--bg-elevated)", borderRadius: 4, overflow: "hidden" }}>
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            background: color,
-            borderRadius: 4,
-            boxShadow: `0 0 6px ${color}`,
-            transform: `scaleX(${pct / 100})`,
-            transformOrigin: "left",
-            transition: "transform 0.4s ease",
-          }}
-        />
-      </div>
-    </div>
-  );
+export default function StatusBadge({ status, label }: Props) {
+  return <Badge variant={status}>{label ?? LABELS[status]}</Badge>;
 }
