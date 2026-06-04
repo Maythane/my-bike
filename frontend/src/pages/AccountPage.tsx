@@ -240,25 +240,49 @@ export default function AccountPage() {
       </div>
 
       {/* Hero */}
-      <div className="acct-hero">
+      <div
+        className="rounded-[var(--r-lg)] border border-[rgba(124,58,237,0.28)] backdrop-blur-[20px]
+          bg-[linear-gradient(135deg,rgba(124,58,237,0.22),rgba(79,70,229,0.14))]
+          px-4 pt-5 pb-[18px] flex flex-col items-center gap-[10px] mb-5 text-center"
+      >
         <button
-          className="acct-hero-avatar-btn"
+          className="relative w-16 h-16 rounded-full overflow-visible border-0 p-0 bg-transparent
+            cursor-pointer flex-shrink-0 transition-opacity active:opacity-70"
           onClick={() => !avatarLoading && avatarInputRef.current?.click()}
           aria-label="เปลี่ยนรูปโปรไฟล์"
           disabled={avatarLoading}
         >
           {user?.avatar_url
-            ? <img src={user.avatar_url} alt={headingName} style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover" }} />
-            : <div className="acct-hero-avatar-inner">{initial}</div>
+            ? <img src={user.avatar_url} alt={headingName} className="w-16 h-16 rounded-full object-cover" />
+            : (
+              <div className="w-16 h-16 rounded-full flex items-center justify-center
+                bg-[var(--purple)] text-white/90 text-[22px] font-bold">
+                {initial}
+              </div>
+            )
           }
           {avatarLoading
-            ? <div className="acct-hero-avatar-loading" />
-            : <span className="acct-hero-avatar-badge"><EditIcon /></span>
+            ? (
+              <div className="absolute inset-0 rounded-full bg-black/45 flex items-center justify-center">
+                <span className="w-[22px] h-[22px] rounded-full border-2 border-white/30 border-t-white animate-spin block" />
+              </div>
+            )
+            : (
+              <span
+                className="absolute bottom-0 right-0 w-[22px] h-[22px] rounded-full
+                  bg-[var(--elevated)] border-2 border-[var(--canvas)]
+                  flex items-center justify-center text-[var(--slate)]
+                  pointer-events-none transition-colors
+                  group-hover:bg-[var(--purple)] group-hover:text-white"
+              >
+                <EditIcon />
+              </span>
+            )
           }
         </button>
         <div>
-          <div className="acct-hero-name">{headingName}</div>
-          {user?.username && <div className="acct-hero-username">@{user.username}</div>}
+          <div className="text-base font-bold text-[var(--ink)] leading-snug">{headingName}</div>
+          {user?.username && <div className="text-xs text-[var(--purple)] mt-0.5">@{user.username}</div>}
         </div>
       </div>
       <input
@@ -270,24 +294,31 @@ export default function AccountPage() {
       />
 
       {/* Section: บัญชี */}
-      <div className="acct-group-label">บัญชี</div>
-      <div className="acct-page-section">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.7px] text-[var(--steel)] mb-1.5 ml-1">บัญชี</div>
+      <div className="bg-[var(--surface)] backdrop-blur-[12px] border border-[var(--hairline)] rounded-[var(--r-lg)] overflow-hidden mb-5">
 
         {/* Display name */}
         <div
-          className={`acct-page-row${open === "displayName" ? " is-open" : ""}`}
+          className={`flex items-center gap-[10px] px-3.5 py-3 min-h-[44px] border-b border-[var(--hairline)]
+            cursor-pointer select-none transition-colors hover:bg-[var(--elevated)] active:bg-[var(--elevated)]
+            ${open === "displayName" ? "is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("displayName", () => setDisplayName(user?.display_name ?? ""))}
           onKeyDown={(e) => e.key === "Enter" && toggleSection("displayName", () => setDisplayName(user?.display_name ?? ""))}
         >
-          <span className="acct-page-row-label">ชื่อที่แสดง</span>
-          <span className="acct-page-row-value">{user?.display_name || <em>ยังไม่ได้ตั้ง</em>}</span>
-          <span className="acct-row-chevron"><ChevronIcon /></span>
+          <span className="text-[13px] text-[var(--slate)] min-w-[90px] flex-shrink-0">ชื่อที่แสดง</span>
+          <span className="flex-1 text-[13px] text-[var(--ink)] overflow-hidden text-ellipsis whitespace-nowrap [&_em]:text-[var(--steel)] [&_em]:not-italic">
+            {user?.display_name || <em>ยังไม่ได้ตั้ง</em>}
+          </span>
+          <span className={`flex items-center text-[var(--steel)] flex-shrink-0 transition-transform duration-200
+            ${open === "displayName" ? "rotate-90 text-[var(--purple)]" : ""}`}>
+            <ChevronIcon />
+          </span>
         </div>
         {open === "displayName" && (
-          <div className="acct-page-row-body">
-            <form onSubmit={handleDisplayNameSave} className="auth-form">
+          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+            <form onSubmit={handleDisplayNameSave} className="flex flex-col gap-4">
               <Input
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
@@ -307,21 +338,26 @@ export default function AccountPage() {
 
         {/* Username */}
         <div
-          className={`acct-page-row${open === "username" ? " is-open" : ""}`}
+          className={`flex items-center gap-[10px] px-3.5 py-3 min-h-[44px] border-b border-[var(--hairline)]
+            cursor-pointer select-none transition-colors hover:bg-[var(--elevated)] active:bg-[var(--elevated)]
+            ${open === "username" ? "is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("username")}
           onKeyDown={(e) => e.key === "Enter" && toggleSection("username")}
         >
-          <span className="acct-page-row-label">Username</span>
-          <span className="acct-page-row-value">
+          <span className="text-[13px] text-[var(--slate)] min-w-[90px] flex-shrink-0">Username</span>
+          <span className="flex-1 text-[13px] text-[var(--ink)] overflow-hidden text-ellipsis whitespace-nowrap [&_em]:text-[var(--steel)] [&_em]:not-italic">
             {user?.username ? `@${user.username}` : <em>ยังไม่ได้ตั้ง</em>}
           </span>
-          <span className="acct-row-chevron"><ChevronIcon /></span>
+          <span className={`flex items-center text-[var(--steel)] flex-shrink-0 transition-transform duration-200
+            ${open === "username" ? "rotate-90 text-[var(--purple)]" : ""}`}>
+            <ChevronIcon />
+          </span>
         </div>
         {open === "username" && (
-          <div className="acct-page-row-body">
-            <form onSubmit={handleUsernameSave} className="auth-form">
+          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+            <form onSubmit={handleUsernameSave} className="flex flex-col gap-4">
               <Input
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))}
@@ -344,23 +380,31 @@ export default function AccountPage() {
 
         {/* Email */}
         <div
-          className={`acct-page-row${open === "email" ? " is-open" : ""}`}
+          className={`flex items-center gap-[10px] px-3.5 py-3 min-h-[44px]
+            cursor-pointer select-none transition-colors hover:bg-[var(--elevated)] active:bg-[var(--elevated)]
+            ${open === "email" ? "is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("email")}
           onKeyDown={(e) => e.key === "Enter" && toggleSection("email")}
-          style={{ borderBottom: "none" }}
         >
-          <span className="acct-page-row-label">Email</span>
-          <span className="acct-page-row-value">{user?.email || <em>ยังไม่ได้เพิ่ม</em>}</span>
+          <span className="text-[13px] text-[var(--slate)] min-w-[90px] flex-shrink-0">Email</span>
+          <span className="flex-1 text-[13px] text-[var(--ink)] overflow-hidden text-ellipsis whitespace-nowrap [&_em]:text-[var(--steel)] [&_em]:not-italic">
+            {user?.email || <em>ยังไม่ได้เพิ่ม</em>}
+          </span>
           {!user?.email
-            ? <span className="acct-page-add-badge">+ เพิ่ม</span>
-            : <span className="acct-row-chevron"><ChevronIcon /></span>
+            ? <span className="text-[11px] text-[var(--purple)] bg-[var(--purple-bg)] border border-[var(--purple-border)] rounded-[var(--r)] px-2 py-0.5 flex-shrink-0">+ เพิ่ม</span>
+            : (
+              <span className={`flex items-center text-[var(--steel)] flex-shrink-0 transition-transform duration-200
+                ${open === "email" ? "rotate-90 text-[var(--purple)]" : ""}`}>
+                <ChevronIcon />
+              </span>
+            )
           }
         </div>
         {open === "email" && (
-          <div className="acct-page-row-body" style={{ borderTop: "1px solid var(--hairline)" }}>
-            <form onSubmit={handleEmailSave} className="auth-form">
+          <div className="px-3.5 pt-3 pb-3.5 border-t border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+            <form onSubmit={handleEmailSave} className="flex flex-col gap-4">
               <Input
                 type="email"
                 value={newEmail}
@@ -381,24 +425,29 @@ export default function AccountPage() {
       </div>
 
       {/* Section: ความปลอดภัย */}
-      <div className="acct-group-label">ความปลอดภัย</div>
-      <div className="acct-page-section">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.7px] text-[var(--steel)] mb-1.5 ml-1">ความปลอดภัย</div>
+      <div className="bg-[var(--surface)] backdrop-blur-[12px] border border-[var(--hairline)] rounded-[var(--r-lg)] overflow-hidden mb-5">
 
         {/* Password */}
         <div
-          className={`acct-page-row${open === "password" ? " is-open" : ""}`}
+          className={`flex items-center gap-[10px] px-3.5 py-3 min-h-[44px] border-b border-[var(--hairline)]
+            cursor-pointer select-none transition-colors hover:bg-[var(--elevated)] active:bg-[var(--elevated)]
+            ${open === "password" ? "is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("password")}
           onKeyDown={(e) => e.key === "Enter" && toggleSection("password")}
         >
-          <span className="acct-page-row-label">Password</span>
-          <span className="acct-page-row-value">••••••••</span>
-          <span className="acct-row-chevron"><ChevronIcon /></span>
+          <span className="text-[13px] text-[var(--slate)] min-w-[90px] flex-shrink-0">Password</span>
+          <span className="flex-1 text-[13px] text-[var(--ink)] overflow-hidden text-ellipsis whitespace-nowrap">••••••••</span>
+          <span className={`flex items-center text-[var(--steel)] flex-shrink-0 transition-transform duration-200
+            ${open === "password" ? "rotate-90 text-[var(--purple)]" : ""}`}>
+            <ChevronIcon />
+          </span>
         </div>
         {open === "password" && (
-          <div className="acct-page-row-body">
-            <form onSubmit={handlePasswordSave} className="auth-form">
+          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+            <form onSubmit={handlePasswordSave} className="flex flex-col gap-4">
               <div className="pw-wrap">
                 <Input
                   type={showCurrent ? "text" : "password"}
@@ -448,26 +497,35 @@ export default function AccountPage() {
 
         {/* Phone */}
         <div
-          className={`acct-page-row${open === "phone" ? " is-open" : ""}`}
+          className={`flex items-center gap-[10px] px-3.5 py-3 min-h-[44px]
+            cursor-pointer select-none transition-colors hover:bg-[var(--elevated)] active:bg-[var(--elevated)]
+            ${open === "phone" ? "is-open" : ""}`}
           role="button"
           tabIndex={0}
           onClick={() => toggleSection("phone")}
           onKeyDown={(e) => e.key === "Enter" && toggleSection("phone")}
-          style={{ borderBottom: "none" }}
         >
-          <span className="acct-page-row-label">เบอร์โทร</span>
-          <span className="acct-page-row-value" style={user?.phone_verified ? { color: "var(--green)" } : undefined}>
+          <span className="text-[13px] text-[var(--slate)] min-w-[90px] flex-shrink-0">เบอร์โทร</span>
+          <span
+            className="flex-1 text-[13px] overflow-hidden text-ellipsis whitespace-nowrap [&_em]:text-[var(--steel)] [&_em]:not-italic"
+            style={user?.phone_verified ? { color: "var(--green)" } : { color: "var(--ink)" }}
+          >
             {user?.phone_verified ? user.phone : <em>ยังไม่ได้เพิ่ม</em>}
           </span>
           {!user?.phone_verified
-            ? <span className="acct-page-add-badge">+ เพิ่ม</span>
-            : <span className="acct-row-chevron"><ChevronIcon /></span>
+            ? <span className="text-[11px] text-[var(--purple)] bg-[var(--purple-bg)] border border-[var(--purple-border)] rounded-[var(--r)] px-2 py-0.5 flex-shrink-0">+ เพิ่ม</span>
+            : (
+              <span className={`flex items-center text-[var(--steel)] flex-shrink-0 transition-transform duration-200
+                ${open === "phone" ? "rotate-90 text-[var(--purple)]" : ""}`}>
+                <ChevronIcon />
+              </span>
+            )
           }
         </div>
         {open === "phone" && (
-          <div className="acct-page-row-body" style={{ borderTop: "1px solid var(--hairline)" }}>
+          <div className="px-3.5 pt-3 pb-3.5 border-t border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
             {!otpSent ? (
-              <div className="auth-form">
+              <div className="flex flex-col gap-4">
                 <Input
                   type="tel"
                   value={phone}
@@ -487,7 +545,7 @@ export default function AccountPage() {
                 </Button>
               </div>
             ) : (
-              <form onSubmit={handlePhoneConfirm} className="auth-form">
+              <form onSubmit={handlePhoneConfirm} className="flex flex-col gap-4">
                 <p style={{ fontSize: 12, color: "var(--slate)", margin: 0 }}>
                   ส่ง OTP ไปที่ <strong style={{ color: "var(--ink)" }}>{phone}</strong>
                 </p>
@@ -501,10 +559,15 @@ export default function AccountPage() {
                   autoFocus
                   required
                 />
-                <div className="auth-otp-hint">
+                <div className="flex items-center gap-2 text-xs text-[var(--slate)] -mt-1">
                   {countdown > 0 ? `OTP หมดอายุใน ${mm}:${ss}` : "OTP หมดอายุแล้ว"}
                   {countdown === 0 && (
-                    <button type="button" className="auth-resend-btn" onClick={handlePhoneSend} disabled={loading}>
+                    <button
+                      type="button"
+                      className="text-[var(--purple)] text-xs hover:underline bg-transparent border-0 cursor-pointer p-0"
+                      onClick={handlePhoneSend}
+                      disabled={loading}
+                    >
                       ส่งใหม่
                     </button>
                   )}
