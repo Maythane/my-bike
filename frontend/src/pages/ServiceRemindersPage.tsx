@@ -92,7 +92,7 @@ export default function ServiceRemindersPage() {
 
   return (
     <>
-    <div className="page">
+    <div className="relative min-h-dvh pb-20 max-w-[680px] w-full mx-auto overflow-x-hidden touch-pan-y px-4 py-6 sm:px-6 sm:py-8">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
         <Button variant="ghost" size="sm" onClick={() => {
           document.documentElement.dataset.navDir = "back";
