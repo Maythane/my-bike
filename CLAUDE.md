@@ -2,48 +2,40 @@
 
 ---
 
-## Design System — Jelly Glass
+## Design System — Direction C (Dark Formal)
 
 Dark mode default · light mode ผ่าน `html.light`
 
-### CSS Variables
-```css
---canvas --surface --surface-soft --elevated
---glass-bg --glass-border
---ink --slate --steel --muted
---purple --purple-bg --purple-border --purple-hover
---red --red-bg --green --green-border
---hairline --hairline-strong
---r --r-md --r-lg --r-full
---jelly-ease --spring --shadow-card --shadow-modal
-```
+### Tools
+Tailwind CSS v4 · shadcn/ui · CSS variables via `@theme inline` ใน `index.css`
 
-### CSS Classes
-```
-.btn .btn-primary .btn-secondary .btn-ghost .btn-danger .btn-sm
-.modal-overlay .modal .modal-plain .modal-box
-.auth-card .auth-input .auth-field .auth-error .auth-success .auth-link
-.acct-modal .acct-section .acct-section-row .acct-profile-edit
-.confirm-dialog .confirm-dialog-body .confirm-dialog-footer
-.card .card-surface
-```
+### shadcn Components (`src/components/ui/`)
+`Button` (variants: default/secondary/ghost/destructive/jelly/outline, sizes: default/sm/lg/icon)
+`Input` · `Label` · `Card` (+ CardHeader/CardTitle/CardContent/CardFooter) · `Badge` (ok/warn/overdue/default)
+`Dialog` (+ DialogContent/Header/Title/Footer/Description) · `AlertDialog` · `Sheet`
+`Select` (+ SelectTrigger/Value/Content/Item) · `Separator` · `Tabs` (+ TabsList/Trigger/Content)
 
-CSS ทั้งหมดอยู่ใน `frontend/src/index.css` ไฟล์เดียว — ไม่มี CSS modules
+### Custom Components (NOT shadcn, keep CSS)
+FAB · SwipeReveal · SkeletonCard · StatusBadge · BottomNav · AvatarMenu · ImageCropper
 
----
+### Key CSS Tokens (in `index.css` `:root`)
+`--background` `--card` `--border` `--primary` `--muted-foreground`
+`--glass-bg` `--glass-border` (subtle glass — nav + modals only)
+`--success` `--warning` `--destructive`
+`--radius` = 0.5rem (8px) · `--radius-sm` = 6px · `--radius-lg` = 12px
+`--purple` `--purple-bg` `--purple-border` `--purple-hover` (accent tints)
+`--canvas` `--surface` `--elevated` · `--ink` `--slate` `--steel`
+`--hairline` `--hairline-strong` · `--r` `--r-md` `--r-lg` `--r-full`
+`--shadow-card` `--shadow-modal` · `--jelly-ease` `--spring`
 
-## Adapting External Code
-
-เมื่อได้รับ code ที่ใช้ shadcn/lucide/Next.js ให้ adapt เป็น:
-
+### Adapting External Code
 | ต้นฉบับ | แปลงเป็น |
 |--------|---------|
-| `<Button variant="outline">` | `<button className="btn btn-ghost">` |
-| `<Button variant="destructive">` | `<button className="btn btn-danger">` |
-| `<Input>` | `<input className="auth-input">` |
-| `<Label>` | `<label>` (styled via CSS) |
-| `<Dialog>` / `<DialogContent>` | `<div className="modal-overlay"><div className="modal modal-plain">` |
+| `<Button variant="outline">` | `<Button variant="ghost">` |
+| `<Button variant="destructive">` | `<Button variant="destructive">` |
+| `<Input>` | `<Input>` (ตรงๆ) |
+| `<Dialog>` / `<DialogContent>` | `<Dialog>` + `<DialogContent>` (ตรงๆ) |
 | lucide icons | Inline `<svg>` |
 | `Link` from next | `<a>` หรือ `useNavigate()` |
 | `"use client"` | ลบออก (ไม่ใช้ Next.js) |
-| `@/components/ui/...` | native elements + CSS classes |
+| `@/components/ui/...` | shadcn components ตรงๆ หรือ native elements |
