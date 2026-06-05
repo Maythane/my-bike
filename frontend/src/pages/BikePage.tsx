@@ -142,7 +142,7 @@ export default function BikePage() {
   }
 
   return (
-    <div className="page">
+    <div className="relative min-h-dvh pb-20 max-w-[680px] w-full mx-auto overflow-x-hidden touch-pan-y px-4 py-6 sm:px-6 sm:py-8">
       <button
         onClick={() => {
           document.documentElement.dataset.navDir = "back";
@@ -210,7 +210,7 @@ export default function BikePage() {
             </div>
 
             <div style={{ padding: "18px 20px 0" }}>
-            <div className="bike-detail-header">
+            <div className="flex items-start justify-between gap-3">
               <div>
                 <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--ink)", letterSpacing: "-0.3px", marginBottom: 3 }}>
                   {bike.nickname ?? `${bike.make} ${bike.model}`}
@@ -221,20 +221,20 @@ export default function BikePage() {
                   {bike.license_plate ? ` · ${bike.license_plate}` : ""}
                 </div>
               </div>
-              <div className="bike-detail-actions">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <Button variant="ghost" size="sm" onClick={() => setShowEditBike(true)}>แก้ไข</Button>
                 {/* desktop: show delete inline */}
                 <Button
                   variant="destructive"
                   size="sm"
-                  className="bike-delete-desktop"
+                  className="hidden sm:inline-flex"
                   onClick={async () => {
                     if (await confirm(`ข้อมูลรถและประวัติการบำรุงรักษาทั้งหมดจะถูกลบด้วย`, { title: `ลบรถ "${bike.nickname ?? bike.model}"?`, confirmLabel: "ลบรถ" }))
                       deleteBikeMut.mutate();
                   }}
                 >ลบ</Button>
                 {/* mobile: overflow ⋮ menu */}
-                <div className="bike-overflow-wrap bike-delete-mobile">
+                <div className="bike-overflow-wrap sm:hidden">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -266,7 +266,7 @@ export default function BikePage() {
               </div>
             </div>
 
-            <div className="bike-detail-stats">
+            <div className="flex gap-6 items-end pt-3 pb-2">
               <div>
                 <div style={{ fontSize: 11, fontWeight: 600, color: "var(--steel)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 2 }}>Odometer</div>
                 <div style={{ fontSize: 28, fontWeight: 700, color: "var(--ink)", letterSpacing: "-0.5px" }}>
@@ -292,7 +292,7 @@ export default function BikePage() {
               <BikeSpecs make={bike.make} model={bike.model} />
             </div>
 
-            <div className="bike-detail-primary-actions">
+            <div className="flex flex-wrap gap-2 pb-4">
               <Button variant="default" style={{ fontSize: 14 }} onClick={() => setShowFuelForm(true)}>
                 ⛽ บันทึกการเติมน้ำมัน
               </Button>
