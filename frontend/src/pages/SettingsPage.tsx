@@ -53,7 +53,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="page">
+    <div className="relative min-h-dvh pb-20 max-w-[680px] w-full mx-auto overflow-x-hidden touch-pan-y px-4 py-6 sm:px-6 sm:py-8">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
         <Button
           variant="ghost"
@@ -74,9 +74,9 @@ export default function SettingsPage() {
 
       {/* ── Account ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="settings-section-label">Account</div>
-        <div className="settings-card">
-          <div className="settings-row" style={{ gap: 12, alignItems: "center" }}>
+        <div className="text-[11px] text-[var(--steel)] uppercase tracking-[0.08em] mb-2">Account</div>
+        <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
+          <div className="flex justify-between items-center" style={{ gap: 12, alignItems: "center" }}>
             <div style={{
               width: 36, height: 36, borderRadius: "50%", background: "var(--purple-bg)",
               border: "1px solid var(--purple-border)", display: "flex", alignItems: "center",
@@ -95,7 +95,7 @@ export default function SettingsPage() {
           </div>
           <div style={{ borderTop: "1px solid var(--hairline)", marginTop: 4 }}>
             <button
-              className="settings-row"
+              className="flex justify-between items-center"
               style={{ width: "100%", background: "none", border: "none", cursor: "pointer",
                 color: "var(--red)", fontSize: 14, fontWeight: 500, justifyContent: "flex-start", gap: 8 }}
               onClick={logout}
@@ -108,23 +108,23 @@ export default function SettingsPage() {
 
       {/* ── ทั่วไป (existing unit/timezone settings) ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="settings-section-label">ทั่วไป</div>
-        <div className="settings-card">
-          <div className="settings-row">
-            <span className="settings-row-label">ระยะทางที่ต้องการให้แสดง</span>
-            <div className="toggle-group">
+        <div className="text-[11px] text-[var(--steel)] uppercase tracking-[0.08em] mb-2">ทั่วไป</div>
+        <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-[var(--ink)]">ระยะทางที่ต้องการให้แสดง</span>
+            <div className="flex gap-1">
               <button
-                className={`toggle-btn${effectiveUnit === "km" ? " active" : ""}`}
+                className={`px-3.5 py-1 rounded-full text-[13px] font-medium border cursor-pointer transition-all duration-150 ${effectiveUnit === "km" ? "bg-[var(--purple-bg)] border-[var(--purple-border)] text-[var(--purple)] font-semibold" : "border-[var(--hairline)] bg-[var(--surface)] text-[var(--slate)]"}`}
                 onClick={() => setUnit("km")}
               >km</button>
               <button
-                className={`toggle-btn${effectiveUnit === "miles" ? " active" : ""}`}
+                className={`px-3.5 py-1 rounded-full text-[13px] font-medium border cursor-pointer transition-all duration-150 ${effectiveUnit === "miles" ? "bg-[var(--purple-bg)] border-[var(--purple-border)] text-[var(--purple)] font-semibold" : "border-[var(--hairline)] bg-[var(--surface)] text-[var(--slate)]"}`}
                 onClick={() => setUnit("miles")}
               >miles</button>
             </div>
           </div>
-          <div className="settings-row">
-            <span className="settings-row-label">Timezone</span>
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-[var(--ink)]">Timezone</span>
             <input
               style={{
                 background: "var(--surface)", border: "1px solid var(--glass-border)",
@@ -140,7 +140,7 @@ export default function SettingsPage() {
 
       {/* ── Shock Setup ต่อคัน (existing) ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="settings-section-label">Shock Setup ต่อคัน</div>
+        <div className="text-[11px] text-[var(--steel)] uppercase tracking-[0.08em] mb-2">Shock Setup ต่อคัน</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {bikes?.map((bike) => (
             <BikeSockRow
@@ -158,10 +158,10 @@ export default function SettingsPage() {
 
       {/* ── App ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="settings-section-label">App</div>
-        <div className="settings-card">
+        <div className="text-[11px] text-[var(--steel)] uppercase tracking-[0.08em] mb-2">App</div>
+        <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
           <button
-            className="settings-row"
+            className="flex justify-between items-center"
             style={{ width: "100%", background: "none", border: "none", cursor: "pointer",
               fontSize: 14, color: "var(--ink)", justifyContent: "space-between" }}
             onClick={openGasStation}
@@ -202,10 +202,10 @@ function BikeSockRow({
     : "ยังไม่ได้ตั้งค่า";
 
   return (
-    <div className="settings-bike-card">
+    <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r)] px-4 py-3.5 flex justify-between items-center">
       <div>
-        <div className="settings-bike-name">{bikeName}</div>
-        <div className="settings-bike-shock">{shockLabel}</div>
+        <div className="text-[13px] font-semibold text-[var(--ink)]">{bikeName}</div>
+        <div className="text-[12px] text-[var(--slate)] mt-0.5">{shockLabel}</div>
       </div>
       <Button variant="ghost" size="sm" onClick={onEdit} style={{ fontSize: 12 }}>
         แก้ไข
