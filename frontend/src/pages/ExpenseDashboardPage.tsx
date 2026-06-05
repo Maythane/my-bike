@@ -95,9 +95,9 @@ export default function ExpenseDashboardPage() {
           </p>
         </div>
         <Button
+          variant="default"
           size="sm"
           className="min-h-[44px] max-[420px]:w-full max-[420px]:justify-center"
-          style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)" }}
           onClick={() => setShowModal(true)}
         >+ เพิ่มค่าใช้จ่าย</Button>
       </div>

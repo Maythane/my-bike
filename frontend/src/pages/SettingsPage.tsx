@@ -163,7 +163,9 @@ export default function SettingsPage() {
             />
           ))}
           {!bikes?.length && (
-            <div style={{ color: "var(--slate)", fontSize: 13 }}>ยังไม่มีรถในระบบ</div>
+            <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] px-4 py-3.5 text-[13px] text-[var(--slate)]">
+              ยังไม่มีรถในระบบ
+            </div>
           )}
         </div>
       </div>

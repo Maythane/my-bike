@@ -282,7 +282,7 @@ export default function AccountPage() {
         </button>
         <div>
           <div className="text-base font-bold text-[var(--ink)] leading-snug">{headingName}</div>
-          {user?.username && <div className="text-xs text-[var(--purple)] mt-0.5">@{user.username}</div>}
+          {user?.display_name && user?.username && <div className="text-xs text-[var(--purple)] mt-0.5">@{user.username}</div>}
         </div>
       </div>
       <input
@@ -591,8 +591,9 @@ export default function AccountPage() {
 
       {/* Logout */}
       <Button
-        variant="destructive"
-        style={{ width: "100%", marginTop: 8, marginBottom: 32 }}
+        variant="ghost"
+        className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+        style={{ marginTop: 8, marginBottom: 32 }}
         onClick={() => logout()}
       >
         ออกจากระบบ
