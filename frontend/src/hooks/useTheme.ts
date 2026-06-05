@@ -12,8 +12,9 @@ export function useTheme() {
   const [theme, setTheme] = useState<Theme>(getInitial);
 
   useEffect(() => {
+    // dark mode = no class (default); light mode = html.light
     document.documentElement.classList.toggle("light", theme === "light");
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.remove("dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
 

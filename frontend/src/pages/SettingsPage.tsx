@@ -74,7 +74,7 @@ export default function SettingsPage() {
 
       {/* ── Account ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="text-[11px] text-[var(--steel)] uppercase tracking-[0.08em] mb-2">Account</div>
+        <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">Account</div>
         <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
           <div className="flex justify-between items-center" style={{ gap: 12, alignItems: "center" }}>
             <div style={{
@@ -93,32 +93,31 @@ export default function SettingsPage() {
               {user?.email && <div style={{ fontSize: 12, color: "var(--slate)", marginTop: 1 }}>{user.email}</div>}
             </div>
           </div>
-          <div style={{ borderTop: "1px solid var(--hairline)", marginTop: 4 }}>
-            <button
-              className="flex justify-between items-center"
-              style={{ width: "100%", background: "none", border: "none", cursor: "pointer",
-                color: "var(--red)", fontSize: 14, fontWeight: 500, justifyContent: "flex-start", gap: 8 }}
+          <div className="border-t border-[var(--hairline)] mt-1 pt-1">
+            <Button
+              variant="ghost"
+              className="w-full justify-start gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 h-9 px-1"
               onClick={logout}
             >
               🚪 ออกจากระบบ
-            </button>
+            </Button>
           </div>
         </div>
       </div>
 
       {/* ── ทั่วไป (existing unit/timezone settings) ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="text-[11px] text-[var(--steel)] uppercase tracking-[0.08em] mb-2">ทั่วไป</div>
+        <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">ทั่วไป</div>
         <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <span className="text-sm text-[var(--ink)]">ระยะทางที่ต้องการให้แสดง</span>
             <div className="flex gap-1">
               <button
-                className={`px-3.5 py-1 rounded-full text-[13px] font-medium border cursor-pointer transition-all duration-150 ${effectiveUnit === "km" ? "bg-[var(--purple-bg)] border-[var(--purple-border)] text-[var(--purple)] font-semibold" : "border-[var(--hairline)] bg-[var(--surface)] text-[var(--slate)]"}`}
+                className={`px-3.5 py-1 rounded-full text-[13px] font-medium border cursor-pointer transition-all duration-150 ${effectiveUnit === "km" ? "bg-[var(--purple-bg)] border-[var(--purple-border)] text-[var(--purple)] font-semibold" : "border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--slate)] hover:text-[var(--ink)]"}`}
                 onClick={() => setUnit("km")}
               >km</button>
               <button
-                className={`px-3.5 py-1 rounded-full text-[13px] font-medium border cursor-pointer transition-all duration-150 ${effectiveUnit === "miles" ? "bg-[var(--purple-bg)] border-[var(--purple-border)] text-[var(--purple)] font-semibold" : "border-[var(--hairline)] bg-[var(--surface)] text-[var(--slate)]"}`}
+                className={`px-3.5 py-1 rounded-full text-[13px] font-medium border cursor-pointer transition-all duration-150 ${effectiveUnit === "miles" ? "bg-[var(--purple-bg)] border-[var(--purple-border)] text-[var(--purple)] font-semibold" : "border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--slate)] hover:text-[var(--ink)]"}`}
                 onClick={() => setUnit("miles")}
               >miles</button>
             </div>
@@ -135,12 +134,25 @@ export default function SettingsPage() {
               onChange={(e) => setTimezone(e.target.value)}
             />
           </div>
+          {/* Save row lives inside the card — gives the button a visible surface to sit on */}
+          <div className="border-t border-[var(--hairline)] pt-3 flex items-center gap-3">
+            <Button
+              variant="default"
+              onClick={() => saveSettings()}
+              disabled={isPending}
+            >
+              {isPending ? "กำลังบันทึก…" : "บันทึก"}
+            </Button>
+            {saveMsg && (
+              <span className="text-[13px] text-[var(--green)]">✓ {saveMsg}</span>
+            )}
+          </div>
         </div>
       </div>
 
       {/* ── Shock Setup ต่อคัน (existing) ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="text-[11px] text-[var(--steel)] uppercase tracking-[0.08em] mb-2">Shock Setup ต่อคัน</div>
+        <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">Shock Setup ต่อคัน</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {bikes?.map((bike) => (
             <BikeSockRow
@@ -158,7 +170,7 @@ export default function SettingsPage() {
 
       {/* ── App ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="text-[11px] text-[var(--steel)] uppercase tracking-[0.08em] mb-2">App</div>
+        <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">App</div>
         <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
           <button
             className="flex justify-between items-center"
@@ -172,19 +184,6 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* Save button (for unit/timezone) */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <Button
-          variant="default"
-          onClick={() => saveSettings()}
-          disabled={isPending}
-        >
-          {isPending ? "กำลังบันทึก…" : "Save Settings"}
-        </Button>
-        {saveMsg && (
-          <span style={{ color: "var(--green)", fontSize: 13 }}>✓ {saveMsg}</span>
-        )}
-      </div>
     </div>
   );
 }

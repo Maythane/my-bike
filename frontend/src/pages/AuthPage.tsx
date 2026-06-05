@@ -155,7 +155,7 @@ export default function AuthPage() {
           <div className="flex flex-col items-center gap-2 text-center">
             <img src="/favicon.svg" className="w-12 h-12 flex-shrink-0" alt="My Bike" />
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-xs font-semibold tracking-[0.12em] uppercase text-[var(--purple)]">Moto Tracker</span>
+              <span className="text-xs font-semibold tracking-[0.06em] text-[var(--purple)]">Moto Tracker</span>
               <h1 className="text-[1.625rem] font-bold text-[var(--ink)] m-0">ยินดีต้อนรับกลับมา</h1>
             </div>
             <p className="text-sm text-[var(--slate)] m-0 max-w-[28ch]">ติดตามการบำรุงรักษาและอัตราบริโภคเชื้อเพลิงรถของคุณ</p>
@@ -307,7 +307,7 @@ export default function AuthPage() {
           <div className="flex flex-col items-center gap-2 text-center">
             <img src="/favicon.svg" className="w-12 h-12 flex-shrink-0" alt="Moto Tracker" />
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-xs font-semibold tracking-[0.12em] uppercase text-[var(--purple)]">Moto Tracker</span>
+              <span className="text-xs font-semibold tracking-[0.06em] text-[var(--purple)]">Moto Tracker</span>
               <h1 className="text-[1.625rem] font-bold text-[var(--ink)] m-0">สร้างบัญชีใหม่</h1>
             </div>
             <p className="text-sm text-[var(--slate)] m-0 max-w-[28ch]">สมัครสมาชิกเพื่อเริ่มบันทึกข้อมูลรถของคุณ</p>

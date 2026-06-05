@@ -190,7 +190,7 @@ export default function ExpenseDashboardPage() {
       )}
 
       {allLoaded && hasError && (
-        <div className="empty-state card" role="alert">
+        <div className="empty-state" role="alert">
           <div className="empty-state-icon">!</div>
           <h3>โหลดค่าใช้จ่ายไม่สำเร็จ</h3>
           <p>ข้อมูลยังอยู่ครบ ลองเปลี่ยนตัวกรองหรือโหลดหน้านี้ใหม่อีกครั้ง</p>
@@ -247,7 +247,7 @@ export default function ExpenseDashboardPage() {
       )}
 
       {allLoaded && !hasError && (!summary || summary.total === 0) && (
-        <div className="empty-state card">
+        <div className="empty-state">
           <div className="empty-state-icon">฿</div>
           <h3>ยังไม่มีค่าใช้จ่ายในช่วงนี้</h3>
           <p>เริ่มจากบันทึกประกัน ต่อทะเบียน อะไหล่ หรือค่าใช้จ่ายอื่นที่ไม่ใช่น้ำมัน</p>

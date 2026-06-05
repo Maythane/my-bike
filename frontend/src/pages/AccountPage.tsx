@@ -294,7 +294,7 @@ export default function AccountPage() {
       />
 
       {/* Section: บัญชี */}
-      <div className="text-[11px] font-semibold uppercase tracking-[0.7px] text-[var(--steel)] mb-1.5 ml-1">บัญชี</div>
+      <div className="text-[11px] font-semibold text-[var(--steel)] mb-1.5 ml-1">บัญชี</div>
       <div className="bg-[var(--surface)] backdrop-blur-[12px] border border-[var(--hairline)] rounded-[var(--r-lg)] overflow-hidden mb-5">
 
         {/* Display name */}
@@ -425,7 +425,7 @@ export default function AccountPage() {
       </div>
 
       {/* Section: ความปลอดภัย */}
-      <div className="text-[11px] font-semibold uppercase tracking-[0.7px] text-[var(--steel)] mb-1.5 ml-1">ความปลอดภัย</div>
+      <div className="text-[11px] font-semibold text-[var(--steel)] mb-1.5 ml-1">ความปลอดภัย</div>
       <div className="bg-[var(--surface)] backdrop-blur-[12px] border border-[var(--hairline)] rounded-[var(--r-lg)] overflow-hidden mb-5">
 
         {/* Password */}
