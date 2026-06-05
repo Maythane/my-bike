@@ -271,7 +271,7 @@ export default function GaragePage() {
             </div>
 
             <div style={{ padding: "18px 20px 0" }}>
-              <div className="bike-detail-header">
+              <div className="flex justify-between items-start gap-3 mb-[18px] max-sm:flex-col max-sm:mb-[14px]">
                 <div>
                   <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--ink)", letterSpacing: "-0.3px", marginBottom: 3 }}>
                     {selectedBike.nickname ?? `${selectedBike.make} ${selectedBike.model}`}
@@ -282,14 +282,14 @@ export default function GaragePage() {
                     {selectedBike.license_plate ? ` · ${selectedBike.license_plate}` : ""}
                   </div>
                 </div>
-                <div className="bike-detail-actions">
+                <div className="flex gap-1.5 max-sm:w-full">
                   <Button variant="ghost" size="sm" onClick={() => setShowEditBike(true)}>แก้ไข</Button>
-                  <Button variant="destructive" size="sm" className="bike-delete-desktop"
+                  <Button variant="destructive" size="sm" className="max-sm:hidden"
                     onClick={async () => {
                       if (await confirm(`ข้อมูลรถและประวัติการบำรุงรักษาทั้งหมดจะถูกลบด้วย`, { title: `ลบรถ "${selectedBike.nickname ?? selectedBike.model}"?`, confirmLabel: "ลบรถ" }))
                         deleteBikeMut.mutate();
                     }}>ลบ</Button>
-                  <div className="bike-overflow-wrap bike-delete-mobile">
+                  <div className="bike-overflow-wrap hidden max-sm:block shrink-0">
                     <Button variant="ghost" size="sm" className="bike-overflow-btn" onClick={() => setShowOverflow((v) => !v)} aria-label="เมนูเพิ่มเติม">⋮</Button>
                     {showOverflow && (
                       <>
@@ -313,7 +313,7 @@ export default function GaragePage() {
                 </div>
               </div>
 
-              <div className="bike-detail-stats">
+              <div className="flex gap-6 flex-wrap pb-[18px] border-b border-[var(--hairline)] mb-[18px] max-sm:grid max-sm:grid-cols-2 max-sm:gap-x-4 max-sm:gap-y-3 max-sm:pb-[14px] max-sm:mb-[14px]">
                 <div>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "var(--steel)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 2 }}>Odometer</div>
                   <div style={{ fontSize: 28, fontWeight: 700, color: "var(--ink)", letterSpacing: "-0.5px", fontVariantNumeric: "tabular-nums" }}>
@@ -339,7 +339,7 @@ export default function GaragePage() {
                 <BikeSpecs make={selectedBike.make} model={selectedBike.model} />
               </div>
 
-              <div className="bike-detail-primary-actions">
+              <div className="flex gap-2 pb-5 flex-wrap max-sm:flex-col max-sm:pb-4">
                 <Button variant="default" style={{ fontSize: 14 }} onClick={() => setShowFuelForm(true)}>
                   ⛽ บันทึกการเติมน้ำมัน
                 </Button>

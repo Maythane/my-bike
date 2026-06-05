@@ -766,38 +766,6 @@ label {
   }
 }
 
-.bike-detail-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-@media (max-width: 639px) {
-  .bike-detail-header {
-    flex-direction: column;
-    margin-bottom: 14px;
-  }
-}
-
-.bike-detail-actions {
-  display: flex;
-  gap: 6px;
-}
-
-/* desktop: show inline delete, hide overflow button */
-.bike-delete-desktop { display: inline-flex; }
-.bike-delete-mobile  { display: none; }
-
-@media (max-width: 639px) {
-  .bike-detail-actions {
-    width: 100%;
-  }
-  /* hide inline delete, show overflow ⋮ on mobile */
-  .bike-delete-desktop { display: none; }
-  .bike-delete-mobile  { display: block; flex-shrink: 0; }
-}
-
 /* Overflow menu */
 .bike-overflow-wrap {
   position: relative;
@@ -932,37 +900,6 @@ html.light .quick-log-menu {
 
 .bike-overflow-danger:hover {
   background: var(--red-bg);
-}
-
-.bike-detail-stats {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--hairline);
-  margin-bottom: 18px;
-}
-@media (max-width: 639px) {
-  .bike-detail-stats {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px 16px;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
-  }
-}
-
-.bike-detail-primary-actions {
-  display: flex;
-  gap: 8px;
-  padding-bottom: 20px;
-  flex-wrap: wrap;
-}
-@media (max-width: 639px) {
-  .bike-detail-primary-actions {
-    flex-direction: column;
-    padding-bottom: 16px;
-  }
 }
 
 .bike-segmented {
