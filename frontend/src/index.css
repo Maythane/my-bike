@@ -943,34 +943,12 @@ html.light .quick-log-menu {
   }
 }
 
-.shock-page {
-  max-width: 920px;
-}
-
-.shock-page-header {
-  margin-bottom: 18px;
-}
-
-.shock-page-header h1 {
-  font-size: 34px;
-  line-height: 1.05;
-  letter-spacing: -1px;
-  margin-top: 4px;
-}
-
-.shock-page-kicker,
 .shock-results-kicker {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: rgba(255, 140, 146, 0.85);
   font-weight: 700;
-}
-
-.shock-page-subtitle {
-  margin-top: 8px;
-  color: var(--slate);
-  max-width: 680px;
 }
 
 .shock-hero-card,
@@ -1065,18 +1043,6 @@ html.light .quick-log-menu {
   margin-bottom: 16px;
 }
 
-.shock-input-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.shock-label {
-  margin-bottom: 10px;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 14px;
-  font-weight: 600;
-}
 
 .shock-input-shell {
   position: relative;
@@ -1430,7 +1396,6 @@ html.light .shock-disclaimer {
   color: rgba(15, 15, 35, 0.62);
 }
 
-html.light .shock-label,
 html.light .shock-table th,
 html.light .shock-warning p,
 html.light .shock-info-card p,
@@ -1509,22 +1474,6 @@ html.light .shock-result-range {
 }
 
 @media (max-width: 639px) {
-  .shock-page {
-    padding-top: 16px;
-  }
-
-  .shock-page-header {
-    margin-bottom: 14px;
-  }
-
-  .shock-page-header h1 {
-    font-size: 28px;
-  }
-
-  .shock-page-subtitle {
-    font-size: 13px;
-  }
-
   .shock-hero-card,
   .shock-panel {
     border-radius: 20px;
@@ -1563,7 +1512,6 @@ html.light .shock-result-range {
     padding: 16px;
   }
 
-  .shock-input-grid,
   .shock-mode-toggle {
     gap: 10px;
   }
@@ -1754,18 +1702,6 @@ html.light .shock-preset-card {
   text-overflow: ellipsis;
 }
 
-.shock-save-weight-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.shock-save-mode-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
 .shock-save-mode-btn {
   padding: 10px 12px;
   border-radius: var(--r);
@@ -1782,14 +1718,7 @@ html.light .shock-preset-card {
   color: #fff;
 }
 
-.shock-save-vals-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-}
-
 @media (max-width: 639px) {
-  .shock-save-vals-row { gap: 8px; }
   .shock-preset-card { width: 160px; }
 }
 

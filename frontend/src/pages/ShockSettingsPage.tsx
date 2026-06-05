@@ -321,7 +321,7 @@ export default function ShockSettingsPage() {
           <div className="shock-brand-banner-fade" />
         </div>
       )}
-      <div className="page shock-page">
+      <div className="page max-w-[920px]">
         <button
           onClick={() => {
             document.documentElement.dataset.navDir = "back";
@@ -348,9 +348,9 @@ export default function ShockSettingsPage() {
             ))}
           </div>
         )}
-      <div className="shock-page-header">
+      <div className="mb-[18px]">
         <div>
-          <p className="shock-page-kicker">
+          <p className="text-[12px] font-bold uppercase tracking-[0.12em] text-[rgba(255,140,146,0.85)]">
             {activeBrand ? `${activeBrand.name} Setup` : "Shock Setup"}
           </p>
           <h1>
@@ -390,7 +390,7 @@ export default function ShockSettingsPage() {
               เปลี่ยนโช้ค
             </Button>
           </div>
-          <p className="shock-page-subtitle" style={{ marginTop: 6 }}>ตาม chart น้ำหนักรวมของผู้ขับขี่และคนซ้อน</p>
+          <p className="mt-[6px] text-[var(--slate)] max-w-[680px]">ตาม chart น้ำหนักรวมของผู้ขับขี่และคนซ้อน</p>
         </div>
       </div>
 
@@ -446,9 +446,9 @@ export default function ShockSettingsPage() {
       </section>
 
       <Card className="shock-panel" style={{ padding: "20px" }}>
-        <div className="shock-input-grid">
+        <div className="grid grid-cols-2 gap-4">
           <div className="form-group">
-            <label htmlFor="rider-weight" className="shock-label">น้ำหนักผู้ขับขี่ (กก.)</label>
+            <label htmlFor="rider-weight" className="block mb-2.5 text-sm font-semibold">น้ำหนักผู้ขับขี่ (กก.)</label>
             <div className="shock-input-shell">
               <input
                 id="rider-weight"
@@ -461,7 +461,7 @@ export default function ShockSettingsPage() {
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="passenger-weight" className="shock-label">น้ำหนักคนซ้อน (กก.)</label>
+            <label htmlFor="passenger-weight" className="block mb-2.5 text-sm font-semibold">น้ำหนักคนซ้อน (กก.)</label>
             <div className="shock-input-shell">
               <input
                 id="passenger-weight"
@@ -476,7 +476,7 @@ export default function ShockSettingsPage() {
         </div>
 
         <div className="form-group">
-          <label className="shock-label">โหมดการใช้งาน</label>
+          <label className="block mb-2.5 text-sm font-semibold">โหมดการใช้งาน</label>
           <div className="shock-mode-toggle" role="tablist" aria-label="โหมดการใช้งาน">
             <button
               type="button"
@@ -658,28 +658,28 @@ export default function ShockSettingsPage() {
               </DialogHeader>
               <div className="px-6 py-4">
                 <div className="form-group">
-                  <label className="shock-label">ชื่อ preset *</label>
+                  <label className="block mb-2.5 text-sm font-semibold">ชื่อ preset *</label>
                   <input type="text" value={editForm.name}
                     onChange={(e) => setEditForm((f) => f && ({ ...f, name: e.target.value }))}
                     placeholder="เช่น ขับคนเดียว ถนนเมือง" autoFocus />
                 </div>
 
-                <div className="shock-save-weight-row">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="form-group">
-                    <label className="shock-label">น้ำหนักผู้ขับ (กก.)</label>
+                    <label className="block mb-2.5 text-sm font-semibold">น้ำหนักผู้ขับ (กก.)</label>
                     <input type="number" inputMode="decimal" value={editForm.rider_weight}
                       onChange={(e) => setEditForm((f) => f && ({ ...f, rider_weight: e.target.value }))} />
                   </div>
                   <div className="form-group">
-                    <label className="shock-label">น้ำหนักคนซ้อน (กก.)</label>
+                    <label className="block mb-2.5 text-sm font-semibold">น้ำหนักคนซ้อน (กก.)</label>
                     <input type="number" inputMode="decimal" value={editForm.passenger_weight}
                       onChange={(e) => setEditForm((f) => f && ({ ...f, passenger_weight: e.target.value }))} />
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label className="shock-label">โหมด</label>
-                  <div className="shock-save-mode-row">
+                  <label className="block mb-2.5 text-sm font-semibold">โหมด</label>
+                  <div className="grid grid-cols-2 gap-2">
                     {(["street", "heavy"] as RideMode[]).map((m) => (
                       <button key={m} type="button"
                         className={`shock-save-mode-btn${editForm.mode === m ? " is-active" : ""}`}
@@ -690,26 +690,26 @@ export default function ShockSettingsPage() {
                   </div>
                 </div>
 
-                <div className="shock-save-vals-row">
+                <div className="grid grid-cols-3 gap-2.5">
                   <div className="form-group">
-                    <label className="shock-label">Preload (mm)</label>
+                    <label className="block mb-2.5 text-sm font-semibold">Preload (mm)</label>
                     <input type="number" inputMode="decimal" value={editForm.preload}
                       onChange={(e) => setEditForm((f) => f && ({ ...f, preload: e.target.value }))} />
                   </div>
                   <div className="form-group">
-                    <label className="shock-label">Comp (clicks)</label>
+                    <label className="block mb-2.5 text-sm font-semibold">Comp (clicks)</label>
                     <input type="number" inputMode="numeric" value={editForm.comp}
                       onChange={(e) => setEditForm((f) => f && ({ ...f, comp: e.target.value }))} />
                   </div>
                   <div className="form-group">
-                    <label className="shock-label">Reb (clicks)</label>
+                    <label className="block mb-2.5 text-sm font-semibold">Reb (clicks)</label>
                     <input type="number" inputMode="numeric" value={editForm.reb}
                       onChange={(e) => setEditForm((f) => f && ({ ...f, reb: e.target.value }))} />
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label className="shock-label">บันทึกประสบการณ์</label>
+                  <label className="block mb-2.5 text-sm font-semibold">บันทึกประสบการณ์</label>
                   <textarea value={editForm.note}
                     onChange={(e) => setEditForm((f) => f && ({ ...f, note: e.target.value }))}
                     placeholder="เช่น นุ่มดี เหมาะถนนเมือง ไม่ตึงเกิน"
@@ -748,7 +748,7 @@ export default function ShockSettingsPage() {
           </DialogHeader>
           <div className="px-6 py-4">
             <div className="form-group">
-              <label className="shock-label">ชื่อ preset *</label>
+              <label className="block mb-2.5 text-sm font-semibold">ชื่อ preset *</label>
               <input
                 type="text"
                 value={saveForm.name}
@@ -758,22 +758,22 @@ export default function ShockSettingsPage() {
               />
             </div>
 
-            <div className="shock-save-weight-row">
+            <div className="grid grid-cols-2 gap-3">
               <div className="form-group">
-                <label className="shock-label">น้ำหนักผู้ขับ (กก.)</label>
+                <label className="block mb-2.5 text-sm font-semibold">น้ำหนักผู้ขับ (กก.)</label>
                 <input type="number" inputMode="decimal" value={saveForm.rider_weight}
                   onChange={(e) => setSaveForm((f) => ({ ...f, rider_weight: e.target.value }))} />
               </div>
               <div className="form-group">
-                <label className="shock-label">น้ำหนักคนซ้อน (กก.)</label>
+                <label className="block mb-2.5 text-sm font-semibold">น้ำหนักคนซ้อน (กก.)</label>
                 <input type="number" inputMode="decimal" value={saveForm.passenger_weight}
                   onChange={(e) => setSaveForm((f) => ({ ...f, passenger_weight: e.target.value }))} />
               </div>
             </div>
 
             <div className="form-group">
-              <label className="shock-label">โหมด</label>
-              <div className="shock-save-mode-row">
+              <label className="block mb-2.5 text-sm font-semibold">โหมด</label>
+              <div className="grid grid-cols-2 gap-2">
                 {(["street", "heavy"] as RideMode[]).map((m) => (
                   <button key={m} type="button"
                     className={`shock-save-mode-btn${saveForm.mode === m ? " is-active" : ""}`}
@@ -784,21 +784,21 @@ export default function ShockSettingsPage() {
               </div>
             </div>
 
-            <div className="shock-save-vals-row">
+            <div className="grid grid-cols-3 gap-2.5">
               <div className="form-group">
-                <label className="shock-label">Preload (mm)</label>
+                <label className="block mb-2.5 text-sm font-semibold">Preload (mm)</label>
                 <input type="number" inputMode="decimal" value={saveForm.preload}
                   onChange={(e) => setSaveForm((f) => ({ ...f, preload: e.target.value }))}
                   placeholder="เช่น 9" />
               </div>
               <div className="form-group">
-                <label className="shock-label">Comp (clicks)</label>
+                <label className="block mb-2.5 text-sm font-semibold">Comp (clicks)</label>
                 <input type="number" inputMode="numeric" value={saveForm.comp}
                   onChange={(e) => setSaveForm((f) => ({ ...f, comp: e.target.value }))}
                   placeholder="เช่น 9" />
               </div>
               <div className="form-group">
-                <label className="shock-label">Reb (clicks)</label>
+                <label className="block mb-2.5 text-sm font-semibold">Reb (clicks)</label>
                 <input type="number" inputMode="numeric" value={saveForm.reb}
                   onChange={(e) => setSaveForm((f) => ({ ...f, reb: e.target.value }))}
                   placeholder="เช่น 9" />
@@ -806,7 +806,7 @@ export default function ShockSettingsPage() {
             </div>
 
             <div className="form-group">
-              <label className="shock-label">บันทึกประสบการณ์ (ไม่บังคับ)</label>
+              <label className="block mb-2.5 text-sm font-semibold">บันทึกประสบการณ์ (ไม่บังคับ)</label>
               <textarea
                 value={saveForm.note}
                 onChange={(e) => setSaveForm((f) => ({ ...f, note: e.target.value }))}
