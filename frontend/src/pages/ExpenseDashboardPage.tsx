@@ -85,9 +85,9 @@ export default function ExpenseDashboardPage() {
   const topCategory = summary?.by_category[0] ?? null;
 
   return (
-    <div className="page">
+    <div className="relative min-h-dvh pb-20 max-w-[680px] w-full mx-auto overflow-x-hidden touch-pan-y px-4 py-6 sm:px-6 sm:py-8">
       {/* Header */}
-      <div className="expense-page-header">
+      <div className="flex justify-between items-start gap-4 mb-4 max-[420px]:flex-col max-[420px]:items-stretch">
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink)", margin: 0, letterSpacing: "-0.03em" }}>ค่าใช้จ่าย</h1>
           <p style={{ margin: "3px 0 0", color: "var(--slate)", fontSize: 13 }}>
@@ -96,7 +96,7 @@ export default function ExpenseDashboardPage() {
         </div>
         <Button
           size="sm"
-          className="expense-add-button"
+          className="min-h-[44px] max-[420px]:w-full max-[420px]:justify-center"
           style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)" }}
           onClick={() => setShowModal(true)}
         >+ เพิ่มค่าใช้จ่าย</Button>
@@ -203,7 +203,7 @@ export default function ExpenseDashboardPage() {
       {allLoaded && !hasError && summary && (
         <>
           {/* KPI */}
-          <div className="expense-kpi-row" style={{ marginBottom: 12 }}>
+          <div className="flex gap-2.5 mb-3 max-[420px]:flex-col">
             <Card className="expense-total-card">
               <div className="expense-kpi-label">รวมทั้งหมด</div>
               <div className="expense-total-value">

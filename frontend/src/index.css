@@ -2282,16 +2282,6 @@ html.light .bike-fab-popup {
   --expense-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.expense-add-button {
-  min-height: 44px;
-}
-.expense-page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
-  margin-bottom: 16px;
-}
 .expense-total-card {
   position: relative;
   flex: 1.35;
@@ -2353,17 +2343,6 @@ html.light .bike-fab-popup {
   line-height: 1.35;
 }
 @media (max-width: 420px) {
-  .expense-page-header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .expense-add-button {
-    width: 100%;
-    justify-content: center;
-  }
-  .expense-kpi-row {
-    flex-direction: column;
-  }
   .expense-total-card,
   .expense-cost-card {
     flex: 1 1 auto;
@@ -2504,10 +2483,6 @@ html.light .bike-fab-popup {
   background: var(--surface-soft);
 }
 
-.expense-kpi-row {
-  display: flex;
-  gap: 10px;
-}
 .expense-category-row {
   display: flex;
   align-items: center;
