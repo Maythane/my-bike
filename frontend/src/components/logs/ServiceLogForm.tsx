@@ -168,12 +168,12 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
   return (
     <>
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="overflow-y-auto">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{isEdit ? "แก้ไขรายการซ่อม" : "บันทึกการซ่อม"}</DialogTitle>
         </DialogHeader>
 
-        <div className="px-6 py-4">
+        <div className="px-6 py-4 overflow-y-auto flex-1">
         {!isEdit && (
           <div className="modal-chip-scroll" style={{ marginBottom: 18 }}>
             {QUICK_ITEMS.map((item) => (

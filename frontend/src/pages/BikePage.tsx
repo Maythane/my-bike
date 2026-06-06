@@ -35,7 +35,6 @@ export default function BikePage() {
   const [editFuelLog, setEditFuelLog] = useState<FuelLog | null>(null);
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
   const [showOverflow, setShowOverflow] = useState(false);
-  const [fabOpen, setFabOpen] = useState(false);
   const [shockLoading, setShockLoading] = useState(false);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const photoRef = useRef<HTMLInputElement>(null);
@@ -142,7 +141,7 @@ export default function BikePage() {
   }
 
   return (
-    <div className="relative min-h-dvh pb-20 max-w-[680px] w-full mx-auto overflow-x-hidden touch-pan-y px-4 py-6 sm:px-6 sm:py-8">
+    <div className="relative min-h-dvh pb-6 max-w-[680px] w-full mx-auto overflow-x-hidden touch-pan-y px-4 py-6 sm:px-6 sm:py-8">
       <button
         onClick={() => {
           document.documentElement.dataset.navDir = "back";
@@ -375,7 +374,7 @@ export default function BikePage() {
           {/* Tab bar — segment control */}
           <div className="bike-segmented">
             {(["fuel", "service"] as const).map((t) => {
-              const labels = { fuel: "เชื้อเพลิง", service: "ประวัติการบำรุงรักษา" };
+              const labels = { fuel: "เชื้อเพลิง", service: "ประวัติบำรุงรักษา" };
               const active = tab === t;
               return (
                 <button
@@ -383,7 +382,7 @@ export default function BikePage() {
                   onClick={() => setTab(t)}
                   style={{
                     flex: 1,
-                    padding: "8px 12px",
+                    padding: "8px 8px",
                     fontSize: 13,
                     fontWeight: active ? 700 : 400,
                     color: active ? "var(--ink)" : "var(--slate)",
@@ -394,6 +393,7 @@ export default function BikePage() {
                     transition: "all var(--spring)",
                     userSelect: "none",
                     WebkitUserSelect: "none",
+                    whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
                   }}
                 >{labels[t]}</button>
               );
@@ -405,7 +405,7 @@ export default function BikePage() {
             <>
               {logsLoading && <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>{[1,2,3].map(i => <SkeletonCard key={i} />)}</div>}
               {!logsLoading && logs.length === 0 && (
-                <div className="empty-state" style={{ padding: "36px 16px" }}>
+                <div className="empty-state" style={{ padding: "48px 16px 80px" }}>
                   <div className="empty-state-icon">🔧</div>
                   <h3>ยังไม่มีประวัติ</h3>
                   <p>กดปุ่มด้านบนเพื่อบันทึกการซ่อมครั้งแรก</p>
@@ -437,7 +437,7 @@ export default function BikePage() {
               )}
               {fuelLoading && <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>{[1,2].map(i => <SkeletonCard key={i} />)}</div>}
               {!fuelLoading && fuelLogs.length === 0 && (
-                <div className="empty-state" style={{ padding: "36px 16px" }}>
+                <div className="empty-state" style={{ padding: "48px 16px 80px" }}>
                   <div className="empty-state-icon">⛽</div>
                   <h3>ยังไม่มีข้อมูลเชื้อเพลิง</h3>
                   <p>บันทึกการเติมน้ำมันเพื่อคำนวณอัตราสิ้นเปลือง</p>
@@ -488,29 +488,6 @@ export default function BikePage() {
       {confirmDialog}
       {cropSrc && <ImageCropper src={cropSrc} aspectRatio={2} onConfirm={handleCropConfirm} onCancel={handleCropCancel} />}
       {lightbox && <Lightbox images={lightbox.images} initialIndex={lightbox.index} onClose={() => setLightbox(null)} />}
-
-      {/* ── Quick-log FAB ── */}
-      {fabOpen && (
-        <>
-          <div className="bike-fab-backdrop" onClick={() => setFabOpen(false)} />
-          <div className="bike-fab-popup">
-            <button className="quick-log-item" onClick={() => { setFabOpen(false); setShowLogForm(true); }}>
-              <span className="quick-log-icon" style={{ background: "var(--purple-bg)", border: "1px solid var(--purple-border)" }}>🔧</span>
-              บำรุงรักษา
-            </button>
-            <button className="quick-log-item" onClick={() => { setFabOpen(false); setShowFuelForm(true); }}>
-              <span className="quick-log-icon" style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.28)" }}>⛽</span>
-              เติมน้ำมัน
-            </button>
-          </div>
-        </>
-      )}
-      <button
-        className={`bike-fab${fabOpen ? " is-open" : ""}`}
-        onClick={() => setFabOpen((v) => !v)}
-        aria-label="บันทึกรายการ"
-      >+</button>
-
 
     </div>
   );

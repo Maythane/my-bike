@@ -25,6 +25,13 @@ const MailIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const UserIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 const LockIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
@@ -143,7 +150,7 @@ export default function AuthPage() {
 
   /* Shared card classes */
   const cardBase =
-    "w-full bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-8 flex flex-col gap-6 relative z-10 shadow-[var(--shadow-card)]";
+    "w-full bg-[var(--glass-bg)] backdrop-blur-[16px] border border-[var(--glass-border)] rounded-[var(--r-md)] p-8 flex flex-col gap-6 relative z-10 shadow-[var(--shadow-card)]";
 
   return (
     <div className="min-h-dvh flex items-center justify-center p-5">
@@ -184,13 +191,13 @@ export default function AuthPage() {
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="login-identifier" className="text-xs font-semibold text-muted-foreground">Email / Username / Telephone</label>
                 <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center text-[var(--slate)] pointer-events-none">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
                     <MailIcon width={16} height={16} />
                   </span>
                   <Input
                     id="login-identifier"
                     type="text"
-                    className="pl-[2.375rem]"
+                    style={{ paddingLeft: "2.75rem" }}
                     value={identifier}
                     onChange={(e) => { setIdentifier(e.target.value); resetOtp(); setError(null); }}
                     placeholder="you@example.com"
@@ -249,12 +256,12 @@ export default function AuthPage() {
                     <a href="#" className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline">ลืมรหัสผ่าน?</a>
                   </div>
                   <div className="relative flex items-center">
-                    <span className="absolute left-3 flex items-center text-[var(--slate)] pointer-events-none">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
                       <LockIcon width={16} height={16} />
                     </span>
                     <Input
                       id="login-password"
-                      className="pl-[2.375rem] pr-10"
+                      style={{ paddingLeft: "2.75rem", paddingRight: "2.5rem" }}
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -316,28 +323,37 @@ export default function AuthPage() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-username" className="text-xs font-semibold text-muted-foreground">Username <span style={{ color: "var(--purple)" }}>*</span></label>
-              <Input
-                id="reg-username"
-                type="text"
-                value={username}
-                onChange={(e) => { setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "")); setError(null); }}
-                placeholder="rider_mark"
-                pattern="[a-zA-Z0-9_]+"
-                minLength={3}
-                maxLength={30}
-                required
-                autoFocus
-                autoComplete="username"
-              />
+              <div className="relative flex items-center">
+                <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
+                  <UserIcon width={16} height={16} />
+                </span>
+                <Input
+                  id="reg-username"
+                  type="text"
+                  style={{ paddingLeft: "2.75rem" }}
+                  value={username}
+                  onChange={(e) => { setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "")); setError(null); }}
+                  placeholder="rider_mark"
+                  pattern="[a-zA-Z0-9_]+"
+                  minLength={3}
+                  maxLength={30}
+                  required
+                  autoFocus
+                  autoComplete="username"
+                />
+              </div>
               <p style={{ fontSize: 11, color: "var(--slate)", margin: "2px 0 0" }}>a–z, 0–9, _ · 3–30 ตัวอักษร</p>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-password" className="text-xs font-semibold text-muted-foreground">Password <span style={{ color: "var(--purple)" }}>*</span></label>
               <div className="relative flex items-center">
+                <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
+                  <LockIcon width={16} height={16} />
+                </span>
                 <Input
                   id="reg-password"
-                  className="pr-10"
+                  style={{ paddingLeft: "2.75rem", paddingRight: "2.5rem" }}
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -360,9 +376,12 @@ export default function AuthPage() {
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-confirm" className="text-xs font-semibold text-muted-foreground">ยืนยัน Password <span style={{ color: "var(--purple)" }}>*</span></label>
               <div className="relative flex items-center">
+                <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
+                  <LockIcon width={16} height={16} />
+                </span>
                 <Input
                   id="reg-confirm"
-                  className="pr-10"
+                  style={{ paddingLeft: "2.75rem", paddingRight: "2.5rem" }}
                   type={showConfirm ? "text" : "password"}
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
@@ -386,15 +405,20 @@ export default function AuthPage() {
                 Email
                 <span style={{ fontSize: 11, color: "var(--steel)", fontWeight: 400 }}>(ไม่บังคับ)</span>
               </label>
-              <Input
-                id="reg-email"
-                type="email"
-                value={regEmail}
-                onChange={(e) => setRegEmail(e.target.value)}
-                placeholder="email@example.com"
-                autoComplete="email"
-                style={{ borderStyle: "dashed", opacity: 0.8 }}
-              />
+              <div className="relative flex items-center">
+                <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
+                  <MailIcon width={16} height={16} />
+                </span>
+                <Input
+                  id="reg-email"
+                  type="email"
+                  style={{ paddingLeft: "2.75rem", borderStyle: "dashed", opacity: 0.8 }}
+                  value={regEmail}
+                  onChange={(e) => setRegEmail(e.target.value)}
+                  placeholder="email@example.com"
+                  autoComplete="email"
+                />
+              </div>
               <p style={{ fontSize: 11, color: "var(--slate)", margin: "2px 0 0" }}>แนะนำ — ใช้กู้รหัสผ่าน, เพิ่มทีหลังได้ใน Account</p>
             </div>
 

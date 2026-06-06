@@ -295,7 +295,7 @@ export default function AccountPage() {
 
       {/* Section: บัญชี */}
       <div className="text-[11px] font-semibold text-[var(--steel)] mb-1.5 ml-1">บัญชี</div>
-      <div className="bg-[var(--surface)] backdrop-blur-[12px] border border-[var(--hairline)] rounded-[var(--r-lg)] overflow-hidden mb-5">
+      <div className="bg-[var(--glass-bg)] backdrop-blur-[12px] border border-[var(--glass-border)] rounded-[var(--r-lg)] overflow-hidden mb-5">
 
         {/* Display name */}
         <div
@@ -317,7 +317,7 @@ export default function AccountPage() {
           </span>
         </div>
         {open === "displayName" && (
-          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-white/[0.03] backdrop-blur-[4px] animate-[acct-row-body-in_0.18s_ease-out_both]">
             <form onSubmit={handleDisplayNameSave} className="flex flex-col gap-4">
               <Input
                 value={displayName}
@@ -356,7 +356,7 @@ export default function AccountPage() {
           </span>
         </div>
         {open === "username" && (
-          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-white/[0.03] backdrop-blur-[4px] animate-[acct-row-body-in_0.18s_ease-out_both]">
             <form onSubmit={handleUsernameSave} className="flex flex-col gap-4">
               <Input
                 value={newUsername}
@@ -403,7 +403,7 @@ export default function AccountPage() {
           }
         </div>
         {open === "email" && (
-          <div className="px-3.5 pt-3 pb-3.5 border-t border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+          <div className="px-3.5 pt-3 pb-3.5 border-t border-[var(--hairline)] flex flex-col gap-[10px] bg-white/[0.03] backdrop-blur-[4px] animate-[acct-row-body-in_0.18s_ease-out_both]">
             <form onSubmit={handleEmailSave} className="flex flex-col gap-4">
               <Input
                 type="email"
@@ -426,7 +426,7 @@ export default function AccountPage() {
 
       {/* Section: ความปลอดภัย */}
       <div className="text-[11px] font-semibold text-[var(--steel)] mb-1.5 ml-1">ความปลอดภัย</div>
-      <div className="bg-[var(--surface)] backdrop-blur-[12px] border border-[var(--hairline)] rounded-[var(--r-lg)] overflow-hidden mb-5">
+      <div className="bg-[var(--glass-bg)] backdrop-blur-[12px] border border-[var(--glass-border)] rounded-[var(--r-lg)] overflow-hidden mb-5">
 
         {/* Password */}
         <div
@@ -446,7 +446,7 @@ export default function AccountPage() {
           </span>
         </div>
         {open === "password" && (
-          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+          <div className="px-3.5 pt-3 pb-3.5 border-b border-[var(--hairline)] flex flex-col gap-[10px] bg-white/[0.03] backdrop-blur-[4px] animate-[acct-row-body-in_0.18s_ease-out_both]">
             <form onSubmit={handlePasswordSave} className="flex flex-col gap-4">
               <div className="pw-wrap">
                 <Input
@@ -523,7 +523,7 @@ export default function AccountPage() {
           }
         </div>
         {open === "phone" && (
-          <div className="px-3.5 pt-3 pb-3.5 border-t border-[var(--hairline)] flex flex-col gap-[10px] bg-[var(--surface-soft)] animate-[acct-row-body-in_0.18s_ease-out_both]">
+          <div className="px-3.5 pt-3 pb-3.5 border-t border-[var(--hairline)] flex flex-col gap-[10px] bg-white/[0.03] backdrop-blur-[4px] animate-[acct-row-body-in_0.18s_ease-out_both]">
             {!otpSent ? (
               <div className="flex flex-col gap-4">
                 <Input

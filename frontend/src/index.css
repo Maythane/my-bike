@@ -128,6 +128,11 @@
   --expense-other:          oklch(0.64 0 0);
   --expense-other-bg:       rgba(150, 150, 150, 0.12);
 
+  /* ── Expense hero theme ── */
+  --expense-hero-bg:       linear-gradient(135deg, oklch(0.60 0.22 293 / 0.15), var(--surface));
+  --expense-hero-border:   oklch(0.60 0.22 293 / 0.35);
+  --expense-hero-glow:     oklch(0.60 0.22 293 / 0.12);
+
   /* ── Shock page brand accent ── */
   --brand-accent: oklch(0.60 0.22 293);
 
@@ -210,6 +215,11 @@ html.light {
   --text-primary: rgba(15, 15, 35, 0.92);
   --text-muted:   rgba(15, 15, 35, 0.32);
   --bg-elevated:  rgba(255, 255, 255, 0.72);
+
+  /* ── Expense hero theme (light) ── */
+  --expense-hero-bg:       linear-gradient(135deg, oklch(0.53 0.24 293 / 0.12), var(--surface));
+  --expense-hero-border:   oklch(0.53 0.24 293 / 0.25);
+  --expense-hero-glow:     transparent;
 }
 
 /* ── Base ── */
@@ -318,6 +328,7 @@ input[type="date"],
 input[type="time"],
 input[type="datetime-local"] {
   font-size: 14px;
+  width: 100%;
   min-width: 0;
 }
 input:focus, textarea:focus, select:focus {
@@ -478,15 +489,14 @@ label {
 }
 @media (max-width: 639px) {
   .page {
-    /* extra bottom padding so content clears the 64px bottom nav */
-    padding: 18px 16px max(88px, calc(env(safe-area-inset-bottom) + 80px));
+    /* Reset bottom padding now that BottomNav is gone */
+    padding: 18px 16px max(32px, calc(env(safe-area-inset-bottom) + 24px));
   }
 }
 
 /* ─── Bottom Navigation (mobile only) ───────────────────────────────────── */
 @media (max-width: 639px) {
-  /* hide the page-level FAB; BottomNav provides quick-log on mobile */
-  .bike-fab, .bike-fab-popup, .bike-fab-backdrop { display: none; }
+  /* FAB logic might still be relevant for some pages, but BottomNav component itself is gone */
 }
 
 /* ─── Log row ────────────────────────────────────────────────────────────── */
@@ -614,7 +624,7 @@ label {
 .app-nav {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
   background: var(--glass-bg);
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
@@ -623,75 +633,53 @@ label {
   align-items: center;
   height: 56px;
   flex-shrink: 0;
-  padding: 0 20px;
-  gap: 10px;
+  padding: 0 16px;
+  gap: 8px;
 }
 @media (max-width: 639px) {
   .app-nav {
-    height: 54px;
-    padding: 0 14px;
+    height: 60px;
+    padding: 0 12px;
   }
 }
 
 .app-nav-links {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
 }
 
 .app-nav-link {
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
+  min-height: 36px;
   padding: 0 12px;
-  border-radius: 999px;
+  border-radius: 12px;
   border: 1px solid transparent;
-  color: var(--ink);
+  color: var(--slate);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.2px;
-  transition: background 0.2s, border-color 0.2s, color 0.2s, transform var(--spring);
+  transition: all 0.2s var(--spring);
+  white-space: nowrap;
 }
 
 .app-nav-link:hover {
-  background: var(--surface);
-  transform: scale(1.02);
+  background: var(--surface-soft);
+  color: var(--ink);
 }
 
 .app-nav-link.is-active {
-  background: var(--surface);
-  border-color: var(--glass-border);
-}
-
-.app-nav-link-accent {
-  color: #ff7b84;
-  background: rgba(255, 70, 85, 0.08);
-  border-color: rgba(255, 70, 85, 0.18);
-}
-
-.app-nav-link-accent.is-active {
-  background: linear-gradient(180deg, rgba(255, 61, 77, 0.24) 0%, rgba(255, 61, 77, 0.14) 100%);
-  border-color: rgba(255, 98, 108, 0.42);
-  color: #ffd9dc;
-}
-
-@media (max-width: 639px) {
-  .app-nav-links {
-    gap: 6px;
-  }
-
-  .app-nav-link {
-    min-height: 32px;
-    padding: 0 10px;
-    font-size: 12px;
-  }
+  background: var(--purple-bg);
+  border-color: var(--purple-border);
+  color: var(--purple);
 }
 
 .app-nav-toggle {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--r);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   backdrop-filter: blur(8px);
@@ -704,6 +692,12 @@ label {
   cursor: pointer;
   transition: transform var(--spring), background 0.2s;
   flex-shrink: 0;
+}
+
+.app-nav-toggle:hover {
+  background: var(--surface);
+  color: var(--ink);
+  transform: scale(1.05);
 }
 
 .bike-hero-image {
@@ -910,6 +904,8 @@ html.light .quick-log-menu {
     radial-gradient(circle at top left, rgba(255, 82, 93, 0.14) 0%, rgba(255, 82, 93, 0) 42%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.035) 100%);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .shock-hero-card {
@@ -1142,6 +1138,8 @@ html.light .quick-log-menu {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .shock-result-row {
@@ -1879,6 +1877,8 @@ html.light .bike-fab-popup {
 /* ─── GaragePage redesign ─────────────────────────────────────────────────── */
 .garage-selector-card {
   background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: var(--r-md);
   overflow: hidden;
@@ -1911,7 +1911,15 @@ html.light .bike-fab-popup {
   transition: background 0.2s, border-color 0.2s, color 0.2s;
   overflow: hidden;
 }
-.garage-selector-chevron::after { content: '>'; display: inline-block; }
+.garage-selector-chevron::after {
+  content: '';
+  display: block;
+  width: 6px; height: 6px;
+  border-right: 2px solid currentColor;
+  border-top: 2px solid currentColor;
+  transform: rotate(45deg) translate(-1px, 1px);
+  transition: transform 0.2s;
+}
 .garage-selector-card.open .garage-selector-chevron {
   background: var(--purple-bg); border-color: var(--purple-border); color: var(--purple);
 }
@@ -1923,14 +1931,14 @@ html.light .bike-fab-popup {
 }
 
 @keyframes chevron-open {
-  0%   { transform: scale(1)   rotate(0deg); }
-  45%  { transform: scale(1.4) rotate(50deg); }
-  100% { transform: scale(1)   rotate(90deg); }
+  0%   { transform: scale(1)   rotate(45deg); }
+  45%  { transform: scale(1.4) rotate(95deg); }
+  100% { transform: scale(1)   rotate(135deg); }
 }
 @keyframes chevron-close {
-  0%   { transform: scale(1)   rotate(90deg); }
-  45%  { transform: scale(1.4) rotate(45deg); }
-  100% { transform: scale(1)   rotate(0deg); }
+  0%   { transform: scale(1)   rotate(135deg); }
+  45%  { transform: scale(1.4) rotate(90deg); }
+  100% { transform: scale(1)   rotate(45deg); }
 }
 
 @keyframes garage-drop-in {
@@ -2136,6 +2144,8 @@ html.light .bike-fab-popup {
   background: var(--expense-hero-bg);
   border-color: var(--expense-hero-border);
   box-shadow: var(--shadow-card), 0 0 34px var(--expense-hero-glow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 .expense-total-card::after {
   content: "";
@@ -2153,6 +2163,8 @@ html.light .bike-fab-popup {
   padding: 16px 14px 15px;
   border-color: var(--green-border);
   background: linear-gradient(135deg, var(--green-bg), var(--surface));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .expense-kpi-label {
   margin-bottom: 6px;
@@ -2204,7 +2216,8 @@ html.light .bike-fab-popup {
   overflow: hidden;
   cursor: pointer;
   user-select: none;
-  -webkit-user-select: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: border-color 0.18s, background 0.18s, transform 0.12s var(--expense-ease);
 }
 .expense-filter-card.open { border-color: var(--purple-border); }

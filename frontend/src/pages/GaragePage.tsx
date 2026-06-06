@@ -8,6 +8,8 @@ import { getFuelLogs, deleteFuelLog, getFuelEconomy } from "../api/fuel";
 import { getServiceLogs, deleteServiceLog } from "../api/logs";
 import { getReminders } from "../api/reminders";
 import { getShockSetting } from "../api/shock";
+import { getExpenseSummary } from "../api/expenses";
+import ExpenseModal from "../components/expenses/ExpenseModal";
 import BikeForm from "../components/bikes/BikeForm";
 import ServiceLogForm from "../components/logs/ServiceLogForm";
 import FuelLogForm from "../components/logs/FuelLogForm";
@@ -44,6 +46,7 @@ export default function GaragePage() {
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [shockLoading, setShockLoading] = useState(false);
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
 
   const openDrop = () => setDropState("open");
   const closeDrop = () => { setDropState("closing"); setTimeout(() => setDropState("closed"), 220); };
@@ -91,6 +94,13 @@ export default function GaragePage() {
   const { data: reminders = [] } = useQuery({
     queryKey: ["service-reminders", bid],
     queryFn: () => getReminders(bid!),
+    enabled: !!bid,
+  });
+
+  const now = new Date();
+  const { data: expenseSummary } = useQuery({
+    queryKey: ["expense-summary", bid, now.getFullYear(), now.getMonth() + 1],
+    queryFn: () => getExpenseSummary(bid!, now.getFullYear(), now.getMonth() + 1),
     enabled: !!bid,
   });
 
@@ -387,14 +397,49 @@ export default function GaragePage() {
             );
           })()}
 
+          {/* ── Expense summary card ── */}
+          {expenseSummary && expenseSummary.total > 0 && (
+            <Card style={{ marginBottom: 10, padding: "12px 14px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>💰 ค่าใช้จ่ายเดือนนี้</span>
+                <div style={{ display: "flex", gap: 6 }}>
+                  <Button size="sm"
+                    style={{ color: "var(--purple)", borderColor: "var(--purple-border)", background: "var(--purple-bg)", fontSize: 11 }}
+                    onClick={() => setShowExpenseModal(true)}>+ เพิ่ม</Button>
+                  <Button size="sm" style={{ fontSize: 11, color: "var(--slate)" }}
+                    onClick={() => navForward(navigate, `/expenses`, { state: { bikeId: bid } })}>
+                    ดูทั้งหมด →
+                  </Button>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <div style={{ textAlign: "center", minWidth: 70 }}>
+                  <div style={{ fontSize: 20, fontWeight: 700, color: "var(--purple)" }}>
+                    ฿{expenseSummary.total.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: 10, color: "var(--slate)" }}>รวม</div>
+                </div>
+                <div style={{ width: 1, height: 36, background: "var(--hairline)" }} />
+                <div style={{ display: "flex", flexDirection: "column", gap: 5, flex: 1 }}>
+                  {expenseSummary.by_category.slice(0, 3).map((c) => (
+                    <div key={c.category} style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
+                      <span style={{ color: "var(--slate)" }}>{c.icon} {c.label}</span>
+                      <span style={{ color: "var(--ink)", fontWeight: 500 }}>฿{c.amount.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          )}
+
           {/* ── Log tabs ── */}
           <div className="bike-segmented" role="tablist">
             {(["fuel", "service"] as const).map((t) => {
-              const labels = { fuel: "⛽ เชื้อเพลิง", service: "🔧 ประวัติการบำรุงรักษา" };
+              const labels = { fuel: "⛽ เชื้อเพลิง", service: "🔧 ประวัติบำรุงรักษา" };
               const active = logTab === t;
               return (
                 <button key={t} role="tab" aria-selected={active} onClick={() => setLogTab(t)} style={{
-                  flex: 1, minHeight: 44, padding: "0 12px", fontSize: 13,
+                  flex: 1, minHeight: 44, padding: "0 8px", fontSize: 13,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontWeight: active ? 700 : 400,
                   color: active ? "var(--ink)" : "var(--slate)",
@@ -403,6 +448,7 @@ export default function GaragePage() {
                   borderRadius: "calc(var(--r-md) - 4px)",
                   cursor: "pointer", transition: "all var(--spring)",
                   userSelect: "none", WebkitUserSelect: "none",
+                  whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
                 }}>{labels[t]}</button>
               );
             })}
@@ -413,7 +459,7 @@ export default function GaragePage() {
             <div className="tab-content">
               {economy && economy.total_logs > 1 && <FuelEconomyCard economy={economy} />}
               {fuelLogs.length === 0 && (
-                <div className="empty-state" style={{ padding: "36px 16px" }}>
+                <div className="empty-state" style={{ padding: "48px 16px 80px" }}>
                   <div className="empty-state-icon">⛽</div>
                   <h3>ยังไม่มีข้อมูลเชื้อเพลิง</h3>
                   <p>บันทึกการเติมน้ำมันเพื่อคำนวณอัตราสิ้นเปลือง</p>
@@ -435,7 +481,7 @@ export default function GaragePage() {
           {logTab === "service" && (
             <div className="tab-content">
               {serviceLogs.length === 0 && (
-                <div className="empty-state" style={{ padding: "36px 16px" }}>
+                <div className="empty-state" style={{ padding: "48px 16px 80px" }}>
                   <div className="empty-state-icon">🔧</div>
                   <h3>ยังไม่มีประวัติการบำรุงรักษา</h3>
                   <p>เริ่มบันทึกเพื่อติดตามประวัติรถของคุณ</p>
@@ -500,6 +546,7 @@ export default function GaragePage() {
           onConfirm={(blob) => { uploadImageMut.mutate(new File([blob], "bike-photo.jpg", { type: "image/jpeg" })); URL.revokeObjectURL(cropSrc!); setCropSrc(null); }}
           onCancel={() => { URL.revokeObjectURL(cropSrc!); setCropSrc(null); }} />
       )}
+      {showExpenseModal && bid && <ExpenseModal bikeId={bid} onClose={() => setShowExpenseModal(false)} />}
       {confirmDialog}
       {lightbox && <Lightbox images={lightbox.images} initialIndex={lightbox.index} onClose={() => setLightbox(null)} />}
     </div>

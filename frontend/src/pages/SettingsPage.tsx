@@ -1,5 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+const BackIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m15 18-6-6 6-6" />
+  </svg>
+);
 import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllMotorcycles } from "../api/motorcycles";
@@ -63,19 +69,20 @@ export default function SettingsPage() {
             setTimeout(() => { delete document.documentElement.dataset.navDir; }, 500);
             navigate("/", { viewTransition: true });
           }}
-          style={{ fontSize: 13 }}
+          style={{ padding: "6px 8px" }}
+          aria-label="กลับ"
         >
-          ← กลับ
+          <BackIcon />
         </Button>
-        <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--ink)", margin: 0 }}>
-          ⚙️ Settings
+        <h1 style={{ fontSize: 17, fontWeight: 700, color: "var(--ink)", margin: 0 }}>
+          ตั้งค่า
         </h1>
       </div>
 
       {/* ── Account ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">Account</div>
-        <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
+        <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">บัญชี</div>
+        <div className="bg-[var(--glass-bg)] backdrop-blur-[12px] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
           <div className="flex justify-between items-center" style={{ gap: 12, alignItems: "center" }}>
             <div style={{
               width: 36, height: 36, borderRadius: "50%", background: "var(--purple-bg)",
@@ -108,7 +115,7 @@ export default function SettingsPage() {
       {/* ── ทั่วไป (existing unit/timezone settings) ── */}
       <div style={{ marginBottom: 24 }}>
         <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">ทั่วไป</div>
-        <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
+        <div className="bg-[var(--glass-bg)] backdrop-blur-[12px] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <span className="text-sm text-[var(--ink)]">ระยะทางที่ต้องการให้แสดง</span>
             <div className="flex gap-1">
@@ -123,7 +130,7 @@ export default function SettingsPage() {
             </div>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-[var(--ink)]">Timezone</span>
+            <span className="text-sm text-[var(--ink)]">เขตเวลา</span>
             <input
               style={{
                 background: "var(--surface)", border: "1px solid var(--glass-border)",
@@ -152,7 +159,7 @@ export default function SettingsPage() {
 
       {/* ── Shock Setup ต่อคัน (existing) ── */}
       <div style={{ marginBottom: 24 }}>
-        <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">Shock Setup ต่อคัน</div>
+        <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">โช้ค ต่อคัน</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {bikes?.map((bike) => (
             <BikeSockRow
@@ -173,11 +180,11 @@ export default function SettingsPage() {
       {/* ── App ── */}
       <div style={{ marginBottom: 24 }}>
         <div className="text-[11px] font-semibold text-[var(--steel)] mb-2">App</div>
-        <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
+        <div className="bg-[var(--glass-bg)] backdrop-blur-[12px] border border-[var(--glass-border)] rounded-[var(--r-md)] p-4 flex flex-col gap-3">
           <button
             className="flex justify-between items-center"
-            style={{ width: "100%", background: "none", border: "none", cursor: "pointer",
-              fontSize: 14, color: "var(--ink)", justifyContent: "space-between" }}
+              style={{ width: "100%", background: "var(--glass-bg)", border: "1px solid var(--glass-border)", backdropFilter: "blur(8px)", borderRadius: "var(--r)", padding: "10px 14px", cursor: "pointer",
+                fontSize: 14, color: "var(--ink)", justifyContent: "space-between" }}
             onClick={openGasStation}
           >
             <span>⛽ ค้นหาปั๊มน้ำมันใกล้เคียง</span>
@@ -203,7 +210,7 @@ function BikeSockRow({
     : "ยังไม่ได้ตั้งค่า";
 
   return (
-    <div className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--r)] px-4 py-3.5 flex justify-between items-center">
+    <div className="bg-[var(--glass-bg)] backdrop-blur-[12px] border border-[var(--glass-border)] rounded-[var(--r)] px-4 py-3.5 flex justify-between items-center">
       <div>
         <div className="text-[13px] font-semibold text-[var(--ink)]">{bikeName}</div>
         <div className="text-[12px] text-[var(--slate)] mt-0.5">{shockLabel}</div>

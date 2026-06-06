@@ -84,10 +84,14 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
   const set = (k: string, v: string | number | boolean) => setForm((f) => ({ ...f, [k]: v }));
 
   useEffect(() => {
-    if (bikeId === undefined && pickedBike) {
-      set("mileage_at_fillup", pickedBike.current_mileage);
+    // If we're creating a new log and have a bike, sync the mileage if it's currently 0 or default
+    if (!isEdit && (bikeId !== undefined || pickedBike)) {
+      const targetMileage = bikeId !== undefined ? currentMileage : pickedBike?.current_mileage;
+      if (targetMileage && (form.mileage_at_fillup === 0 || form.mileage_at_fillup === undefined)) {
+        set("mileage_at_fillup", targetMileage);
+      }
     }
-  }, [pickedBike?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [bikeId, currentMileage, pickedBike?.id, pickedBike?.current_mileage, isEdit]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFuelAmount = (val: string) => {
     const liters = parseFloat(val);
@@ -203,12 +207,12 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
   return (
     <>
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="overflow-y-auto">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{isEdit ? "แก้ไขรายการเติมน้ำมัน" : "บันทึกการเติมน้ำมัน"}</DialogTitle>
         </DialogHeader>
 
-        <div className="px-6 py-4">
+        <div className="px-6 py-4 overflow-y-auto flex-1">
         {bikeId === undefined && (
           <div style={{ marginBottom: 16 }}>
             <label style={{ fontSize: 12, fontWeight: 600, color: "var(--steel)", display: "block", marginBottom: 6 }}>
@@ -289,13 +293,13 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
             <input type="number" step="0.01" value={form.fuel_amount} onChange={(e) => handleFuelAmount(e.target.value)} placeholder="5.50" />
           </div>
           <div className="form-group">
-            <label>ราคา/ลิตร (฿) — ไม่บังคับ</label>
+            <label>ราคา/ลิตร (฿) <span style={{ color: "var(--steel)", fontWeight: 400 }}>— ไม่บังคับ</span></label>
             <input type="number" step="0.01" value={form.price_per_liter} onChange={(e) => handlePricePerLiter(e.target.value)} placeholder="43.00" />
           </div>
         </div>
 
         <div className="form-group">
-          <label>รวม (฿) — ไม่บังคับ</label>
+          <label>รวม (฿) <span style={{ color: "var(--steel)", fontWeight: 400 }}>— ไม่บังคับ</span></label>
           <input type="number" step="1" value={form.cost} onChange={(e) => handleCost(e.target.value)} placeholder="250" />
           {calcHint && (
             <div style={{ fontSize: 11, color: "var(--accent-green)", marginTop: 5, fontWeight: 500 }}>
@@ -305,7 +309,7 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
         </div>
 
         <div className="form-group">
-          <label>สถานที่ — ไม่บังคับ</label>
+          <label>สถานที่ <span style={{ color: "var(--steel)", fontWeight: 400 }}>— ไม่บังคับ</span></label>
           {topStations.length > 0 && (
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
               {topStations.map((name) => (
@@ -342,12 +346,12 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
         </div>
 
         <div className="form-group">
-          <label>หมายเหตุ — ไม่บังคับ</label>
+          <label>หมายเหตุ <span style={{ color: "var(--steel)", fontWeight: 400 }}>— ไม่บังคับ</span></label>
           <textarea value={form.notes} onChange={(e) => set("notes", e.target.value)} rows={2} placeholder="เช่น สังเกตประหยัดน้ำมัน, เติมช่วงราคาลด…" />
         </div>
 
         <div className="form-group">
-          <label>รูปภาพ / ใบเสร็จ — ไม่บังคับ (สูงสุด {MAX_IMAGES} รูป)</label>
+          <label>รูปภาพ / ใบเสร็จ <span style={{ color: "var(--steel)", fontWeight: 400 }}>— ไม่บังคับ</span> (สูงสุด {MAX_IMAGES} รูป)</label>
           <div className="modal-thumb-grid">
             {existingImages.map((img, i) => (
               <Thumb key={img.id} src={img.image_path}
