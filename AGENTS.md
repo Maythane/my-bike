@@ -21,7 +21,7 @@
 
 ### Backend
 ```bash
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db \
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db \
   backend/.venv/bin/uvicorn app.main:app \
   --host 0.0.0.0 --port 8764 --reload --app-dir backend
 ```

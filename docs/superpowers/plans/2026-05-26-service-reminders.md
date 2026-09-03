@@ -100,8 +100,8 @@ def create_db():
 - [ ] **Step 4: Verify migration runs without error**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/backend
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db .venv/bin/python3 -c "
+cd /Users/mark/my-work-space/My-Project/My-bike/backend
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db .venv/bin/python3 -c "
 from app.database import _migrate_reminders
 _migrate_reminders()
 from sqlalchemy import text, create_engine
@@ -121,7 +121,7 @@ columns: ['id', 'motorcycle_id', 'item_key', 'item_name', 'interval_km', 'last_d
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add backend/app/models.py backend/app/database.py
 git commit -m "feat: add ServiceReminder model and DB migration"
 ```
@@ -290,7 +290,7 @@ def mark_done(
 - [ ] **Step 2: Verify the file has no syntax errors**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/backend
+cd /Users/mark/my-work-space/My-Project/My-bike/backend
 .venv/bin/python3 -c "from app.routers.reminders import router; print('OK')"
 ```
 
@@ -331,8 +331,8 @@ app.include_router(reminders.router)
 - [ ] **Step 2: Verify server starts**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/backend
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev .venv/bin/python3 -c "
+cd /Users/mark/my-work-space/My-Project/My-bike/backend
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev .venv/bin/python3 -c "
 from app.main import app
 print('routes:', [r.path for r in app.routes if hasattr(r, 'path') and 'reminder' in r.path])
 "
@@ -346,9 +346,9 @@ routes: ['/api/motorcycles/{bike_id}/service-reminders', '/api/motorcycles/{bike
 - [ ] **Step 3: Test reminder logic end-to-end with Python**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/backend
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db .venv/bin/python3 -c "
-import os; os.environ['DB_PATH'] = '/Users/mark/My-Project/My-bike/data/moto.db'
+cd /Users/mark/my-work-space/My-Project/My-bike/backend
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db .venv/bin/python3 -c "
+import os; os.environ['DB_PATH'] = '/Users/mark/my-work-space/My-Project/My-bike/data/moto.db'
 from app.database import engine, _migrate_reminders
 from app.routers.reminders import _ensure_reminders, _compute_status
 from sqlmodel import Session
@@ -442,7 +442,7 @@ export const markReminderDone = (bikeId: number, itemKey: string) =>
 - [ ] **Step 3: Verify TypeScript compiles**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -721,7 +721,7 @@ Append at the end of `frontend/src/index.css`:
 - [ ] **Step 3: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add frontend/src/pages/ServiceRemindersPage.tsx frontend/src/index.css
 git commit -m "feat: add ServiceRemindersPage with status + edit mode"
 ```
@@ -826,7 +826,7 @@ Add `<ReminderAlertBar>` in the JSX, just before the tab section (find the tab r
 - [ ] **Step 4: Verify TypeScript compiles**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -863,7 +863,7 @@ Add the route inside the protected `<Routes>`, after the existing `/settings/bik
 - [ ] **Step 2: Verify TypeScript compiles clean**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -872,7 +872,7 @@ Expected: no output.
 - [ ] **Step 3: Build and deploy**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npm run deploy
 ```
 
@@ -890,9 +890,9 @@ After restarting backend, test the following in the browser:
 
 To trigger overdue for testing:
 ```bash
-cd /Users/mark/My-Project/My-bike/backend
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db .venv/bin/python3 -c "
-import os; os.environ['DB_PATH'] = '/Users/mark/My-Project/My-bike/data/moto.db'
+cd /Users/mark/my-work-space/My-Project/My-bike/backend
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db .venv/bin/python3 -c "
+import os; os.environ['DB_PATH'] = '/Users/mark/my-work-space/My-Project/My-bike/data/moto.db'
 from app.database import engine
 from sqlalchemy import text
 with engine.begin() as conn:
@@ -904,7 +904,7 @@ with engine.begin() as conn:
 - [ ] **Step 5: Final commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add frontend/src/App.tsx
 git commit -m "feat: add /bikes/:bikeId/reminders route — service reminders complete"
 ```

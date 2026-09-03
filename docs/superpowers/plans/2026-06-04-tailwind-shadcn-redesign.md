@@ -1459,7 +1459,7 @@ FAB · SwipeReveal · SkeletonCard · StatusBadge · BottomNav · AvatarMenu · 
 
 - [ ] **Step 5: Delete brainstorm artifact**
 ```bash
-rm /Users/mark/My-Project/My-bike/visual-directions.html
+rm /Users/mark/my-work-space/My-Project/My-bike/visual-directions.html
 ```
 
 - [ ] **Step 6: Final build**

@@ -93,8 +93,8 @@ def create_db():
 - [ ] **Step 4: Verify migration**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/backend
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
+cd /Users/mark/my-work-space/My-Project/My-bike/backend
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
   .venv/bin/python3 -c "
 from app.database import _migrate_expenses
 _migrate_expenses()
@@ -115,7 +115,7 @@ columns: ['id', 'motorcycle_id', 'category', 'amount', 'date', 'notes', 'created
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add backend/app/models.py backend/app/database.py
 git commit -m "feat: add Expense model and DB migration"
 ```
@@ -410,8 +410,8 @@ def delete_expense(
 - [ ] **Step 2: Verify syntax**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/backend
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
+cd /Users/mark/my-work-space/My-Project/My-bike/backend
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
   .venv/bin/python3 -c "from app.routers.expenses import router; print('OK')"
 ```
 
@@ -420,7 +420,7 @@ Expected: `OK`
 - [ ] **Step 3: Smoke-test summary endpoint logic**
 
 ```bash
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
   .venv/bin/python3 -c "
 from app.routers.expenses import _months_ending_at
 buckets = _months_ending_at(2026, 5, 6)
@@ -472,7 +472,7 @@ app.include_router(expenses.router)
 - [ ] **Step 2: Verify routes registered**
 
 ```bash
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
   .venv/bin/python3 -c "
 from app.main import app
 routes = [r.path for r in app.routes if hasattr(r, 'path') and 'expense' in r.path]
@@ -557,7 +557,7 @@ export const deleteExpense = (bikeId: number, expenseId: number) =>
 - [ ] **Step 5: TypeScript check**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -566,7 +566,7 @@ Expected: no output.
 - [ ] **Step 6: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add backend/app/main.py frontend/src/types/index.ts frontend/src/api/expenses.ts
 git commit -m "feat: wire expenses router, add frontend types and API client"
 ```
@@ -582,7 +582,7 @@ git commit -m "feat: wire expenses router, add frontend types and API client"
 - [ ] **Step 1: Create `ExpenseCategoryBreakdown.tsx`**
 
 ```bash
-mkdir -p /Users/mark/My-Project/My-bike/frontend/src/components/expenses
+mkdir -p /Users/mark/my-work-space/My-Project/My-bike/frontend/src/components/expenses
 ```
 
 Create `frontend/src/components/expenses/ExpenseCategoryBreakdown.tsx`:
@@ -708,7 +708,7 @@ export default function ExpenseTrendChart({ buckets }: { buckets: MonthBucket[] 
 - [ ] **Step 3: TypeScript check**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -717,7 +717,7 @@ Expected: no output.
 - [ ] **Step 4: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add frontend/src/components/expenses/
 git commit -m "feat: add ExpenseCategoryBreakdown and ExpenseTrendChart components"
 ```
@@ -927,7 +927,7 @@ export default function ExpenseModal({ bikeId, expense, onClose }: Props) {
 - [ ] **Step 2: TypeScript check**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -936,7 +936,7 @@ Expected: no output.
 - [ ] **Step 3: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add frontend/src/components/expenses/ExpenseModal.tsx
 git commit -m "feat: add ExpenseModal component"
 ```
@@ -1145,7 +1145,7 @@ export default function ExpenseDashboardPage() {
 - [ ] **Step 2: TypeScript check**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -1154,7 +1154,7 @@ Expected: no output.
 - [ ] **Step 3: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add frontend/src/pages/ExpenseDashboardPage.tsx
 git commit -m "feat: add ExpenseDashboardPage"
 ```
@@ -1257,7 +1257,7 @@ Find the closing `</>` of the `{bike && (<>...</>)}` block (near the bottom of t
 - [ ] **Step 4: TypeScript check**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -1266,7 +1266,7 @@ Expected: no output.
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add frontend/src/pages/BikePage.tsx
 git commit -m "feat: add expense summary card to BikePage"
 ```
@@ -1345,7 +1345,7 @@ Append at the end of `frontend/src/index.css`:
 - [ ] **Step 3: TypeScript check**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npx tsc --noEmit 2>&1 | head -20
 ```
 
@@ -1354,7 +1354,7 @@ Expected: no output.
 - [ ] **Step 4: Build and deploy**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend
 npm run deploy 2>&1 | tail -10
 ```
 
@@ -1365,14 +1365,14 @@ Expected: `✓ built in ~250ms`
 Kill existing backend, then:
 
 ```bash
-cd /Users/mark/My-Project/My-bike && NO_BROWSER=1 python3 server.py &
+cd /Users/mark/my-work-space/My-Project/My-bike && NO_BROWSER=1 python3 server.py &
 sleep 2
 ```
 
 Test summary endpoint directly:
 
 ```bash
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db AUTH_SECRET_KEY=dev \
   .venv/bin/python3 -c "
 from app.routers.expenses import _fuel_total, _maint_total, _months_ending_at
 from app.database import get_session
@@ -1399,7 +1399,7 @@ Open **http://localhost:8764**, log in, then:
 - [ ] **Step 7: Commit**
 
 ```bash
-cd /Users/mark/My-Project/My-bike
+cd /Users/mark/my-work-space/My-Project/My-bike
 git add frontend/src/App.tsx frontend/src/index.css
 git commit -m "feat: add expense dashboard route, nav link, and CSS"
 ```

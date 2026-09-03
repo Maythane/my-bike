@@ -105,9 +105,9 @@ def create_db():
 
 Restart backend and check no errors in stdout:
 ```bash
-DB_PATH=/Users/mark/My-Project/My-bike/data/moto.db \
-  /Users/mark/My-Project/My-bike/backend/.venv/bin/uvicorn app.main:app \
-  --host 0.0.0.0 --port 8764 --reload --app-dir /Users/mark/My-Project/My-bike/backend
+DB_PATH=/Users/mark/my-work-space/My-Project/My-bike/data/moto.db \
+  /Users/mark/my-work-space/My-Project/My-bike/backend/.venv/bin/uvicorn app.main:app \
+  --host 0.0.0.0 --port 8764 --reload --app-dir /Users/mark/my-work-space/My-Project/My-bike/backend
 ```
 
 Expected: server starts, no migration errors, existing users still queryable.
@@ -407,7 +407,7 @@ Also remove the `agreeTerms` state, `setAgreeTerms`, and the checkbox that refer
 - [ ] **Step 4: Build to check for TypeScript errors**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npm run build 2>&1 | tail -20
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npm run build 2>&1 | tail -20
 ```
 
 Expected: `✓ built in ...ms` with no TypeScript errors.
@@ -1157,7 +1157,7 @@ export default function AccountPage() {
 - [ ] **Step 2: Build to verify no TypeScript errors**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npm run build 2>&1 | tail -15
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npm run build 2>&1 | tail -15
 ```
 
 Expected: `✓ built in ...ms`
@@ -1230,7 +1230,7 @@ In `frontend/src/components/ui/AvatarMenu.tsx`:
 - [ ] **Step 3: Build to verify**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npm run build 2>&1 | tail -10
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npm run build 2>&1 | tail -10
 ```
 
 Expected: `✓ built in ...ms`, no errors about missing AccountModal.
@@ -1258,7 +1258,7 @@ git rm frontend/src/components/ui/AccountModal.tsx
 - [ ] **Step 2: Final build verification**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npm run build 2>&1 | tail -10
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npm run build 2>&1 | tail -10
 ```
 
 Expected: `✓ built in ...ms`, no missing module errors.
@@ -1266,7 +1266,7 @@ Expected: `✓ built in ...ms`, no missing module errors.
 - [ ] **Step 3: Deploy**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npm run deploy
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npm run deploy
 ```
 
 - [ ] **Step 4: Commit**

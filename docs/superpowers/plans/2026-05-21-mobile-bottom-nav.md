@@ -125,15 +125,15 @@ html.light .bottom-nav-popup {
 - [ ] **Step 2: Verify CSS loads without errors**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npm run build 2>&1 | tail -5
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npm run build 2>&1 | tail -5
 ```
 Expected: no CSS parse errors (build may fail on TS — that's fine for now)
 
 - [ ] **Step 3: Commit**
 
 ```bash
-git -C /Users/mark/My-Project/My-bike add frontend/src/index.css
-git -C /Users/mark/My-Project/My-bike commit -m "style: add bottom nav CSS and mobile layout adjustments"
+git -C /Users/mark/my-work-space/My-Project/My-bike add frontend/src/index.css
+git -C /Users/mark/my-work-space/My-Project/My-bike commit -m "style: add bottom nav CSS and mobile layout adjustments"
 ```
 
 ---
@@ -268,8 +268,8 @@ export default function BottomNav() {
 - [ ] **Step 2: Commit**
 
 ```bash
-git -C /Users/mark/My-Project/My-bike add frontend/src/components/ui/BottomNav.tsx
-git -C /Users/mark/My-Project/My-bike commit -m "feat: add BottomNav component with FAB popup"
+git -C /Users/mark/my-work-space/My-Project/My-bike add frontend/src/components/ui/BottomNav.tsx
+git -C /Users/mark/my-work-space/My-Project/My-bike commit -m "feat: add BottomNav component with FAB popup"
 ```
 
 ---
@@ -313,15 +313,15 @@ Find the protected route layout div (the one containing `<NavBar>` and the scrol
 - [ ] **Step 3: Verify TypeScript compiles**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npx tsc --noEmit 2>&1 | head -20
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npx tsc --noEmit 2>&1 | head -20
 ```
 Expected: errors only from ServiceLogForm/FuelLogForm prop changes (next tasks), not from BottomNav.
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git -C /Users/mark/My-Project/My-bike add frontend/src/App.tsx
-git -C /Users/mark/My-Project/My-bike commit -m "feat: wire BottomNav into AppShell"
+git -C /Users/mark/my-work-space/My-Project/My-bike add frontend/src/App.tsx
+git -C /Users/mark/my-work-space/My-Project/My-bike commit -m "feat: wire BottomNav into AppShell"
 ```
 
 ---
@@ -432,15 +432,15 @@ Find the submit `<button>` in the form. Add `disabled={!effectiveBikeId || isPen
 - [ ] **Step 6: Verify TypeScript**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npx tsc --noEmit 2>&1 | grep ServiceLog
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npx tsc --noEmit 2>&1 | grep ServiceLog
 ```
 Expected: no ServiceLogForm errors
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git -C /Users/mark/My-Project/My-bike add frontend/src/components/logs/ServiceLogForm.tsx
-git -C /Users/mark/My-Project/My-bike commit -m "feat: make ServiceLogForm bikeId optional with bike-picker"
+git -C /Users/mark/my-work-space/My-Project/My-bike add frontend/src/components/logs/ServiceLogForm.tsx
+git -C /Users/mark/my-work-space/My-Project/My-bike commit -m "feat: make ServiceLogForm bikeId optional with bike-picker"
 ```
 
 ---
@@ -542,15 +542,15 @@ Find the submit button, change `disabled={isPending}` to `disabled={!effectiveBi
 - [ ] **Step 6: Verify TypeScript — should be clean**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npx tsc --noEmit 2>&1 | head -20
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npx tsc --noEmit 2>&1 | head -20
 ```
 Expected: 0 errors
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git -C /Users/mark/My-Project/My-bike add frontend/src/components/logs/FuelLogForm.tsx
-git -C /Users/mark/My-Project/My-bike commit -m "feat: make FuelLogForm bikeId optional with bike-picker"
+git -C /Users/mark/my-work-space/My-Project/My-bike add frontend/src/components/logs/FuelLogForm.tsx
+git -C /Users/mark/my-work-space/My-Project/My-bike commit -m "feat: make FuelLogForm bikeId optional with bike-picker"
 ```
 
 ---
@@ -727,15 +727,15 @@ return (
 - [ ] **Step 5: Verify TypeScript**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npx tsc --noEmit 2>&1 | head -20
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npx tsc --noEmit 2>&1 | head -20
 ```
 Expected: 0 errors
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git -C /Users/mark/My-Project/My-bike add frontend/src/pages/SettingsPage.tsx
-git -C /Users/mark/My-Project/My-bike commit -m "feat: rebuild SettingsPage with Account, Dark Mode, and Gas sections"
+git -C /Users/mark/my-work-space/My-Project/My-bike add frontend/src/pages/SettingsPage.tsx
+git -C /Users/mark/my-work-space/My-Project/My-bike commit -m "feat: rebuild SettingsPage with Account, Dark Mode, and Gas sections"
 ```
 
 ---
@@ -745,7 +745,7 @@ git -C /Users/mark/My-Project/My-bike commit -m "feat: rebuild SettingsPage with
 - [ ] **Step 1: Start dev server**
 
 ```bash
-cd /Users/mark/My-Project/My-bike/frontend && npm run dev
+cd /Users/mark/my-work-space/My-Project/My-bike/frontend && npm run dev
 ```
 
 - [ ] **Step 2: Check mobile layout (resize browser to ≤ 639px)**
@@ -782,6 +782,6 @@ Verify:
 - [ ] **Step 7: Final commit**
 
 ```bash
-git -C /Users/mark/My-Project/My-bike add -A
-git -C /Users/mark/My-Project/My-bike commit -m "feat: mobile bottom navigation complete" 2>/dev/null || echo "nothing to commit"
+git -C /Users/mark/my-work-space/My-Project/My-bike add -A
+git -C /Users/mark/my-work-space/My-Project/My-bike commit -m "feat: mobile bottom navigation complete" 2>/dev/null || echo "nothing to commit"
 ```
