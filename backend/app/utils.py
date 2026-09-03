@@ -6,6 +6,7 @@ from app.models import MaintenanceLog, MaintenanceTask, FuelLog, Motorcycle
 
 MAX_DIMENSION = 1920
 JPEG_QUALITY = 82
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10 MB
 
 
 def save_compressed_image(file_bytes: bytes, dest_path: str) -> None:

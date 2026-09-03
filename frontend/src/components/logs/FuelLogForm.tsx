@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -207,7 +208,10 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
   return (
     <>
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent>
+      <DialogContent
+        onPointerDownOutside={(e) => { if (lightboxIndex !== null) e.preventDefault(); }}
+        onInteractOutside={(e) => { if (lightboxIndex !== null) e.preventDefault(); }}
+      >
         <DialogHeader>
           <DialogTitle>{isEdit ? "แก้ไขรายการเติมน้ำมัน" : "บันทึกการเติมน้ำมัน"}</DialogTitle>
         </DialogHeader>
@@ -378,8 +382,9 @@ export default function FuelLogForm({ bikeId, currentMileage, tankCapacity, onCl
         </DialogFooter>
       </DialogContent>
     </Dialog>
-    {lightboxIndex !== null && (
-      <Lightbox images={allPreviews} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
+    {lightboxIndex !== null && createPortal(
+      <Lightbox images={allPreviews} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />,
+      document.body
     )}
     </>
   );

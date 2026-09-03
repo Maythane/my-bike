@@ -14,22 +14,23 @@ export default function Lightbox({ images, initialIndex, onClose }: Props) {
   const [closing, setClosing] = useState(false);
   const startX = useRef(0);
   const startY = useRef(0);
+  // prevent click from firing after touch on iOS
+  const touchDidAct = useRef(false);
 
   const handleClose = useCallback(() => {
     setClosing(true);
     setTimeout(onClose, CLOSE_DURATION);
   }, [onClose]);
 
-  const prev = () => {
-    if (idx === 0) return;
+  const prev = useCallback(() => {
     setDir("right");
-    setIdx(i => i - 1);
-  };
-  const next = () => {
-    if (idx === images.length - 1) return;
+    setIdx(i => Math.max(0, i - 1));
+  }, []);
+
+  const next = useCallback(() => {
     setDir("left");
-    setIdx(i => i + 1);
-  };
+    setIdx(i => Math.min(images.length - 1, i + 1));
+  }, [images.length]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -39,9 +40,10 @@ export default function Lightbox({ images, initialIndex, onClose }: Props) {
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, [handleClose, idx]);
+  }, [handleClose, prev, next]);
 
   const onTouchStart = (e: React.TouchEvent) => {
+    touchDidAct.current = false;
     startX.current = e.touches[0].clientX;
     startY.current = e.touches[0].clientY;
   };
@@ -49,8 +51,35 @@ export default function Lightbox({ images, initialIndex, onClose }: Props) {
   const onTouchEnd = (e: React.TouchEvent) => {
     const dx = startX.current - e.changedTouches[0].clientX;
     const dy = startY.current - e.changedTouches[0].clientY;
-    if (Math.abs(dx) < Math.abs(dy) || Math.abs(dx) < 40) return;
-    if (dx > 0) next(); else prev();
+
+    // Horizontal swipe
+    if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) {
+      e.preventDefault();
+      touchDidAct.current = true;
+      if (dx > 0) next(); else prev();
+      return;
+    }
+
+    // Tap (no movement) → close
+    if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+      e.preventDefault();
+      touchDidAct.current = true;
+      handleClose();
+    }
+  };
+
+  // Desktop fallback — skip if touch already handled the event
+  const onBackdropClick = (e: React.MouseEvent) => {
+    if (touchDidAct.current) { touchDidAct.current = false; return; }
+    e.stopPropagation();
+    handleClose();
+  };
+
+  const btnTouchEnd = (action: () => void) => (e: React.TouchEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    touchDidAct.current = true;
+    action();
   };
 
   const imgAnimation = closing
@@ -65,28 +94,34 @@ export default function Lightbox({ images, initialIndex, onClose }: Props) {
     ? `lb-backdrop-out ${CLOSE_DURATION}ms ease forwards`
     : "lb-backdrop-in 0.20s ease";
 
+  // position: absolute — backdrop is position:fixed inset:0 (full viewport), so
+  // absolute children land at the same screen coords as fixed would. Avoids the
+  // iOS Safari bug where nested position:fixed elements miss touch events.
   const btnStyle: React.CSSProperties = {
     position: "absolute",
-    width: 40, height: 40, borderRadius: "50%",
+    width: 44, height: 44, borderRadius: "50%",
     background: "rgba(255,255,255,0.15)", color: "#fff",
     border: "none", fontSize: 22, cursor: "pointer",
     display: "flex", alignItems: "center", justifyContent: "center",
-    backdropFilter: "blur(4px)",
-    transition: "background 0.15s, transform 0.15s",
+    transition: "background 0.15s",
+    WebkitTapHighlightColor: "transparent",
+    zIndex: 301,
   };
 
   return (
     <div
-      onClick={(e) => { e.stopPropagation(); handleClose(); }}
+      onClick={onBackdropClick}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
+      onTouchMove={(e) => e.stopPropagation()}
       style={{
         position: "fixed", inset: 0,
-        background: "rgba(0,0,0,0.88)",
-        backdropFilter: "blur(6px)",
+        background: "rgba(0,0,0,0.92)",
         display: "flex", alignItems: "center", justifyContent: "center",
         zIndex: 300,
         userSelect: "none",
+        touchAction: "none",        // prevent iOS scroll container stealing touch
+        WebkitUserSelect: "none",
         animation: backdropAnimation,
       }}
     >
@@ -106,16 +141,28 @@ export default function Lightbox({ images, initialIndex, onClose }: Props) {
 
       {/* Close */}
       <button
+        onTouchEnd={btnTouchEnd(handleClose)}
         onClick={e => { e.stopPropagation(); handleClose(); }}
-        style={{ ...btnStyle, top: 16, right: 16, fontSize: 20 }}
+        style={{ ...btnStyle, top: 16, right: 16 }}
+        aria-label="ปิด"
       >×</button>
 
-      {/* Prev / Next */}
+      {/* Prev / Next — use vh-based top so they stay centered on any viewport */}
       {images.length > 1 && idx > 0 && (
-        <button onClick={e => { e.stopPropagation(); prev(); }} style={{ ...btnStyle, left: 16, top: "50%", transform: "translateY(-50%)" }}>‹</button>
+        <button
+          onTouchEnd={btnTouchEnd(prev)}
+          onClick={e => { e.stopPropagation(); prev(); }}
+          style={{ ...btnStyle, left: 16, top: "50vh", transform: "translateY(-50%)" }}
+          aria-label="ก่อนหน้า"
+        >‹</button>
       )}
       {images.length > 1 && idx < images.length - 1 && (
-        <button onClick={e => { e.stopPropagation(); next(); }} style={{ ...btnStyle, right: 16, top: "50%", transform: "translateY(-50%)" }}>›</button>
+        <button
+          onTouchEnd={btnTouchEnd(next)}
+          onClick={e => { e.stopPropagation(); next(); }}
+          style={{ ...btnStyle, right: 16, top: "50vh", transform: "translateY(-50%)" }}
+          aria-label="ถัดไป"
+        >›</button>
       )}
 
       {/* Dot indicators */}

@@ -1,108 +1,88 @@
 {
-  "project_name": "My-bike",
+  "project_name": "My Bike (Moto Tracker)",
   "stack": [
     { "name": "React 19", "category": "frontend", "icon": "react" },
-    { "name": "TypeScript", "category": "frontend", "icon": "box" },
-    { "name": "Vite", "category": "frontend", "icon": "box" },
-    { "name": "TanStack Query", "category": "frontend", "icon": "box" },
-    { "name": "FastAPI", "category": "backend", "icon": "python" },
-    { "name": "SQLModel", "category": "backend", "icon": "python" },
-    { "name": "SQLite", "category": "database", "icon": "sqlite" },
-    { "name": "Docker", "category": "infrastructure", "icon": "box" }
+    { "name": "Vite 8", "category": "frontend", "icon": "box" },
+    { "name": "TypeScript 6", "category": "frontend", "icon": "box" },
+    { "name": "TanStack Query 5", "category": "frontend", "icon": "box" },
+    { "name": "React Router 7", "category": "frontend", "icon": "box" },
+    { "name": "Tailwind CSS 4", "category": "frontend", "icon": "box" },
+    { "name": "shadcn/ui (Radix UI)", "category": "frontend", "icon": "box" },
+    { "name": "FastAPI 0.115", "category": "backend", "icon": "python" },
+    { "name": "SQLModel 0.0.22", "category": "backend", "icon": "python" },
+    { "name": "Uvicorn", "category": "backend", "icon": "python" },
+    { "name": "python-jose (JWT)", "category": "backend", "icon": "lock" },
+    { "name": "Pillow (image processing)", "category": "backend", "icon": "file" },
+    { "name": "SQLite", "category": "database", "icon": "sqlite" }
   ],
   "nodes": [
     {
-      "id": "auth",
-      "name": "Authentication",
-      "plain_english": "Where users sign up, log in, and manage their profile, avatar, and username.",
+      "id": "auth_ui",
+      "name": "Login / Register",
+      "plain_english": "Users sign in with username, email, or phone OTP.",
       "layer": "frontend",
       "rank": 0,
       "icon": "lock",
       "files": [
         "frontend/src/pages/AuthPage.tsx",
-        "frontend/src/api/auth.ts",
+        "frontend/src/pages/AccountPage.tsx",
         "frontend/src/hooks/useAuth.ts",
-        "frontend/src/components/ui/AccountModal.tsx",
         "frontend/src/components/ui/AvatarMenu.tsx",
-        "frontend/src/components/ui/EyeIcon.tsx"
+        "frontend/src/components/ui/ImageCropper.tsx"
       ],
       "external": false
     },
     {
       "id": "garage",
-      "name": "Garage & Bikes",
-      "plain_english": "Where users manage their motorcycles — add, edit, view details and photos.",
+      "name": "Garage",
+      "plain_english": "Main home screen where users see and switch between their motorcycles.",
       "layer": "frontend",
       "rank": 0,
       "icon": "box",
       "files": [
         "frontend/src/pages/GaragePage.tsx",
         "frontend/src/pages/BikePage.tsx",
-        "frontend/src/api/motorcycles.ts",
-        "frontend/src/api/profiles.ts",
         "frontend/src/components/bikes/BikeForm.tsx",
-        "frontend/src/components/profiles/BikeSpecs.tsx",
-        "frontend/src/data/bikeSpecs.ts",
-        "frontend/src/types/index.ts"
+        "frontend/src/components/profiles/BikeSpecs.tsx"
       ],
       "external": false
     },
     {
-      "id": "maintenance",
-      "name": "Maintenance Tracking",
-      "plain_english": "Where users log service work — oil changes, tire swaps, and other jobs with dates, mileage, and costs.",
+      "id": "logs_ui",
+      "name": "Service & Fuel Logs",
+      "plain_english": "Forms for recording oil changes, fuel fill-ups, and service jobs with photos.",
       "layer": "frontend",
       "rank": 0,
       "icon": "settings",
       "files": [
-        "frontend/src/api/logs.ts",
-        "frontend/src/api/tasks.ts",
-        "frontend/src/api/templates.ts",
-        "frontend/src/components/logs/LogForm.tsx",
-        "frontend/src/components/logs/LogHistoryRows.tsx",
         "frontend/src/components/logs/ServiceLogForm.tsx",
-        "frontend/src/components/tasks/TaskForm.tsx",
-        "frontend/src/components/tasks/TaskRow.tsx"
+        "frontend/src/components/logs/FuelLogForm.tsx",
+        "frontend/src/components/logs/LogHistoryRows.tsx"
       ],
       "external": false
     },
     {
-      "id": "fuel",
-      "name": "Fuel Logs",
-      "plain_english": "Where users record every fill-up — amount, cost, mileage, and fuel type to monitor efficiency.",
-      "layer": "frontend",
-      "rank": 0,
-      "icon": "chart",
-      "files": [
-        "frontend/src/api/fuel.ts",
-        "frontend/src/components/logs/FuelLogForm.tsx"
-      ],
-      "external": false
-    },
-    {
-      "id": "reminders",
+      "id": "reminders_ui",
       "name": "Service Reminders",
-      "plain_english": "Where users set mileage-based alerts so they never miss scheduled maintenance.",
+      "plain_english": "Shows overdue and upcoming service items with progress bars.",
       "layer": "frontend",
       "rank": 0,
       "icon": "mail",
       "files": [
         "frontend/src/pages/ServiceRemindersPage.tsx",
-        "frontend/src/api/reminders.ts",
         "frontend/src/components/reminders/ReminderAlertBar.tsx"
       ],
       "external": false
     },
     {
-      "id": "expenses",
+      "id": "expenses_ui",
       "name": "Expense Dashboard",
-      "plain_english": "Where users track and chart all money spent on their bikes, broken down by category.",
+      "plain_english": "Shows money spent on the bike by category with charts and trend data.",
       "layer": "frontend",
       "rank": 0,
       "icon": "chart",
       "files": [
         "frontend/src/pages/ExpenseDashboardPage.tsx",
-        "frontend/src/api/expenses.ts",
         "frontend/src/components/expenses/ExpenseCategoryBreakdown.tsx",
         "frontend/src/components/expenses/ExpenseModal.tsx",
         "frontend/src/components/expenses/ExpenseTrendChart.tsx"
@@ -110,15 +90,99 @@
       "external": false
     },
     {
-      "id": "shock",
-      "name": "Shock Absorber Setup",
-      "plain_english": "Where users dial in their suspension by entering weight and riding mode to get recommended settings.",
+      "id": "shock_ui",
+      "name": "Shock Settings",
+      "plain_english": "Suspension tuning tool with brand lookup and weight-based setting recommendations.",
       "layer": "frontend",
       "rank": 0,
       "icon": "settings",
       "files": [
-        "frontend/src/pages/ShockSetupPage.tsx",
         "frontend/src/pages/ShockSettingsPage.tsx",
+        "frontend/src/pages/ShockSetupPage.tsx"
+      ],
+      "external": false
+    },
+    {
+      "id": "auth_api",
+      "name": "Auth API",
+      "plain_english": "Handles registration, login, JWT tokens, phone OTP, avatar uploads, and profile updates.",
+      "layer": "api",
+      "rank": 1,
+      "icon": "lock",
+      "files": [
+        "backend/app/routers/auth.py",
+        "backend/app/auth.py",
+        "frontend/src/api/auth.ts"
+      ],
+      "external": false
+    },
+    {
+      "id": "motorcycles_api",
+      "name": "Motorcycles API",
+      "plain_english": "Creates, updates, and deletes motorcycle records and handles bike image uploads.",
+      "layer": "api",
+      "rank": 1,
+      "icon": "box",
+      "files": [
+        "backend/app/routers/motorcycles.py",
+        "backend/app/routers/profiles.py",
+        "frontend/src/api/motorcycles.ts",
+        "frontend/src/api/profiles.ts"
+      ],
+      "external": false
+    },
+    {
+      "id": "logs_api",
+      "name": "Logs API",
+      "plain_english": "Stores service and fuel log records, recalculates odometer from the latest entry.",
+      "layer": "api",
+      "rank": 1,
+      "icon": "settings",
+      "files": [
+        "backend/app/routers/logs.py",
+        "backend/app/routers/fuel.py",
+        "frontend/src/api/logs.ts",
+        "frontend/src/api/fuel.ts"
+      ],
+      "external": false
+    },
+    {
+      "id": "reminders_api",
+      "name": "Reminders API",
+      "plain_english": "Tracks per-bike service intervals and calculates km remaining until each item is due.",
+      "layer": "api",
+      "rank": 1,
+      "icon": "mail",
+      "files": [
+        "backend/app/routers/reminders.py",
+        "frontend/src/api/reminders.ts"
+      ],
+      "external": false
+    },
+    {
+      "id": "expenses_api",
+      "name": "Expenses API",
+      "plain_english": "Stores custom expense entries and aggregates spending summaries with monthly trends.",
+      "layer": "api",
+      "rank": 1,
+      "icon": "chart",
+      "files": [
+        "backend/app/routers/expenses.py",
+        "frontend/src/api/expenses.ts"
+      ],
+      "external": false
+    },
+    {
+      "id": "shock_api",
+      "name": "Shock API",
+      "plain_english": "Stores suspension settings per bike and looks up tuning charts by brand and weight.",
+      "layer": "api",
+      "rank": 1,
+      "icon": "settings",
+      "files": [
+        "backend/app/routers/shock.py",
+        "backend/app/routers/shock_brands.py",
+        "backend/app/routers/shock_presets.py",
         "frontend/src/api/shock.ts",
         "frontend/src/api/shockBrands.ts",
         "frontend/src/api/shock_presets.ts"
@@ -126,165 +190,72 @@
       "external": false
     },
     {
-      "id": "settings",
-      "name": "App Settings",
-      "plain_english": "Where users configure preferences like distance units, timezone, and dark or light mode.",
-      "layer": "frontend",
-      "rank": 0,
-      "icon": "settings",
-      "files": [
-        "frontend/src/pages/SettingsPage.tsx",
-        "frontend/src/api/settings.ts",
-        "frontend/src/hooks/useTheme.ts"
-      ],
-      "external": false
-    },
-    {
-      "id": "api",
-      "name": "FastAPI Backend",
-      "plain_english": "The server that handles all requests from the app — it enforces auth, applies business rules, and talks to the database.",
+      "id": "settings_api",
+      "name": "Settings API",
+      "plain_english": "Saves per-user preferences like distance unit and timezone.",
       "layer": "api",
       "rank": 1,
-      "icon": "python",
+      "icon": "settings",
       "files": [
-        "backend/app/main.py",
-        "backend/app/auth.py",
-        "backend/app/utils.py",
-        "backend/app/routers/auth.py",
-        "backend/app/routers/motorcycles.py",
-        "backend/app/routers/profiles.py",
-        "backend/app/routers/logs.py",
+        "backend/app/routers/settings.py",
         "backend/app/routers/tasks.py",
         "backend/app/routers/templates.py",
-        "backend/app/routers/fuel.py",
-        "backend/app/routers/shock.py",
-        "backend/app/routers/shock_brands.py",
-        "backend/app/routers/shock_presets.py",
-        "backend/app/routers/reminders.py",
-        "backend/app/routers/expenses.py",
-        "backend/app/routers/settings.py",
-        "server.py"
+        "frontend/src/api/settings.ts",
+        "frontend/src/api/tasks.ts",
+        "frontend/src/api/templates.ts"
       ],
       "external": false
     },
     {
       "id": "database",
       "name": "Database",
-      "plain_english": "The local SQLite database that stores all bikes, logs, users, and settings — no cloud database is used.",
+      "plain_english": "SQLite file storing all users, motorcycles, logs, reminders, and expenses.",
       "layer": "database",
       "rank": 3,
       "icon": "sqlite",
       "files": [
-        "backend/app/models.py",
         "backend/app/database.py",
-        "backend/app/seed.py",
-        "backend/migrate_add_users.py",
-        "backend/migrate_shock_per_bike.py"
+        "backend/app/models.py",
+        "backend/app/utils.py",
+        "data/moto.db"
       ],
       "external": false
+    },
+    {
+      "id": "google_maps",
+      "name": "Google Maps",
+      "plain_english": "Opens nearby fuel station search using the user's GPS coordinates from the browser.",
+      "layer": "external",
+      "rank": 1,
+      "icon": "map",
+      "files": [],
+      "external": true
     }
   ],
   "edges": [
-    {
-      "from": "auth",
-      "to": "api",
-      "label": "sends login credentials and profile updates",
-      "kind": "api_call"
-    },
-    {
-      "from": "garage",
-      "to": "api",
-      "label": "loads and saves motorcycle details and photos",
-      "kind": "api_call"
-    },
-    {
-      "from": "maintenance",
-      "to": "api",
-      "label": "submits and retrieves service log entries and tasks",
-      "kind": "api_call"
-    },
-    {
-      "from": "maintenance",
-      "to": "reminders",
-      "label": "marks a reminder as done when a service log is saved",
-      "kind": "event"
-    },
-    {
-      "from": "fuel",
-      "to": "api",
-      "label": "saves fuel fill-up records and photos",
-      "kind": "api_call"
-    },
-    {
-      "from": "reminders",
-      "to": "api",
-      "label": "loads, configures, and marks reminders as complete",
-      "kind": "api_call"
-    },
-    {
-      "from": "expenses",
-      "to": "api",
-      "label": "fetches spending summaries and saves new expense entries",
-      "kind": "api_call"
-    },
-    {
-      "from": "shock",
-      "to": "api",
-      "label": "reads and saves suspension settings and brand presets",
-      "kind": "api_call"
-    },
-    {
-      "from": "settings",
-      "to": "api",
-      "label": "reads and saves user preferences",
-      "kind": "api_call"
-    },
-    {
-      "from": "garage",
-      "to": "fuel",
-      "label": "bike detail page shows fuel economy alongside bike info",
-      "kind": "import"
-    },
-    {
-      "from": "garage",
-      "to": "maintenance",
-      "label": "bike detail page shows service history",
-      "kind": "import"
-    },
-    {
-      "from": "garage",
-      "to": "reminders",
-      "label": "bike detail page shows upcoming maintenance alerts",
-      "kind": "import"
-    },
-    {
-      "from": "garage",
-      "to": "shock",
-      "label": "bike detail page shows current shock settings",
-      "kind": "import"
-    },
-    {
-      "from": "garage",
-      "to": "expenses",
-      "label": "bike detail page shows a spending summary",
-      "kind": "import"
-    },
-    {
-      "from": "settings",
-      "to": "shock",
-      "label": "settings page shows current shock configuration",
-      "kind": "import"
-    },
-    {
-      "from": "api",
-      "to": "database",
-      "label": "reads and writes all user, bike, log, and settings data",
-      "kind": "db_write"
-    }
+    { "from": "auth_ui",      "to": "auth_api",         "label": "sends login credentials and profile updates", "kind": "api_call" },
+    { "from": "garage",       "to": "motorcycles_api",  "label": "loads and manages motorcycle records and photos", "kind": "api_call" },
+    { "from": "garage",       "to": "logs_api",         "label": "displays service history and fuel fill-up history", "kind": "api_call" },
+    { "from": "garage",       "to": "reminders_api",    "label": "shows overdue and upcoming service alert count", "kind": "api_call" },
+    { "from": "garage",       "to": "expenses_api",     "label": "shows monthly expense summary card", "kind": "api_call" },
+    { "from": "garage",       "to": "shock_api",        "label": "checks if shock brand is set to decide which page to open", "kind": "api_call" },
+    { "from": "logs_ui",      "to": "logs_api",         "label": "saves fuel and service log entries with optional photos", "kind": "api_call" },
+    { "from": "logs_ui",      "to": "reminders_api",    "label": "auto-marks reminder done when a matching service is logged", "kind": "api_call" },
+    { "from": "reminders_ui", "to": "reminders_api",    "label": "loads, edits, and marks service items done", "kind": "api_call" },
+    { "from": "expenses_ui",  "to": "expenses_api",     "label": "loads expense summaries and adds new expense records", "kind": "api_call" },
+    { "from": "shock_ui",     "to": "shock_api",        "label": "reads and saves suspension settings and tuning charts", "kind": "api_call" },
+    { "from": "auth_api",     "to": "database",         "label": "reads and writes user accounts and credentials", "kind": "db_write" },
+    { "from": "motorcycles_api", "to": "database",      "label": "reads and writes motorcycle and profile records", "kind": "db_write" },
+    { "from": "logs_api",     "to": "database",         "label": "stores service logs, fuel logs, and updates odometer", "kind": "db_write" },
+    { "from": "reminders_api","to": "database",         "label": "reads and writes per-bike service reminder state", "kind": "db_write" },
+    { "from": "expenses_api", "to": "database",         "label": "reads and writes expense records and aggregates totals", "kind": "db_read" },
+    { "from": "shock_api",    "to": "database",         "label": "reads shock presets and writes user suspension settings", "kind": "db_write" },
+    { "from": "settings_api", "to": "database",         "label": "reads and writes user app preferences and task templates", "kind": "db_write" },
+    { "from": "garage",       "to": "google_maps",      "label": "opens nearby fuel station search with current GPS location", "kind": "external_call" }
   ],
   "summary": {
-    "feature_count": 10,
-    "connection_count": 16,
-    "headline": "A motorcycle maintenance app where riders track fuel, service work, expenses, and suspension settings for all their bikes."
+    "feature_count": 14,
+    "connection_count": 19,
+    "headline": "A motorcycle maintenance tracker where Thai riders log fuel, services, and costs, and get reminders when the next service is due."
   }
 }

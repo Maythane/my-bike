@@ -8,7 +8,7 @@ import os, uuid
 from app.database import get_session
 from app.models import Motorcycle, Profile, UnitEnum, User
 from app.auth import get_current_user
-from app.utils import get_motorcycle_for_user, save_compressed_image
+from app.utils import get_motorcycle_for_user, save_compressed_image, MAX_UPLOAD_BYTES
 
 router = APIRouter(tags=["motorcycles"])
 
@@ -175,7 +175,10 @@ async def upload_bike_image(
         old = os.path.join(UPLOAD_DIR, os.path.basename(bike.image_path))
         if os.path.exists(old):
             os.remove(old)
-    save_compressed_image(await file.read(), dest)
+    data = await file.read()
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="ไฟล์ใหญ่เกินไป (สูงสุด 10 MB)")
+    save_compressed_image(data, dest)
     bike.image_path = f"/uploads/bikes/{filename}"
     session.add(bike)
     session.commit()

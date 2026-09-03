@@ -330,6 +330,8 @@ input[type="datetime-local"] {
   font-size: 14px;
   width: 100%;
   min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
 }
 input:focus, textarea:focus, select:focus {
   border-color: var(--purple);

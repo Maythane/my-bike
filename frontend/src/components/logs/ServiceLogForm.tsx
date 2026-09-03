@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -168,7 +169,10 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
   return (
     <>
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent>
+      <DialogContent
+        onPointerDownOutside={(e) => { if (lightboxIndex !== null) e.preventDefault(); }}
+        onInteractOutside={(e) => { if (lightboxIndex !== null) e.preventDefault(); }}
+      >
         <DialogHeader>
           <DialogTitle>{isEdit ? "แก้ไขรายการซ่อม" : "บันทึกการซ่อม"}</DialogTitle>
         </DialogHeader>
@@ -325,8 +329,9 @@ export default function ServiceLogForm({ bikeId, currentMileage, onClose, log, p
         </DialogFooter>
       </DialogContent>
     </Dialog>
-    {lightboxIndex !== null && (
-      <Lightbox images={allPreviews} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
+    {lightboxIndex !== null && createPortal(
+      <Lightbox images={allPreviews} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />,
+      document.body
     )}
     </>
   );

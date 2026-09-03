@@ -8,7 +8,7 @@ import os, uuid
 from app.database import get_session
 from app.models import MaintenanceLog, MaintenanceLogImage, MaintenanceTask, Motorcycle, User
 from app.auth import get_current_user
-from app.utils import recalc_odometer, save_compressed_image, get_motorcycle_for_user
+from app.utils import recalc_odometer, save_compressed_image, get_motorcycle_for_user, MAX_UPLOAD_BYTES
 
 router = APIRouter(tags=["logs"])
 
@@ -193,7 +193,10 @@ async def upload_service_log_image(
         raise HTTPException(status_code=400, detail=f"Maximum {MAX_IMAGES} images per log")
     filename = f"{log_id}_{uuid.uuid4().hex[:8]}.jpg"
     dest = os.path.join(UPLOAD_DIR, filename)
-    save_compressed_image(await file.read(), dest)
+    data = await file.read()
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="ไฟล์ใหญ่เกินไป (สูงสุด 10 MB)")
+    save_compressed_image(data, dest)
     img = MaintenanceLogImage(log_id=log_id, image_path=f"/uploads/service/{filename}")
     session.add(img)
     session.commit()

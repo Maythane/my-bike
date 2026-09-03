@@ -190,14 +190,13 @@ export default function AuthPage() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="login-identifier" className="text-xs font-semibold text-muted-foreground">Email / Username / Telephone</label>
-                <div className="relative flex items-center">
-                  <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
-                    <MailIcon width={16} height={16} />
-                  </span>
-                  <Input
+                <div className="flex items-center h-10 w-full rounded-[var(--radius-sm)] border border-border bg-input px-3.5 gap-2.5 transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring focus-within:border-primary focus-within:bg-white/[.10]">
+                  <MailIcon width={16} height={16} className="flex-shrink-0 text-[var(--slate)]" />
+                  <input
                     id="login-identifier"
                     type="text"
-                    style={{ paddingLeft: "2.75rem" }}
+                    style={{ padding: 0 }}
+                    className="flex-1 min-w-0 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
                     value={identifier}
                     onChange={(e) => { setIdentifier(e.target.value); resetOtp(); setError(null); }}
                     placeholder="you@example.com"
@@ -255,13 +254,12 @@ export default function AuthPage() {
                     <label htmlFor="login-password" className="text-xs font-semibold text-muted-foreground">Password</label>
                     <a href="#" className="text-sm text-primary hover:text-primary/80 underline-offset-4 hover:underline">ลืมรหัสผ่าน?</a>
                   </div>
-                  <div className="relative flex items-center">
-                    <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
-                      <LockIcon width={16} height={16} />
-                    </span>
-                    <Input
+                  <div className="flex items-center h-10 w-full rounded-[var(--radius-sm)] border border-border bg-input px-3.5 gap-2.5 transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring focus-within:border-primary focus-within:bg-white/[.10]">
+                    <LockIcon width={16} height={16} className="flex-shrink-0 text-[var(--slate)]" />
+                    <input
                       id="login-password"
-                      style={{ paddingLeft: "2.75rem", paddingRight: "2.5rem" }}
+                      style={{ padding: 0 }}
+                      className="flex-1 min-w-0 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -271,7 +269,7 @@ export default function AuthPage() {
                     />
                     <button
                       type="button"
-                      className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center text-[var(--slate)] rounded-r-[var(--r)] transition-colors duration-150 hover:text-[var(--ink)]"
+                      className="flex-shrink-0 flex items-center justify-center w-6 text-[var(--slate)] hover:text-[var(--ink)] transition-colors duration-150"
                       onClick={() => setShowPassword((v) => !v)}
                       aria-label={showPassword ? "ซ่อน password" : "แสดง password"}
                     >
@@ -323,14 +321,13 @@ export default function AuthPage() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-username" className="text-xs font-semibold text-muted-foreground">Username <span style={{ color: "var(--purple)" }}>*</span></label>
-              <div className="relative flex items-center">
-                <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
-                  <UserIcon width={16} height={16} />
-                </span>
-                <Input
+              <div className="flex items-center h-10 w-full rounded-[var(--radius-sm)] border border-border bg-input px-3.5 gap-2.5 transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring focus-within:border-primary focus-within:bg-white/[.10]">
+                <UserIcon width={16} height={16} className="flex-shrink-0 text-[var(--slate)]" />
+                <input
                   id="reg-username"
                   type="text"
-                  style={{ paddingLeft: "2.75rem" }}
+                  style={{ padding: 0 }}
+                  className="flex-1 min-w-0 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
                   value={username}
                   onChange={(e) => { setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "")); setError(null); }}
                   placeholder="rider_mark"
@@ -347,13 +344,12 @@ export default function AuthPage() {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-password" className="text-xs font-semibold text-muted-foreground">Password <span style={{ color: "var(--purple)" }}>*</span></label>
-              <div className="relative flex items-center">
-                <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
-                  <LockIcon width={16} height={16} />
-                </span>
-                <Input
+              <div className="flex items-center h-10 w-full rounded-[var(--radius-sm)] border border-border bg-input px-3.5 gap-2.5 transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring focus-within:border-primary focus-within:bg-white/[.10]">
+                <LockIcon width={16} height={16} className="flex-shrink-0 text-[var(--slate)]" />
+                <input
                   id="reg-password"
-                  style={{ paddingLeft: "2.75rem", paddingRight: "2.5rem" }}
+                  style={{ padding: 0 }}
+                  className="flex-1 min-w-0 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -364,7 +360,7 @@ export default function AuthPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center text-[var(--slate)] rounded-r-[var(--r)] transition-colors duration-150 hover:text-[var(--ink)]"
+                  className="flex-shrink-0 flex items-center justify-center w-6 text-[var(--slate)] hover:text-[var(--ink)] transition-colors duration-150"
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? "ซ่อน password" : "แสดง password"}
                 >
@@ -375,13 +371,12 @@ export default function AuthPage() {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="reg-confirm" className="text-xs font-semibold text-muted-foreground">ยืนยัน Password <span style={{ color: "var(--purple)" }}>*</span></label>
-              <div className="relative flex items-center">
-                <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
-                  <LockIcon width={16} height={16} />
-                </span>
-                <Input
+              <div className="flex items-center h-10 w-full rounded-[var(--radius-sm)] border border-border bg-input px-3.5 gap-2.5 transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring focus-within:border-primary focus-within:bg-white/[.10]">
+                <LockIcon width={16} height={16} className="flex-shrink-0 text-[var(--slate)]" />
+                <input
                   id="reg-confirm"
-                  style={{ paddingLeft: "2.75rem", paddingRight: "2.5rem" }}
+                  style={{ padding: 0 }}
+                  className="flex-1 min-w-0 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
                   type={showConfirm ? "text" : "password"}
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
@@ -391,7 +386,7 @@ export default function AuthPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center text-[var(--slate)] rounded-r-[var(--r)] transition-colors duration-150 hover:text-[var(--ink)]"
+                  className="flex-shrink-0 flex items-center justify-center w-6 text-[var(--slate)] hover:text-[var(--ink)] transition-colors duration-150"
                   onClick={() => setShowConfirm((v) => !v)}
                   aria-label={showConfirm ? "ซ่อน password" : "แสดง password"}
                 >
@@ -405,14 +400,13 @@ export default function AuthPage() {
                 Email
                 <span style={{ fontSize: 11, color: "var(--steel)", fontWeight: 400 }}>(ไม่บังคับ)</span>
               </label>
-              <div className="relative flex items-center">
-                <span className="absolute inset-y-0 left-3 flex items-center text-[var(--slate)] pointer-events-none">
-                  <MailIcon width={16} height={16} />
-                </span>
-                <Input
+              <div className="flex items-center h-10 w-full rounded-[var(--radius-sm)] border border-dashed border-border bg-input px-3.5 gap-2.5 opacity-80 transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring focus-within:border-primary focus-within:bg-white/[.10]">
+                <MailIcon width={16} height={16} className="flex-shrink-0 text-[var(--slate)]" />
+                <input
                   id="reg-email"
                   type="email"
-                  style={{ paddingLeft: "2.75rem", borderStyle: "dashed", opacity: 0.8 }}
+                  style={{ padding: 0 }}
+                  className="flex-1 min-w-0 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
                   value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)}
                   placeholder="email@example.com"

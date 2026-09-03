@@ -1,47 +1,51 @@
 {
-  "project_name": "My-bike",
+  "project_name": "My Bike (Moto Tracker)",
   "stack": [
     { "name": "React 19", "category": "frontend", "icon": "react" },
-    { "name": "TypeScript", "category": "frontend", "icon": "box" },
-    { "name": "Vite", "category": "frontend", "icon": "box" },
-    { "name": "TanStack Query", "category": "frontend", "icon": "box" },
-    { "name": "FastAPI", "category": "backend", "icon": "python" },
-    { "name": "SQLModel", "category": "backend", "icon": "python" },
-    { "name": "SQLite", "category": "database", "icon": "sqlite" },
-    { "name": "Docker", "category": "infrastructure", "icon": "box" }
+    { "name": "Vite 8", "category": "frontend", "icon": "box" },
+    { "name": "TypeScript 6", "category": "frontend", "icon": "box" },
+    { "name": "TanStack Query 5", "category": "frontend", "icon": "box" },
+    { "name": "React Router 7", "category": "frontend", "icon": "box" },
+    { "name": "Tailwind CSS 4", "category": "frontend", "icon": "box" },
+    { "name": "shadcn/ui (Radix UI)", "category": "frontend", "icon": "box" },
+    { "name": "FastAPI 0.115", "category": "backend", "icon": "python" },
+    { "name": "SQLModel 0.0.22", "category": "backend", "icon": "python" },
+    { "name": "Uvicorn", "category": "backend", "icon": "python" },
+    { "name": "python-jose (JWT)", "category": "backend", "icon": "lock" },
+    { "name": "Pillow (image processing)", "category": "backend", "icon": "file" },
+    { "name": "SQLite", "category": "database", "icon": "sqlite" }
   ],
   "features": [
     {
       "id": "auth",
       "name": "Authentication",
-      "layer": "frontend",
-      "plain_english": "This is where people sign up, log in, and manage their account profile (avatar, display name, username, phone).",
+      "layer": "api",
+      "plain_english": "This is where people sign up and log in — supports email/password, username, phone OTP, avatar upload, and profile editing.",
       "files": [
         "frontend/src/pages/AuthPage.tsx",
+        "frontend/src/pages/AccountPage.tsx",
         "frontend/src/api/auth.ts",
         "frontend/src/hooks/useAuth.ts",
-        "frontend/src/components/ui/AccountModal.tsx",
         "frontend/src/components/ui/AvatarMenu.tsx",
-        "frontend/src/components/ui/EyeIcon.tsx",
-        "backend/app/auth.py",
-        "backend/app/routers/auth.py"
+        "frontend/src/components/ui/ImageCropper.tsx",
+        "backend/app/routers/auth.py",
+        "backend/app/auth.py"
       ],
       "icon": "lock"
     },
     {
       "id": "garage",
-      "name": "Garage & Bikes",
+      "name": "Garage (Motorcycle Management)",
       "layer": "frontend",
-      "plain_english": "This is where users manage their motorcycles — add, edit, and view details like make, model, mileage, and photos.",
+      "plain_english": "This is the main home screen where users manage their motorcycle(s) — add, edit, view specs, upload a photo, and see all maintenance tasks at a glance.",
       "files": [
         "frontend/src/pages/GaragePage.tsx",
         "frontend/src/pages/BikePage.tsx",
-        "frontend/src/api/motorcycles.ts",
-        "frontend/src/api/profiles.ts",
         "frontend/src/components/bikes/BikeForm.tsx",
         "frontend/src/components/profiles/BikeSpecs.tsx",
+        "frontend/src/api/motorcycles.ts",
+        "frontend/src/api/profiles.ts",
         "frontend/src/data/bikeSpecs.ts",
-        "frontend/src/types/index.ts",
         "backend/app/routers/motorcycles.py",
         "backend/app/routers/profiles.py"
       ],
@@ -49,16 +53,16 @@
     },
     {
       "id": "maintenance",
-      "name": "Maintenance Tracking",
-      "layer": "frontend",
-      "plain_english": "This is where users log service work done on their bikes — oil changes, tire replacements, and other tasks — with dates, mileage, and costs.",
+      "name": "Maintenance Logs",
+      "layer": "api",
+      "plain_english": "This is where users record every service job done on the bike — oil changes, tire swaps, brake jobs — with cost, mileage, date, photos, and notes.",
       "files": [
+        "frontend/src/components/logs/ServiceLogForm.tsx",
+        "frontend/src/components/logs/LogForm.tsx",
+        "frontend/src/components/logs/LogHistoryRows.tsx",
         "frontend/src/api/logs.ts",
         "frontend/src/api/tasks.ts",
         "frontend/src/api/templates.ts",
-        "frontend/src/components/logs/LogForm.tsx",
-        "frontend/src/components/logs/LogHistoryRows.tsx",
-        "frontend/src/components/logs/ServiceLogForm.tsx",
         "frontend/src/components/tasks/TaskForm.tsx",
         "frontend/src/components/tasks/TaskRow.tsx",
         "backend/app/routers/logs.py",
@@ -70,11 +74,11 @@
     {
       "id": "fuel",
       "name": "Fuel Logs",
-      "layer": "frontend",
-      "plain_english": "This is where users record every time they fill up — tracking fuel amount, cost, mileage, and fuel type to monitor efficiency.",
+      "layer": "api",
+      "plain_english": "This is where users track every fuel fill-up — liters, cost, fuel type, mileage — and automatically calculates km-per-liter fuel economy over time.",
       "files": [
-        "frontend/src/api/fuel.ts",
         "frontend/src/components/logs/FuelLogForm.tsx",
+        "frontend/src/api/fuel.ts",
         "backend/app/routers/fuel.py"
       ],
       "icon": "chart"
@@ -82,12 +86,12 @@
     {
       "id": "reminders",
       "name": "Service Reminders",
-      "layer": "frontend",
-      "plain_english": "This is where users set up alerts to remind them when scheduled maintenance is coming up based on mileage intervals.",
+      "layer": "api",
+      "plain_english": "This is where the app alerts users when scheduled services are due soon or overdue — based on km intervals for oil, spark plugs, filters, and more.",
       "files": [
         "frontend/src/pages/ServiceRemindersPage.tsx",
-        "frontend/src/api/reminders.ts",
         "frontend/src/components/reminders/ReminderAlertBar.tsx",
+        "frontend/src/api/reminders.ts",
         "backend/app/routers/reminders.py"
       ],
       "icon": "mail"
@@ -96,13 +100,13 @@
       "id": "expenses",
       "name": "Expense Dashboard",
       "layer": "frontend",
-      "plain_english": "This is where users track and visualize all money spent on their bikes — categorized spending with trend charts and breakdowns.",
+      "plain_english": "This is where users see a financial summary of all money spent on the bike — broken down by category (fuel, maintenance, accessories) with monthly trends and cost-per-km.",
       "files": [
         "frontend/src/pages/ExpenseDashboardPage.tsx",
-        "frontend/src/api/expenses.ts",
         "frontend/src/components/expenses/ExpenseCategoryBreakdown.tsx",
         "frontend/src/components/expenses/ExpenseModal.tsx",
         "frontend/src/components/expenses/ExpenseTrendChart.tsx",
+        "frontend/src/api/expenses.ts",
         "backend/app/routers/expenses.py"
       ],
       "icon": "chart"
@@ -111,10 +115,10 @@
       "id": "shock",
       "name": "Shock Absorber Settings",
       "layer": "frontend",
-      "plain_english": "This is where users dial in their suspension — entering rider weight, riding mode, and getting recommended shock preload and damping settings.",
+      "plain_english": "This is a specialized tool for riders to tune and save their suspension settings — preload, compression, rebound — based on rider weight and riding mode, with brand/model lookups.",
       "files": [
-        "frontend/src/pages/ShockSetupPage.tsx",
         "frontend/src/pages/ShockSettingsPage.tsx",
+        "frontend/src/pages/ShockSetupPage.tsx",
         "frontend/src/api/shock.ts",
         "frontend/src/api/shockBrands.ts",
         "frontend/src/api/shock_presets.ts",
@@ -128,7 +132,7 @@
       "id": "settings",
       "name": "App Settings",
       "layer": "frontend",
-      "plain_english": "This is where users configure preferences like distance units, timezone, and dark/light mode theme.",
+      "plain_english": "This is where users configure the app — units (km vs miles), timezone, and theme (dark/light mode).",
       "files": [
         "frontend/src/pages/SettingsPage.tsx",
         "frontend/src/api/settings.ts",
@@ -138,36 +142,34 @@
       "icon": "settings"
     },
     {
-      "id": "database",
-      "name": "Database",
-      "layer": "database",
-      "plain_english": "This is the local SQLite database that stores all bikes, logs, users, and settings — no cloud database is used.",
-      "files": [
-        "backend/app/models.py",
-        "backend/app/database.py",
-        "backend/app/seed.py",
-        "backend/migrate_add_users.py",
-        "backend/migrate_shock_per_bike.py"
-      ],
-      "icon": "sqlite"
-    },
-    {
       "id": "infrastructure",
       "name": "Infrastructure",
       "layer": "backend",
-      "plain_english": "This is how the app is built, served, and deployed — a FastAPI server that hosts the frontend as static files and handles all API requests.",
+      "plain_english": "This covers how the app is built, served, and deployed — the database setup, image storage, static file serving, and Docker containerization.",
       "files": [
         "backend/app/main.py",
+        "backend/app/database.py",
+        "backend/app/models.py",
         "backend/app/utils.py",
-        "backend/app/auth.py",
-        "server.py",
+        "backend/app/seed.py",
+        "backend/app/status.py",
+        "backend/migrate_add_users.py",
+        "backend/migrate_shock_per_bike.py",
         "Dockerfile",
         "docker-compose.yml",
+        "Makefile",
         "frontend/vite.config.ts",
-        "Makefile"
+        "frontend/src/lib/utils.ts",
+        "frontend/src/api/client.ts"
       ],
       "icon": "box"
     }
   ],
-  "external_services": []
+  "external_services": [
+    {
+      "id": "google_maps",
+      "name": "Google Maps",
+      "purpose": "Opens nearby fuel station search using the user's GPS coordinates from the browser"
+    }
+  ]
 }

@@ -169,7 +169,7 @@ function AppShell() {
         path="/*"
         element={
           <ProtectedRoute>
-            <div style={{ display: "flex", flexDirection: "column", height: "100%", position: "relative", zIndex: 1 }}>
+            <div style={{ display: "flex", flexDirection: "column", height: "100%", position: "relative" }}>
               <NavBar />
               <div style={{ flex: 1, overflowY: "auto", scrollbarGutter: "stable" }}>
                 <Suspense fallback={<PageFallback />}>

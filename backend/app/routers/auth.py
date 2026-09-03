@@ -12,7 +12,7 @@ from sqlmodel import Session, select
 from app.database import get_session
 from app.models import User, AppSettings, ShockSetting
 from app.auth import hash_password, verify_password, create_access_token, get_current_user
-from app.utils import save_compressed_image
+from app.utils import save_compressed_image, MAX_UPLOAD_BYTES
 
 AVATAR_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "uploads", "avatars")
 
@@ -319,6 +319,8 @@ async def upload_avatar(
     session: Session = Depends(get_session),
 ):
     data = await file.read()
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="ไฟล์ใหญ่เกินไป (สูงสุด 10 MB)")
     if current_user.avatar_url:
         old = os.path.join(AVATAR_DIR, os.path.basename(current_user.avatar_url))
         if os.path.exists(old):
